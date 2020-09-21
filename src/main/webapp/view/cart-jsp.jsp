@@ -21,7 +21,7 @@
     <h5>
         Total price = <c:out value="${totalPrice}"/>
     </h5>
-    <form action="${pageContext.request.contextPath}/buy-product">
+    <form action="${pageContext.request.contextPath}/order" method="post">
         <input type="submit" value="Buy" class="btn btn-primary">
     </form>
 </div>
