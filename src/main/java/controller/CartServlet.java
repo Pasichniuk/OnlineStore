@@ -48,7 +48,7 @@ public class CartServlet extends HttpServlet {
         for (Cookie c : cookies) {
 
             if (c.getValue().length() < 10) {
-                Product product = productDAO.getElement(Integer.parseInt(c.getValue()));
+                Product product = productDAO.getProduct(Integer.parseInt(c.getValue()));
                 products.add(product);
 
                 Cart.increaseTotalPrice(product.getPrice());

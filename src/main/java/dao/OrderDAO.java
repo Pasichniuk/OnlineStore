@@ -1,15 +1,16 @@
 package dao;
 
+import entity.Order;
 import entity.Product;
 import util.DBConnectionUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDAO {
+
+    private static final String SQL_GET_USER_ORDERS = "SELECT * FROM online_store.order WHERE user_id=?";
 
     private static final String SQL_INSERT_ORDER = "INSERT INTO `online_store`.`order` (`user_id`) VALUES (?)";
 
@@ -20,6 +21,33 @@ public class OrderDAO {
     private Connection connection;
 
     private PreparedStatement preparedStatement;
+    private ResultSet resultSet;
+
+    public List<Order> getUserOrders(int userID) {
+        List<Order> orders = null;
+        Order order;
+
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            preparedStatement = connection.prepareStatement(SQL_GET_USER_ORDERS);
+            preparedStatement.setInt(1, userID);
+
+            resultSet = preparedStatement.executeQuery();
+
+            orders = new ArrayList<>();
+
+            while (resultSet.next()) {
+                order = new Order(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3));
+                orders.add(order);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return orders;
+    }
 
     public void insertOrder(int userID, List<Product> products) {
         try {
@@ -61,13 +89,13 @@ public class OrderDAO {
             preparedStatement = connection.prepareStatement(SQL_GET_ORDER_ID);
             preparedStatement.setInt(1, userID);
 
-            ResultSet rs = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
 
-            if (rs.next())
-                return rs.getInt(1);
+            if (resultSet.next())
+                return resultSet.getInt(1);
 
         } catch (SQLException exception) {
-            return 0;
+            exception.printStackTrace();
         }
 
         return 0;

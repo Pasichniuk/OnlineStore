@@ -37,7 +37,7 @@ public class ProductServlet extends HttpServlet {
             return;
         }
 
-        List<Product> products = productDAO.get();
+        List<Product> products = productDAO.getAllProducts();
 
         if (request.getParameter("Sort") != null)
             sortingOption = request.getParameter("Sort");

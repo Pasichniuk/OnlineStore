@@ -17,7 +17,7 @@ public class ProductDAO {
     private Connection connection;
     private ResultSet resultSet;
 
-    public List<Product> get() {
+    public List<Product> getAllProducts() {
         List<Product> products = null;
         Product product;
 
@@ -41,7 +41,7 @@ public class ProductDAO {
         return products;
     }
 
-    public Product getElement(int productID) {
+    public Product getProduct(int productID) {
         Product product = null;
 
         try {

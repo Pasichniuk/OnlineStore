@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel='stylesheet' href='https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css'>
 
@@ -16,10 +17,25 @@
     </tr>
 </table>
 
-    <div class="container">
-        <h3 align="center">User: ${userLogin} <a href="${pageContext.request.contextPath}/profile?logout=true"><h3>Log out</h3></a> </h3>
-        <hr>
-    </div>
+<div class="container">
+    <h3 align="center">User: ${userLogin} <a href="${pageContext.request.contextPath}/profile?logout=true"><h3>Log out</h3></a> </h3>
+    <hr>
+</div>
+
+<div class="container">
+    <table border="1" class="table table-striped table-bordered">
+        <tr class="thead-dark">
+            <th>Order ID</th>
+            <th>Order Status</th>
+        </tr>
+        <c:forEach items="${orders}" var="order">
+            <tr>
+                <td>${order.orderID}</td>
+                <td>${order.status}</td>
+            </tr>
+        </c:forEach>
+    </table>
+</div>
 
 </body>
 </html>
