@@ -16,8 +16,6 @@ public class OrderDAO {
 
     private static final String SQL_INSERT_ORDER_PRODUCT = "INSERT INTO `online_store`.`order_product` VALUES (?, ?)";
 
-    private static final String SQL_GET_ORDER_ID = "SELECT order_id FROM online_store.order WHERE user_id=?";
-
     private Connection connection;
 
     private PreparedStatement preparedStatement;
@@ -53,15 +51,21 @@ public class OrderDAO {
         try {
             connection = DBConnectionUtil.getConnection();
 
-            preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER);
+            preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, userID);
 
-            if (preparedStatement.executeUpdate() == 1) {
-                int orderID = getOrderID(userID);
+            if (preparedStatement.executeUpdate() != 1)
+                return;
 
-                for (Product product : products)
-                    insertOrderProduct(orderID, product.getId());
-            }
+            resultSet = preparedStatement.getGeneratedKeys();
+
+            int orderID = 0;
+
+            if (resultSet.next())
+                orderID = resultSet.getInt(1);
+
+            for (Product product : products)
+                insertOrderProduct(orderID, product.getId());
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -80,24 +84,5 @@ public class OrderDAO {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-    }
-
-    private int getOrderID(int userID) {
-        try {
-            connection = DBConnectionUtil.getConnection();
-
-            preparedStatement = connection.prepareStatement(SQL_GET_ORDER_ID);
-            preparedStatement.setInt(1, userID);
-
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next())
-                return resultSet.getInt(1);
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return 0;
     }
 }
