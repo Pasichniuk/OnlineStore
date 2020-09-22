@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "ex" uri = "/WEB-INF/custom.tld"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="tf" %>
 <link rel='stylesheet' href='https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css'>
 
 <html>
@@ -22,6 +23,14 @@
         Welcome!
     </ex:Welcome>
 </h1>
+
+<div>
+    <h5 class="fixed-bottom" align="center">
+        <hr>
+        <tf:tagfile/>
+        <hr>
+    </h5>
+</div>
 
 </body>
 </html>
