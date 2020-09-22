@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "ex" uri = "/WEB-INF/custom.tld"%>
 <link rel='stylesheet' href='https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css'>
 
 <html>
@@ -16,7 +17,11 @@
     </tr>
 </table>
 
-<h1 class="thead-light" align="center">Welcome!</h1>
+<h1 class="thead-light" align="center">
+    <ex:Welcome>
+        Welcome!
+    </ex:Welcome>
+</h1>
 
 </body>
 </html>
