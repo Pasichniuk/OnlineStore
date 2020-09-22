@@ -32,7 +32,7 @@ public class UserDAO {
                 return true;
 
         } catch (SQLException exception) {
-            return false;
+            exception.printStackTrace();
         }
 
         return false;
@@ -50,7 +50,7 @@ public class UserDAO {
                 return true;
 
         } catch (SQLException exception) {
-            return false;
+            exception.printStackTrace();
         }
 
         return false;
@@ -69,7 +69,7 @@ public class UserDAO {
                 return resultSet.getInt(1);
 
         } catch (SQLException exception) {
-            return 0;
+            exception.printStackTrace();
         }
 
         return 0;

@@ -4,7 +4,6 @@ import dao.ProductDAO;
 import entity.Cart;
 import entity.Product;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -27,6 +26,16 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> products = Cart.getProducts();
 
+        if (removeProductFromCart(request, response, products) || addProductToCart(request, response, products))
+            return;
+
+        request.setAttribute("totalPrice", Cart.getTotalPrice());
+        request.setAttribute("products", products);
+
+        request.getRequestDispatcher("view/cart-jsp.jsp").forward(request, response);
+    }
+
+    private boolean removeProductFromCart(HttpServletRequest request, HttpServletResponse response, List<Product> products) throws IOException {
         String productID = request.getParameter("ProductID");
 
         if (productID != null) {
@@ -38,11 +47,15 @@ public class CartServlet extends HttpServlet {
 
                     products.remove(p);
                     response.sendRedirect("/cart");
-                    return;
+                    return true;
                 }
             }
         }
 
+        return false;
+    }
+
+    private boolean addProductToCart(HttpServletRequest request, HttpServletResponse response, List<Product> products) throws IOException {
         Cookie[] cookies = request.getCookies();
 
         for (Cookie c : cookies) {
@@ -57,16 +70,10 @@ public class CartServlet extends HttpServlet {
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
                 response.sendRedirect("/catalog");
-                return;
+                return true;
             }
-
         }
 
-        request.setAttribute("totalPrice", Cart.getTotalPrice());
-
-        request.setAttribute("products", products);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("view/cart-jsp.jsp");
-        dispatcher.forward(request, response);
+        return false;
     }
 }

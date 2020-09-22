@@ -22,6 +22,18 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (validateUserInput(request, response))
+            return;
+
+        response.sendRedirect("/registration");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("view/registration-jsp.jsp").forward(request, response);
+    }
+
+    private boolean validateUserInput(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userLogin = request.getParameter("login");
         String userPassword = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
@@ -32,16 +44,11 @@ public class RegistrationServlet extends HttpServlet {
 
                 if (userDAO.registerUser(userLogin, userPassword)) {
                     response.sendRedirect("/log-in");
-                    return;
+                    return true;
                 }
             }
         }
 
-        response.sendRedirect("/registration");
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("view/registration-jsp.jsp").forward(request, response);
+        return false;
     }
 }

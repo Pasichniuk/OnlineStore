@@ -4,9 +4,8 @@ import entity.Order;
 import entity.Product;
 import util.DBConnectionUtil;
 
+import java.util.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OrderDAO {
 

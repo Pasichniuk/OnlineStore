@@ -4,7 +4,6 @@ import dao.ProductDAO;
 import entity.Product;
 import util.Sorter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -27,15 +26,8 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String productID = request.getParameter("ProductID");
-
-        if (productID != null) {
-            Cookie cookie = new Cookie("ProductID", productID);
-            cookie.setMaxAge(24*60*60);
-            response.addCookie(cookie);
-            response.sendRedirect("/cart");
+        if (sendProductToCart(request, response))
             return;
-        }
 
         List<Product> products = productDAO.getAllProducts();
 
@@ -46,8 +38,21 @@ public class ProductServlet extends HttpServlet {
 
         request.setAttribute("products", products);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("view/catalog-jsp.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("view/catalog-jsp.jsp").forward(request, response);
+    }
+
+    private boolean sendProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String productID = request.getParameter("ProductID");
+
+        if (productID != null) {
+            Cookie cookie = new Cookie("ProductID", productID);
+            cookie.setMaxAge(24*60*60);
+            response.addCookie(cookie);
+            response.sendRedirect("/cart");
+            return true;
+        }
+
+        return false;
     }
 
     private void sortProducts(String sortingOption, List<Product> products) {
@@ -55,6 +60,7 @@ public class ProductServlet extends HttpServlet {
         if (sortingOption != null) {
 
             switch (sortingOption) {
+
                 case "a-z":
                     Sorter.sortProductsAZ(products);
                     break;
