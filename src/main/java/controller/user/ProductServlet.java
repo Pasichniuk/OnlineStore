@@ -1,4 +1,4 @@
-package controller;
+package controller.user;
 
 import dao.ProductDAO;
 import entity.Product;
@@ -38,7 +38,7 @@ public class ProductServlet extends HttpServlet {
 
         request.setAttribute("products", products);
 
-        request.getRequestDispatcher("view/catalog-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher("view/user/catalog-jsp.jsp").forward(request, response);
     }
 
     private boolean sendProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -18,7 +18,9 @@
 </table>
 
 <div class="container">
-    <h3 align="center">User: ${userLogin} <a href="${pageContext.request.contextPath}/profile?logout=true"><h3>Log out</h3></a> </h3>
+    <h3 align="center">User: ${userLogin}
+        <a href="${pageContext.request.contextPath}/log-out"><h3>Log out</h3></a>
+    </h3>
     <hr>
 </div>
 

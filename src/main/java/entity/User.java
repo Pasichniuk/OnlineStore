@@ -4,9 +4,15 @@ public class User {
 
     private int id;
     private String login;
-    private int role;
     private String blockStatus;
-    private String password;
+    private String role;
+
+    public User(int id, String login, String blockStatus, String role) {
+        this.id = id;
+        this.login = login;
+        this.blockStatus = blockStatus;
+        this.role = role;
+    }
 
     public int getId() {
         return id;
@@ -24,14 +30,6 @@ public class User {
         this.login = login;
     }
 
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     public String getBlockStatus() {
         return blockStatus;
     }
@@ -40,11 +38,11 @@ public class User {
         this.blockStatus = blockStatus;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

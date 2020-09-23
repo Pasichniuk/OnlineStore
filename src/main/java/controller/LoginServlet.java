@@ -27,11 +27,16 @@ public class LoginServlet extends HttpServlet {
         if (userDAO.authorizeUser(userLogin, userPassword)) {
             HttpSession session = request.getSession();
 
-            session.setAttribute("userLogin", userLogin);
+            if (userDAO.getUser(userLogin).getRole().equals("ROLE_ADMIN")) {
+                session.setAttribute("adminLogin", userLogin);
+                response.sendRedirect("/admin-profile");
+            } else {
+                session.setAttribute("userLogin", userLogin);
+                response.sendRedirect("/profile");
+            }
 
-            response.sendRedirect("/profile");
-
-        } else response.sendRedirect("/log-in");
+        } else
+            response.sendRedirect("/log-in");
     }
 
     @Override

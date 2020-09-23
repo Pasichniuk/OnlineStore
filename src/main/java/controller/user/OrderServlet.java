@@ -1,4 +1,4 @@
-package controller;
+package controller.user;
 
 import dao.OrderDAO;
 import dao.UserDAO;
@@ -26,7 +26,7 @@ public class OrderServlet extends HttpServlet {
         String userLogin = (String) request.getSession().getAttribute("userLogin");
 
         if (userLogin != null && Cart.getProducts().size() > 0) {
-            orderDAO.insertOrder(userDAO.getUserID(userLogin), Cart.getProducts());
+            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), Cart.getProducts());
             Cart.clearCart();
         }
 

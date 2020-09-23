@@ -1,4 +1,4 @@
-package controller;
+package controller.user;
 
 import dao.OrderDAO;
 import dao.UserDAO;
@@ -28,21 +28,13 @@ public class ProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        String logout = request.getParameter("logout");
-
-        if (logout != null) {
-            session.invalidate();
-            response.sendRedirect("/log-in");
-            return;
-        }
-
         String userLogin = (String)session.getAttribute("userLogin");
 
-        List<Order> orders = orderDAO.getUserOrders(userDAO.getUserID(userLogin));
+        List<Order> orders = orderDAO.getUserOrders(userDAO.getUser(userLogin).getId());
 
         request.setAttribute("userLogin", userLogin);
         request.setAttribute("orders", orders);
 
-        request.getRequestDispatcher("view/profile-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher("view/user/profile-jsp.jsp").forward(request, response);
     }
 }

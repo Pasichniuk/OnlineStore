@@ -1,4 +1,4 @@
-package controller;
+package controller.user;
 
 import dao.ProductDAO;
 import entity.Cart;
@@ -32,7 +32,7 @@ public class CartServlet extends HttpServlet {
         request.setAttribute("totalPrice", Cart.getTotalPrice());
         request.setAttribute("products", products);
 
-        request.getRequestDispatcher("view/cart-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
     }
 
     private boolean removeProductFromCart(HttpServletRequest request, HttpServletResponse response, List<Product> products) throws IOException {

@@ -1,6 +1,9 @@
 package dao;
 
+import entity.User;
 import util.DBConnectionUtil;
+
+import java.util.*;
 import java.sql.*;
 
 public class UserDAO {
@@ -11,7 +14,11 @@ public class UserDAO {
     private static final String SQL_INSERT_USER = "INSERT INTO online_store.store_user(user_login, user_role, user_password) " +
             "VALUES(?, 1, aes_encrypt(?, 'password'))";
 
-    private static final String SQL_GET_USER_ID = "SELECT user_id FROM online_store.store_user WHERE user_login=?";
+    private static final String SQL_FIND_ALL_USERS = "SELECT user_id, user_login, block_status FROM online_store.store_user " +
+            "WHERE user_role=1";
+
+    private static final String SQL_GET_USER = "SELECT user_id, user_login, block_status, role_name FROM online_store.store_user " +
+            "JOIN online_store.role ON store_user.user_role = role.role_id WHERE user_login=?";
 
     private Connection connection;
 
@@ -56,22 +63,49 @@ public class UserDAO {
         return false;
     }
 
-    public int getUserID(String userLogin) {
+    public List<User> getAllUsers() {
+        List<User> users = null;
+        User user;
+
         try {
             connection = DBConnectionUtil.getConnection();
 
-            preparedStatement = connection.prepareStatement(SQL_GET_USER_ID);
-            preparedStatement.setString(1, userLogin);
+            Statement st = connection.createStatement();
 
-            resultSet = preparedStatement.executeQuery();
+            resultSet = st.executeQuery(SQL_FIND_ALL_USERS);
 
-            if (resultSet.next())
-                return resultSet.getInt(1);
+            users = new ArrayList<>();
+
+            while (resultSet.next()) {
+                user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), "ROLE_USER");
+                users.add(user);
+            }
 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
 
-        return 0;
+        return users;
+    }
+
+    public User getUser(String userLogin) {
+        User user = null;
+
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            preparedStatement = connection.prepareStatement(SQL_GET_USER);
+            preparedStatement.setString(1, userLogin);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next())
+                user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return user;
     }
 }
