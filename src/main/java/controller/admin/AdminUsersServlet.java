@@ -20,6 +20,7 @@ public class AdminUsersServlet extends HttpServlet {
         userDAO = new UserDAO();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> users = userDAO.getAllUsers();
 

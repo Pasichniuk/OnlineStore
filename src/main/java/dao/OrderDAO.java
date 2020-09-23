@@ -9,6 +9,8 @@ import java.sql.*;
 
 public class OrderDAO {
 
+    private static final String SQL_FIND_ALL_ORDERS = "SELECT * FROM online_store.order";
+
     private static final String SQL_GET_USER_ORDERS = "SELECT * FROM online_store.order WHERE user_id=?";
 
     private static final String SQL_INSERT_ORDER = "INSERT INTO `online_store`.`order` (`user_id`) VALUES (?)";
@@ -19,6 +21,31 @@ public class OrderDAO {
 
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+
+    public List<Order> getAllOrders() {
+        List<Order> orders = null;
+        Order order;
+
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            Statement st = connection.createStatement();
+
+            resultSet = st.executeQuery(SQL_FIND_ALL_ORDERS);
+
+            orders = new ArrayList<>();
+
+            while (resultSet.next()) {
+                order = new Order(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3));
+                orders.add(order);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return orders;
+    }
 
     public List<Order> getUserOrders(int userID) {
         List<Order> orders = null;
