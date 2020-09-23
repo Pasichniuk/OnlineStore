@@ -13,9 +13,11 @@ public class OrderDAO {
 
     private static final String SQL_GET_USER_ORDERS = "SELECT * FROM online_store.order WHERE user_id=?";
 
-    private static final String SQL_INSERT_ORDER = "INSERT INTO `online_store`.`order` (`user_id`) VALUES (?)";
+    private static final String SQL_INSERT_ORDER = "INSERT INTO online_store.order (user_id) VALUES (?)";
 
-    private static final String SQL_INSERT_ORDER_PRODUCT = "INSERT INTO `online_store`.`order_product` VALUES (?, ?)";
+    private static final String SQL_INSERT_ORDER_PRODUCT = "INSERT INTO online_store.order_product VALUES (?, ?)";
+
+    private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE online_store.order SET order_status=? WHERE order_id=? AND order_status='REGISTERED'";
 
     private Connection connection;
 
@@ -105,6 +107,20 @@ public class OrderDAO {
             preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER_PRODUCT);
             preparedStatement.setInt(1, orderID);
             preparedStatement.setInt(2, productID);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void updateOrderStatus(int orderID, String status) {
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_ORDER_STATUS);
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, orderID);
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {

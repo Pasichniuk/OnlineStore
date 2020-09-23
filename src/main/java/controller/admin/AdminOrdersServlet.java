@@ -22,10 +22,26 @@ public class AdminOrdersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (changeOrderStatus(request, response))
+            return;
+
         List<Order> orders = orderDAO.getAllOrders();
 
         request.setAttribute("orders", orders);
 
         request.getRequestDispatcher("view/admin/admin-orders-jsp.jsp").forward(request, response);
+    }
+
+    private boolean changeOrderStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String orderID = request.getParameter("orderID");
+        String status = request.getParameter("status");
+
+        if (orderID != null && status != null) {
+            orderDAO.updateOrderStatus(Integer.parseInt(orderID), status);
+            response.sendRedirect("/admin-orders");
+            return true;
+        }
+
+        return false;
     }
 }

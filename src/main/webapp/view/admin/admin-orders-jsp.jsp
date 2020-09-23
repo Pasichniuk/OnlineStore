@@ -31,9 +31,9 @@
                 <td>${order.userID}</td>
                 <td>${order.status}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}?status=true">PAID</a>
+                    <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=PAID">PAID</a>
                     /
-                    <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}?status=false">CANCELLED</a>
+                    <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=CANCELLED">CANCELLED</a>
                 </td>
             </tr>
         </c:forEach>
