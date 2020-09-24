@@ -19,18 +19,20 @@ public class OrderDAO {
 
     private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE online_store.order SET order_status=? WHERE order_id=? AND order_status='REGISTERED'";
 
-    private Connection connection;
+    private final Connection connection;
 
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+
+    public OrderDAO() {
+        connection = DBConnectionUtil.getConnection();
+    }
 
     public List<Order> getAllOrders() {
         List<Order> orders = null;
         Order order;
 
         try {
-            connection = DBConnectionUtil.getConnection();
-
             Statement st = connection.createStatement();
 
             resultSet = st.executeQuery(SQL_FIND_ALL_ORDERS);
@@ -54,8 +56,6 @@ public class OrderDAO {
         Order order;
 
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_GET_USER_ORDERS);
             preparedStatement.setInt(1, userID);
 
@@ -77,8 +77,6 @@ public class OrderDAO {
 
     public void insertOrder(int userID, List<Product> products) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, userID);
 
@@ -102,8 +100,6 @@ public class OrderDAO {
 
     private void insertOrderProduct(int orderID, int productID) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER_PRODUCT);
             preparedStatement.setInt(1, orderID);
             preparedStatement.setInt(2, productID);
@@ -116,8 +112,6 @@ public class OrderDAO {
 
     public void updateOrderStatus(int orderID, String status) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_UPDATE_ORDER_STATUS);
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderID);

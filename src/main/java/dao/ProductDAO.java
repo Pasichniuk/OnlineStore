@@ -20,20 +20,24 @@ public class ProductDAO {
 
     private static final String SQL_UPDATE_PRODUCT = "UPDATE online_store.product SET product_name=?, category=?, price=? WHERE product_id=?";
 
+    private static final String SQL_GET_PRODUCT_ID = "SELECT product_id FROM online_store.product WHERE product_name=?";
+
     private static final String SQL_GET_CATEGORY_ID = "SELECT category_id FROM online_store.category WHERE category_name=?";
 
-    private Connection connection;
+    private final Connection connection;
 
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+
+    public ProductDAO() {
+        connection = DBConnectionUtil.getConnection();
+    }
 
     public List<Product> getAllProducts() {
         List<Product> products = null;
         Product product;
 
         try {
-            connection = DBConnectionUtil.getConnection();
-
             Statement st = connection.createStatement();
 
             resultSet = st.executeQuery(SQL_FIND_ALL_PRODUCTS);
@@ -55,8 +59,6 @@ public class ProductDAO {
         Product product = null;
 
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_GET_PRODUCT);
             preparedStatement.setInt(1, productID);
 
@@ -74,8 +76,6 @@ public class ProductDAO {
 
     public void deleteProduct(int productID) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_DELETE_PRODUCT);
             preparedStatement.setInt(1, productID);
             preparedStatement.executeUpdate();
@@ -87,11 +87,9 @@ public class ProductDAO {
 
     public void insertProduct(String productName, String category, float price) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             int categoryID = getCategoryID(category);
 
-            if (categoryID == 0)
+            if (categoryID == 0 || productExists(productName))
                 return;
 
             preparedStatement = connection.prepareStatement(SQL_INSERT_PRODUCT);
@@ -108,11 +106,9 @@ public class ProductDAO {
 
     public void updateProduct(int productID, String productName, String category, float price) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             int categoryID = getCategoryID(category);
 
-            if (categoryID == 0)
+            if (categoryID == 0 || productExists(productName))
                 return;
 
             preparedStatement = connection.prepareStatement(SQL_UPDATE_PRODUCT);
@@ -128,10 +124,25 @@ public class ProductDAO {
         }
     }
 
+    private boolean productExists(String productName) {
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_PRODUCT_ID);
+            preparedStatement.setString(1, productName);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next())
+                return true;
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return false;
+    }
+
     private int getCategoryID(String category) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_ID);
             preparedStatement.setString(1, category);
 

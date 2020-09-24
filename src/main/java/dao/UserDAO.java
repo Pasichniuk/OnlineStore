@@ -22,15 +22,17 @@ public class UserDAO {
 
     private static final String SQL_UPDATE_USER_BLOCK_STATUS = "UPDATE online_store.store_user SET block_status=? WHERE user_id=?";
 
-    private Connection connection;
+    private final Connection connection;
 
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
+    public UserDAO() {
+        connection = DBConnectionUtil.getConnection();
+    }
+
     public boolean authorizeUser(String userLogin, String userPassword) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_AUTHORIZE_USER);
             preparedStatement.setString(1, userLogin);
             preparedStatement.setString(2, userPassword);
@@ -49,7 +51,8 @@ public class UserDAO {
 
     public boolean registerUser(String userLogin, String userPassword) {
         try {
-            connection = DBConnectionUtil.getConnection();
+            if (getUser(userLogin) != null)
+                return false;
 
             preparedStatement = connection.prepareStatement(SQL_INSERT_USER);
             preparedStatement.setString(1, userLogin);
@@ -70,8 +73,6 @@ public class UserDAO {
         User user;
 
         try {
-            connection = DBConnectionUtil.getConnection();
-
             Statement st = connection.createStatement();
 
             resultSet = st.executeQuery(SQL_FIND_ALL_USERS);
@@ -94,8 +95,6 @@ public class UserDAO {
         User user = null;
 
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_GET_USER);
             preparedStatement.setString(1, userLogin);
 
@@ -113,8 +112,6 @@ public class UserDAO {
 
     public void updateUserBlockStatus(String blockStatus, int userID) {
         try {
-            connection = DBConnectionUtil.getConnection();
-
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_BLOCK_STATUS);
             preparedStatement.setString(1, blockStatus);
             preparedStatement.setInt(2, userID);
