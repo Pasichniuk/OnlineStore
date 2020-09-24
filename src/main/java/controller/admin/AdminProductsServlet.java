@@ -22,10 +22,29 @@ public class AdminProductsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (performAction(request, response))
+            return;
+
         List<Product> products = productDAO.getAllProducts();
 
         request.setAttribute("products", products);
 
         request.getRequestDispatcher("/view/admin/admin-catalog-jsp.jsp").forward(request, response);
+    }
+
+    private boolean performAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String productID = request.getParameter("productID");
+        String action = request.getParameter("action");
+
+        if (action != null && productID != null) {
+
+            if (action.equals("DELETE")) {
+                productDAO.deleteProduct(Integer.parseInt(productID));
+                response.sendRedirect("/admin-catalog");
+                return true;
+            }
+        }
+
+        return false;
     }
 }

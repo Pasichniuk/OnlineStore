@@ -14,7 +14,11 @@ public class ProductDAO {
     private static final String SQL_GET_PRODUCT = "SELECT product_id, product_name, category_name, price, addition_date FROM online_store.product \n" +
             "JOIN online_store.category ON product.category = category.category_id WHERE product_id=?";
 
+    private static final String SQL_DELETE_PRODUCT = "DELETE FROM online_store.product WHERE product_id=?";
+
     private Connection connection;
+
+    private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
     public List<Product> getAllProducts() {
@@ -47,10 +51,10 @@ public class ProductDAO {
         try {
             connection = DBConnectionUtil.getConnection();
 
-            PreparedStatement ps = connection.prepareStatement(SQL_GET_PRODUCT);
-            ps.setInt(1, productID);
+            preparedStatement = connection.prepareStatement(SQL_GET_PRODUCT);
+            preparedStatement.setInt(1, productID);
 
-            resultSet = ps.executeQuery();
+            resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next())
                 product = new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getFloat(4), resultSet.getDate(5));
@@ -60,5 +64,18 @@ public class ProductDAO {
         }
 
         return product;
+    }
+
+    public void deleteProduct(int productID) {
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            preparedStatement = connection.prepareStatement(SQL_DELETE_PRODUCT);
+            preparedStatement.setInt(1, productID);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 }
