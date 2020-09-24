@@ -32,7 +32,7 @@
                 <td>${order.status}</td>
                 <td>
                     <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=PAID">PAID</a>
-                    /
+                    |
                     <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=CANCELLED">CANCELLED</a>
                 </td>
             </tr>

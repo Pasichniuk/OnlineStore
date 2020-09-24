@@ -40,7 +40,7 @@
                 <td>${product.price}</td>
                 <td>
                     <a href="${pageContext.request.contextPath}/view/admin/product-edit-jsp.jsp?productID=${product.id}">Edit</a>
-                    /
+                    |
                     <a href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}">Delete</a>
                 </td>
             </tr>

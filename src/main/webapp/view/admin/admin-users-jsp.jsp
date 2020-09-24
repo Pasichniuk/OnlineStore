@@ -32,7 +32,7 @@
                 <td>${user.blockStatus}</td>
                 <td>
                     <a href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=BLOCKED">Block</a>
-                    /
+                    |
                     <a href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=UNBLOCKED">Unblock</a>
                 </td>
             </tr>

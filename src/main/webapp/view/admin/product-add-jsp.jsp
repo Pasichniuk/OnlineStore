@@ -7,16 +7,41 @@
 </head>
 <body>
 
-<form action="${pageContext.request.contextPath}/admin-catalog?action=ADD" method="post">
 <div class="container">
-    <label>
-        Enter product name: <input type="text" name="productName"/> <br/>
-        Enter category: <input type="text" name="category"/> <br/>
-        Enter price: <input type="text" name="price"/> <br/>
-        <button type="submit" class="btn btn-primary">Add product</button>
-    </label>
+
+    <h1>Add new product</h1>
+    <hr/>
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <form action="${pageContext.request.contextPath}/admin-catalog?action=ADD" method="post">
+
+                    <div class="form-group">
+                        <label>
+                            <input type="text" name="productName" placeholder="Enter product name" class="form-control"/>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="text" name="category" placeholder="Enter category" class="form-control"/>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="text" name="price" placeholder="Enter price" class="form-control"/>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add product</button>
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
-</form>
 
 </body>
 </html>
