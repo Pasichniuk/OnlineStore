@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class UserDAO {
 
-    private static final String SQL_GET_USER_LOGIN = "SELECT user_login FROM online_store.store_user " +
+    private static final String SQL_AUTHORIZE_USER = "SELECT user_login, block_status FROM online_store.store_user " +
             "WHERE user_login=? AND user_password=aes_encrypt(?, 'password')";
 
     private static final String SQL_INSERT_USER = "INSERT INTO online_store.store_user(user_login, user_role, user_password) " +
@@ -20,6 +20,8 @@ public class UserDAO {
     private static final String SQL_GET_USER = "SELECT user_id, user_login, block_status, role_name FROM online_store.store_user " +
             "JOIN online_store.role ON store_user.user_role = role.role_id WHERE user_login=?";
 
+    private static final String SQL_UPDATE_USER_BLOCK_STATUS = "UPDATE online_store.store_user SET block_status=? WHERE user_id=?";
+
     private Connection connection;
 
     private PreparedStatement preparedStatement;
@@ -29,13 +31,13 @@ public class UserDAO {
         try {
             connection = DBConnectionUtil.getConnection();
 
-            preparedStatement = connection.prepareStatement(SQL_GET_USER_LOGIN);
+            preparedStatement = connection.prepareStatement(SQL_AUTHORIZE_USER);
             preparedStatement.setString(1, userLogin);
             preparedStatement.setString(2, userPassword);
 
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next())
+            if (resultSet.next() && resultSet.getString(2).equals("UNBLOCKED"))
                 return true;
 
         } catch (SQLException exception) {
@@ -107,5 +109,19 @@ public class UserDAO {
         }
 
         return user;
+    }
+
+    public void updateUserBlockStatus(String blockStatus, int userID) {
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_BLOCK_STATUS);
+            preparedStatement.setString(1, blockStatus);
+            preparedStatement.setInt(2, userID);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 }
