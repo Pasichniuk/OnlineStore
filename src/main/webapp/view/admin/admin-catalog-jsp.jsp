@@ -18,8 +18,8 @@
 </table>
 
 <div class="container">
-    <form action="${pageContext.request.contextPath}/admin-catalog?action=ADD">
-        <input type="submit" value="Add product" class="btn btn-primary">
+    <form action="${pageContext.request.contextPath}/view/admin/product-add-jsp.jsp">
+        <button type="submit" class="btn btn-primary">Add product</button>
     </form>
 </div>
 
@@ -39,9 +39,9 @@
                 <td>${product.additionDate}</td>
                 <td>${product.price}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}&action=EDIT">Edit</a>
+                    <a href="${pageContext.request.contextPath}/admin-catalog?">Edit</a>
                     /
-                    <a href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}&action=DELETE">Delete</a>
+                    <a href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}">Delete</a>
                 </td>
             </tr>
         </c:forEach>

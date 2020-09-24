@@ -16,6 +16,10 @@ public class ProductDAO {
 
     private static final String SQL_DELETE_PRODUCT = "DELETE FROM online_store.product WHERE product_id=?";
 
+    private static final String SQL_INSERT_PRODUCT = "INSERT INTO online_store.product (product_name, category, price) VALUES (?, ?, ?)";
+
+    private static final String SQL_GET_CATEGORY_ID = "SELECT category_id FROM online_store.category WHERE category_name=?";
+
     private Connection connection;
 
     private PreparedStatement preparedStatement;
@@ -77,5 +81,45 @@ public class ProductDAO {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void insertProduct(String productName, String category, float price) {
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            int categoryID = getCategoryID(category);
+
+            if (categoryID == 0)
+                return;
+
+            preparedStatement = connection.prepareStatement(SQL_INSERT_PRODUCT);
+            preparedStatement.setString(1, productName);
+            preparedStatement.setInt(2, categoryID);
+            preparedStatement.setFloat(3, price);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private int getCategoryID(String category) {
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_ID);
+            preparedStatement.setString(1, category);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next())
+                return resultSet.getInt(1);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return 0;
     }
 }
