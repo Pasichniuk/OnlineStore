@@ -24,10 +24,16 @@ public class AdminProductsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (addProduct(request, response))
-            return;
+        String action = request.getParameter("action");
 
-        response.sendRedirect("/view/admin/product-add-jsp.jsp");
+        if (action.equals("ADD")) {
+            addProduct(request, response);
+
+        } else if (action.equals("EDIT")) {
+            editProduct(request, response);
+
+        } else
+            response.sendRedirect("/view/admin/product-add-jsp.jsp");
     }
 
     @Override
@@ -42,7 +48,7 @@ public class AdminProductsServlet extends HttpServlet {
         request.getRequestDispatcher("/view/admin/admin-catalog-jsp.jsp").forward(request, response);
     }
 
-    private boolean addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productName = request.getParameter("productName");
         String category = request.getParameter("category");
         String price = request.getParameter("price");
@@ -50,10 +56,19 @@ public class AdminProductsServlet extends HttpServlet {
         if (productName.matches(CHECK_INPUT_REGEX) && category.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.insertProduct(productName, category, Float.parseFloat(price));
             response.sendRedirect("/admin-catalog");
-            return true;
         }
+    }
 
-        return false;
+    private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int productID = Integer.parseInt(request.getParameter("productID"));
+        String productName = request.getParameter("productName");
+        String category = request.getParameter("category");
+        String price = request.getParameter("price");
+
+        if (productName.matches(CHECK_INPUT_REGEX) && category.matches(CHECK_INPUT_REGEX) && price != null) {
+            productDAO.updateProduct(productID, productName, category, Float.parseFloat(price));
+            response.sendRedirect("/admin-catalog");
+        }
     }
 
     private boolean deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {

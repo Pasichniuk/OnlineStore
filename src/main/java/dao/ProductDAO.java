@@ -18,6 +18,8 @@ public class ProductDAO {
 
     private static final String SQL_INSERT_PRODUCT = "INSERT INTO online_store.product (product_name, category, price) VALUES (?, ?, ?)";
 
+    private static final String SQL_UPDATE_PRODUCT = "UPDATE online_store.product SET product_name=?, category=?, price=? WHERE product_id=?";
+
     private static final String SQL_GET_CATEGORY_ID = "SELECT category_id FROM online_store.category WHERE category_name=?";
 
     private Connection connection;
@@ -96,6 +98,28 @@ public class ProductDAO {
             preparedStatement.setString(1, productName);
             preparedStatement.setInt(2, categoryID);
             preparedStatement.setFloat(3, price);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void updateProduct(int productID, String productName, String category, float price) {
+        try {
+            connection = DBConnectionUtil.getConnection();
+
+            int categoryID = getCategoryID(category);
+
+            if (categoryID == 0)
+                return;
+
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_PRODUCT);
+            preparedStatement.setString(1, productName);
+            preparedStatement.setInt(2, categoryID);
+            preparedStatement.setFloat(3, price);
+            preparedStatement.setInt(4, productID);
 
             preparedStatement.executeUpdate();
 

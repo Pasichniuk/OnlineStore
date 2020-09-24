@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form action="${pageContext.request.contextPath}/admin-catalog" method="post">
+<form action="${pageContext.request.contextPath}/admin-catalog?action=ADD" method="post">
 <div class="container">
     <label>
         Enter product name: <input type="text" name="productName"/> <br/>
