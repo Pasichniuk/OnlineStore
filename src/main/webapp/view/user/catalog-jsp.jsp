@@ -17,21 +17,32 @@
     </tr>
 </table>
 
-<form action="${pageContext.request.contextPath}/catalog">
-<div class="container" >
-    <label>
-        <select name="Sort">
-            <option value="a-z" selected>A-Z</option>
-            <option value="z-a">Z-A</option>
-            <option value="cheap-expensive">Cheap-Expensive</option>
-            <option value="expensive-cheap">Expensive-Cheap</option>
-            <option value="older-newer">Older-Newer</option>
-            <option value="newer-older">Newer-Older</option>
-        </select>
-    </label>
-    <input type="submit" value="Sort" class="btn btn-primary">
+
+<div class="container">
+
+    <form action="${pageContext.request.contextPath}/catalog">
+        <label>
+            <select name="Sort">
+                <option value="a-z" selected>A-Z</option>
+                <option value="z-a">Z-A</option>
+                <option value="cheap-expensive">Cheap-Expensive</option>
+                <option value="expensive-cheap">Expensive-Cheap</option>
+                <option value="older-newer">Older-Newer</option>
+                <option value="newer-older">Newer-Older</option>
+            </select>
+        </label>
+        <input type="submit" value="Sort" class="btn btn-primary">
+    </form>
+
+    <form action="${pageContext.request.contextPath}/catalog" method="post">
+        <label>
+            <input type="number" name="minPrice"  min="0" placeholder="Enter min price"/>
+            <input type="number" name="maxPrice" max="10_000" placeholder="Enter max price"/>
+        </label>
+        <input type="submit" value="Apply" class="btn btn-primary">
+    </form>
+
 </div>
-</form>
 
 <div class="container">
        <table border="1" class="table table-striped table-bordered">

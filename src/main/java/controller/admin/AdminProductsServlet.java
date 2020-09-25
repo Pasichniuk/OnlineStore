@@ -41,7 +41,7 @@ public class AdminProductsServlet extends HttpServlet {
         if (deleteProduct(request, response))
             return;
 
-        List<Product> products = productDAO.getAllProducts();
+        List<Product> products = productDAO.getAllProducts(0, 10_000);
 
         request.setAttribute("products", products);
 

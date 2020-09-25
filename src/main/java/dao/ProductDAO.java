@@ -9,7 +9,7 @@ import java.sql.*;
 public class ProductDAO {
 
     private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, price, addition_date FROM online_store.product \n" +
-            "JOIN online_store.category ON product.category = category.category_id";
+            "JOIN online_store.category ON product.category = category.category_id WHERE price BETWEEN ? AND ?";
 
     private static final String SQL_GET_PRODUCT = "SELECT product_id, product_name, category_name, price, addition_date FROM online_store.product \n" +
             "JOIN online_store.category ON product.category = category.category_id WHERE product_id=?";
@@ -33,14 +33,16 @@ public class ProductDAO {
         connection = DBConnectionUtil.getConnection();
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts(int minPrice, int maxPrice) {
         List<Product> products = null;
         Product product;
 
         try {
-            Statement st = connection.createStatement();
+            preparedStatement = connection.prepareStatement(SQL_FIND_ALL_PRODUCTS);
+            preparedStatement.setInt(1, minPrice);
+            preparedStatement.setInt(2, maxPrice);
 
-            resultSet = st.executeQuery(SQL_FIND_ALL_PRODUCTS);
+            resultSet = preparedStatement.executeQuery();
 
             products = new ArrayList<>();
 

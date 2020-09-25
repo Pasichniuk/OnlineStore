@@ -18,18 +18,26 @@ public class ProductServlet extends HttpServlet {
 
     private final ProductDAO productDAO;
 
+    private List<Product> products;
+
     private String sortingOption;
 
     public ProductServlet() {
         productDAO = new ProductDAO();
+        products = productDAO.getAllProducts(0, 10_000);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        products = getProductsFromPriceRange(request);
+
+        response.sendRedirect("/catalog");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (sendProductToCart(request, response))
             return;
-
-        List<Product> products = productDAO.getAllProducts();
 
         if (request.getParameter("Sort") != null)
             sortingOption = request.getParameter("Sort");
@@ -55,9 +63,22 @@ public class ProductServlet extends HttpServlet {
         return false;
     }
 
+    private List<Product> getProductsFromPriceRange(HttpServletRequest request) {
+        int minPrice = 0;
+        int maxPrice = 10_000;
+
+        if (request.getParameter("minPrice") != null && request.getParameter("minPrice").length() > 0)
+            minPrice = Integer.parseInt(request.getParameter("minPrice"));
+
+        if (request.getParameter("maxPrice") != null && request.getParameter("maxPrice").length() > 0)
+            maxPrice = Integer.parseInt(request.getParameter("maxPrice"));
+
+        return productDAO.getAllProducts(minPrice, maxPrice);
+    }
+
     private void sortProducts(String sortingOption, List<Product> products) {
 
-        if (sortingOption != null) {
+        if (sortingOption != null && !products.isEmpty()) {
 
             switch (sortingOption) {
 
