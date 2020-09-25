@@ -15,7 +15,7 @@ public class AdminProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        String adminLogin = (String)session.getAttribute("adminLogin");
+        String adminLogin = (String)session.getAttribute("userLogin");
 
         request.setAttribute("adminLogin", adminLogin);
 

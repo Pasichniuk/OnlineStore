@@ -21,33 +21,64 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (authorizeUser(request, response))
+            return;
+
+        response.sendRedirect("/log-in");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (getProfile(request, response))
+            return;
+
+        request.getRequestDispatcher("view/login-jsp.jsp").forward(request, response);
+    }
+
+    private boolean authorizeUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userLogin = request.getParameter("login");
         String userPassword = request.getParameter("password");
 
         if (userDAO.authorizeUser(userLogin, userPassword)) {
             HttpSession session = request.getSession();
 
-            if (userDAO.getUser(userLogin).getRole().equals("ROLE_ADMIN")) {
-                session.setAttribute("adminLogin", userLogin);
-                response.sendRedirect("/admin-profile");
-            } else {
+            String role = userDAO.getUser(userLogin).getRole();
+
+            if (role.equals("ROLE_ADMIN")) {
                 session.setAttribute("userLogin", userLogin);
+                session.setAttribute("role", role);
+
+                response.sendRedirect("/admin-profile");
+                return true;
+
+            } else if (role.equals("ROLE_USER")) {
+                session.setAttribute("userLogin", userLogin);
+                session.setAttribute("role", role);
+
                 response.sendRedirect("/profile");
+                return true;
             }
-
-        } else
-            response.sendRedirect("/log-in");
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        if (session.getAttribute("userLogin") != null) {
-            response.sendRedirect("/profile");
-            return;
         }
 
-        request.getRequestDispatcher("view/login-jsp.jsp").forward(request, response);
+        return false;
+    }
+
+    private boolean getProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("userLogin") != null && session.getAttribute("role") != null) {
+
+            String role = (String) session.getAttribute("role");
+
+            if (role.equals("ROLE_ADMIN")) {
+                response.sendRedirect("/admin-profile");
+                return true;
+            } else if (role.equals("ROLE_USER")) {
+                response.sendRedirect("/profile");
+                return true;
+            }
+        }
+
+        return false;
     }
 }
