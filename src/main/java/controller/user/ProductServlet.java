@@ -22,16 +22,14 @@ public class ProductServlet extends HttpServlet {
 
     private String sortingOption;
 
+    private String selectedCategory;
+
+    private int minPrice = 0;
+    private int maxPrice = 10_000;
+
     public ProductServlet() {
         productDAO = new ProductDAO();
-        products = productDAO.getAllProducts(0, 10_000);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        products = getProductsFromPriceRange(request);
-
-        response.sendRedirect("/catalog");
+        products = productDAO.getAllProducts(minPrice, maxPrice);
     }
 
     @Override
@@ -39,10 +37,17 @@ public class ProductServlet extends HttpServlet {
         if (sendProductToCart(request, response))
             return;
 
+        getProductsFromPriceRange(request);
+
+        if (request.getParameter("Category") != null)
+            selectedCategory = request.getParameter("Category");
+
+        getProductsFromCategory();
+
         if (request.getParameter("Sort") != null)
             sortingOption = request.getParameter("Sort");
 
-        sortProducts(sortingOption, products);
+        sortProducts(sortingOption);
 
         request.setAttribute("products", products);
 
@@ -63,20 +68,28 @@ public class ProductServlet extends HttpServlet {
         return false;
     }
 
-    private List<Product> getProductsFromPriceRange(HttpServletRequest request) {
-        int minPrice = 0;
-        int maxPrice = 10_000;
-
+    private void getProductsFromPriceRange(HttpServletRequest request) {
         if (request.getParameter("minPrice") != null && request.getParameter("minPrice").length() > 0)
             minPrice = Integer.parseInt(request.getParameter("minPrice"));
 
         if (request.getParameter("maxPrice") != null && request.getParameter("maxPrice").length() > 0)
             maxPrice = Integer.parseInt(request.getParameter("maxPrice"));
 
-        return productDAO.getAllProducts(minPrice, maxPrice);
+        products = productDAO.getAllProducts(minPrice, maxPrice);
     }
 
-    private void sortProducts(String sortingOption, List<Product> products) {
+    private void getProductsFromCategory() {
+
+        if (selectedCategory != null && !products.isEmpty()) {
+
+            if (selectedCategory.equals("All"))
+                products = productDAO.getAllProducts(minPrice, maxPrice);
+            else
+                products.removeIf(product -> !product.getCategory().equals(selectedCategory));
+        }
+    }
+
+    private void sortProducts(String sortingOption) {
 
         if (sortingOption != null && !products.isEmpty()) {
 

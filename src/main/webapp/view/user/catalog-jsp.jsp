@@ -34,7 +34,20 @@
         <input type="submit" value="Sort" class="btn btn-primary">
     </form>
 
-    <form action="${pageContext.request.contextPath}/catalog" method="post">
+    <form action="${pageContext.request.contextPath}/catalog">
+        <label>
+            <select name="Category">
+                <option value="All" selected>All</option>
+                <option value="Phones">Phones</option>
+                <option value="Laptops">Laptops</option>
+                <option value="Headphones">Headphones</option>
+                <option value="Home appliances">Home appliances</option>
+            </select>
+        </label>
+        <input type="submit" value="Apply" class="btn btn-primary">
+    </form>
+
+    <form action="${pageContext.request.contextPath}/catalog">
         <label>
             <input type="number" name="minPrice"  min="0" placeholder="Enter min price"/>
             <input type="number" name="maxPrice" max="10_000" placeholder="Enter max price"/>
