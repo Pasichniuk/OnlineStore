@@ -33,6 +33,19 @@ public class ProductDAO {
         connection = DBConnectionUtil.getConnection();
     }
 
+    public List<Product> getProductsOnPage(int offset, int recordsPerPage, int minPrice, int maxPrice) {
+        List<Product> products = getAllProducts(minPrice, maxPrice);
+        List<Product> productsOnPage = new ArrayList<>();
+
+        for (int i = offset; i < (offset + recordsPerPage); i++) {
+
+            if (i < products.size())
+                productsOnPage.add(products.get(i));
+        }
+
+        return productsOnPage;
+    }
+
     public List<Product> getAllProducts(int minPrice, int maxPrice) {
         List<Product> products = null;
         Product product;

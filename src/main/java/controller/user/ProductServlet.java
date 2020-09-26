@@ -20,22 +20,31 @@ public class ProductServlet extends HttpServlet {
 
     private List<Product> products;
 
-    private String sortingOption;
-
     private String selectedCategory;
+
+    private String sortingOption;
 
     private int minPrice = 0;
     private int maxPrice = 10_000;
 
+    private static final int RECORDS_PER_PAGE = 5;
+    private final int productsAmount;
+    private int pageNumber = 1;
+    private int pagesAmount;
+
     public ProductServlet() {
         productDAO = new ProductDAO();
         products = productDAO.getAllProducts(minPrice, maxPrice);
+        productsAmount = products.size();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (sendProductToCart(request, response))
             return;
+
+        if (request.getParameter("page") != null)
+            pageNumber = Integer.parseInt(request.getParameter("page"));
 
         getProductsFromPriceRange(request);
 
@@ -50,6 +59,8 @@ public class ProductServlet extends HttpServlet {
         sortProducts(sortingOption);
 
         request.setAttribute("products", products);
+        request.setAttribute("pagesAmount", pagesAmount);
+        request.setAttribute("currentPage", pageNumber);
 
         request.getRequestDispatcher("view/user/catalog-jsp.jsp").forward(request, response);
     }
@@ -68,14 +79,21 @@ public class ProductServlet extends HttpServlet {
         return false;
     }
 
+    private void getProductsOnPage() {
+        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, minPrice, maxPrice);
+
+        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
+    }
+
     private void getProductsFromPriceRange(HttpServletRequest request) {
+
         if (request.getParameter("minPrice") != null && request.getParameter("minPrice").length() > 0)
             minPrice = Integer.parseInt(request.getParameter("minPrice"));
 
         if (request.getParameter("maxPrice") != null && request.getParameter("maxPrice").length() > 0)
             maxPrice = Integer.parseInt(request.getParameter("maxPrice"));
 
-        products = productDAO.getAllProducts(minPrice, maxPrice);
+        getProductsOnPage();
     }
 
     private void getProductsFromCategory() {
@@ -83,7 +101,7 @@ public class ProductServlet extends HttpServlet {
         if (selectedCategory != null && !products.isEmpty()) {
 
             if (selectedCategory.equals("All"))
-                products = productDAO.getAllProducts(minPrice, maxPrice);
+                getProductsOnPage();
             else
                 products.removeIf(product -> !product.getCategory().equals(selectedCategory));
         }
