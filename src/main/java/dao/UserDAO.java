@@ -68,6 +68,19 @@ public class UserDAO {
         return false;
     }
 
+    public List<User> getUsersOnPage(int offset, int recordsPerPage) {
+        List<User> users = getAllUsers();
+        List<User> usersOnPage = new ArrayList<>();
+
+        for (int i = offset; i < (offset + recordsPerPage); i++) {
+
+            if (i < users.size())
+                usersOnPage.add(users.get(i));
+        }
+
+        return usersOnPage;
+    }
+
     public List<User> getAllUsers() {
         List<User> users = null;
         User user;
