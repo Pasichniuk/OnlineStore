@@ -21,11 +21,24 @@ public final class Cart {
         totalPrice -= number;
     }
 
-    public static List<Product> getProducts() {
+    public static float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public static List<Product> getCartProducts() {
         return products;
     }
 
-    public static float getTotalPrice() {
-        return totalPrice;
+    public static List<Product> getCartProductsOnPage(int offset, int recordsPerPage) {
+        List<Product> products = getCartProducts();
+        List<Product> productsOnPage = new ArrayList<>();
+
+        for (int i = offset; i < (offset + recordsPerPage); i++) {
+
+            if (i < products.size())
+                productsOnPage.add(products.get(i));
+        }
+
+        return productsOnPage;
     }
 }

@@ -18,19 +18,37 @@ public class CartServlet extends HttpServlet {
 
     private final ProductDAO productDAO;
 
+    private List<Product> products;
+
+    private static final int RECORDS_PER_PAGE = 5;
+    private int pageNumber = 1;
+
+    private int productsAmount;
+    private int pagesAmount;
+
     public CartServlet() {
         productDAO = new ProductDAO();
+        products = Cart.getCartProducts();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Product> products = Cart.getProducts();
+        products = Cart.getCartProducts();
 
         if (removeProductFromCart(request, response, products) || addProductToCart(request, response, products))
             return;
 
+        productsAmount = products.size();
+
+        if (request.getParameter("page") != null)
+            pageNumber = Integer.parseInt(request.getParameter("page"));
+
+        getProductsOnPage();
+
         request.setAttribute("totalPrice", Cart.getTotalPrice());
         request.setAttribute("products", products);
+        request.setAttribute("pagesAmount", pagesAmount);
+        request.setAttribute("currentPage", pageNumber);
 
         request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
     }
@@ -75,5 +93,11 @@ public class CartServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    private void getProductsOnPage() {
+        products = Cart.getCartProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
+
+        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
     }
 }
