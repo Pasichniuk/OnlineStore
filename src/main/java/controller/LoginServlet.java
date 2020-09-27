@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
         if (authorizeUser(request, response))
             return;
 
-        response.sendRedirect("/log-in");
+        response.getWriter().write(notifyIncorrectLoginInput());
     }
 
     @Override
@@ -80,5 +80,9 @@ public class LoginServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    private String notifyIncorrectLoginInput() {
+        return "<script>" + "alert('Incorrect login or password! Please, check your input.');" + "window.location = 'http://localhost:8080/log-in';" + "</script>";
     }
 }

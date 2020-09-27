@@ -28,8 +28,12 @@ public class OrderServlet extends HttpServlet {
         if (userLogin != null && Cart.getCartProducts().size() > 0) {
             orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), Cart.getCartProducts());
             Cart.clearCart();
-        }
+            response.sendRedirect("/cart");
+        } else
+            response.getWriter().write(notifyUnauthorizedUser());
+    }
 
-        response.sendRedirect("/cart");
+    private String notifyUnauthorizedUser() {
+        return "<script>" + "alert('Only authorized users can make orders. Cart cannot be empty.');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
     }
 }

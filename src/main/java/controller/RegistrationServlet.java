@@ -25,7 +25,7 @@ public class RegistrationServlet extends HttpServlet {
         if (validateUserInput(request, response))
             return;
 
-        response.sendRedirect("/registration");
+        response.getWriter().write(notifyIncorrectInput());
     }
 
     @Override
@@ -50,5 +50,9 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    private String notifyIncorrectInput() {
+        return "<script>" + "alert('Incorrect input! Please, try again.');" + "window.location = 'http://localhost:8080/registration';" + "</script>";
     }
 }

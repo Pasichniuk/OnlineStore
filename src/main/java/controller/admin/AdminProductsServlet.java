@@ -45,7 +45,7 @@ public class AdminProductsServlet extends HttpServlet {
             editProduct(request, response);
 
         } else
-            response.sendRedirect("/view/admin/product-add-jsp.jsp");
+            response.sendRedirect("/admin-catalog");
     }
 
     @Override
@@ -79,7 +79,8 @@ public class AdminProductsServlet extends HttpServlet {
         if (productName.matches(CHECK_INPUT_REGEX) && category.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.insertProduct(productName, category, Float.parseFloat(price));
             response.sendRedirect("/admin-catalog");
-        }
+        } else
+            response.getWriter().write(notifyIncorrectInput());
     }
 
     private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -91,7 +92,8 @@ public class AdminProductsServlet extends HttpServlet {
         if (productName.matches(CHECK_INPUT_REGEX) && category.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.updateProduct(productID, productName, category, Float.parseFloat(price));
             response.sendRedirect("/admin-catalog");
-        }
+        } else
+            response.getWriter().write(notifyIncorrectInput());
     }
 
     private boolean deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -104,5 +106,9 @@ public class AdminProductsServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    private String notifyIncorrectInput() {
+        return "<script>" + "alert('Incorrect input! Please, try again.');" + "window.location = 'http://localhost:8080/admin-catalog';" + "</script>";
     }
 }
