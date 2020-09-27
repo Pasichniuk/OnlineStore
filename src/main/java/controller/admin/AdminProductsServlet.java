@@ -16,10 +16,22 @@ public class AdminProductsServlet extends HttpServlet {
 
     private static final String CHECK_INPUT_REGEX = "^[a-zA-Z0-9 ._-]{3,}$";
 
+    private static final int MAX_PRICE = 10_000;
+    private static final int MIN_PRICE = 0;
+
+    private static final int RECORDS_PER_PAGE = 5;
+    private final int productsAmount;
+    private int pageNumber = 1;
+    private int pagesAmount;
+
     private final ProductDAO productDAO;
+
+    private List<Product> products;
 
     public AdminProductsServlet() {
         productDAO = new ProductDAO();
+        products = productDAO.getAllProducts(MIN_PRICE, MAX_PRICE);
+        productsAmount = products.size();
     }
 
     @Override
@@ -41,11 +53,22 @@ public class AdminProductsServlet extends HttpServlet {
         if (deleteProduct(request, response))
             return;
 
-        List<Product> products = productDAO.getAllProducts(0, 10_000);
+        if (request.getParameter("page") != null)
+            pageNumber = Integer.parseInt(request.getParameter("page"));
+
+        getProductsOnPage();
 
         request.setAttribute("products", products);
+        request.setAttribute("pagesAmount", pagesAmount);
+        request.setAttribute("currentPage", pageNumber);
 
         request.getRequestDispatcher("/view/admin/admin-catalog-jsp.jsp").forward(request, response);
+    }
+
+    private void getProductsOnPage() {
+        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, MIN_PRICE, MAX_PRICE);
+
+        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
     }
 
     private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
