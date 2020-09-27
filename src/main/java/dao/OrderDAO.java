@@ -28,6 +28,19 @@ public class OrderDAO {
         connection = DBConnectionUtil.getConnection();
     }
 
+    public List<Order> getOrdersOnPage(int offset, int recordsPerPage) {
+        List<Order> orders = getAllOrders();
+        List<Order> ordersOnPage = new ArrayList<>();
+
+        for (int i = offset; i < (offset + recordsPerPage); i++) {
+
+            if (i < orders.size())
+                ordersOnPage.add(orders.get(i));
+        }
+
+        return ordersOnPage;
+    }
+
     public List<Order> getAllOrders() {
         List<Order> orders = null;
         Order order;

@@ -16,8 +16,17 @@ public class AdminOrdersServlet extends HttpServlet {
 
     private final OrderDAO orderDAO;
 
+    private List<Order> orders;
+
+    private static final int RECORDS_PER_PAGE = 5;
+    private final int ordersAmount;
+    private int pageNumber = 1;
+    private int pagesAmount;
+
     public AdminOrdersServlet() {
         orderDAO = new OrderDAO();
+        orders = orderDAO.getAllOrders();
+        ordersAmount = orders.size();
     }
 
     @Override
@@ -25,9 +34,14 @@ public class AdminOrdersServlet extends HttpServlet {
         if (changeOrderStatus(request, response))
             return;
 
-        List<Order> orders = orderDAO.getAllOrders();
+        if (request.getParameter("page") != null)
+            pageNumber = Integer.parseInt(request.getParameter("page"));
+
+        getOrdersOnPage();
 
         request.setAttribute("orders", orders);
+        request.setAttribute("pagesAmount", pagesAmount);
+        request.setAttribute("currentPage", pageNumber);
 
         request.getRequestDispatcher("view/admin/admin-orders-jsp.jsp").forward(request, response);
     }
@@ -43,5 +57,11 @@ public class AdminOrdersServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    private void getOrdersOnPage() {
+        orders = orderDAO.getOrdersOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
+
+        pagesAmount = (int) Math.ceil(ordersAmount * 1.0 / RECORDS_PER_PAGE);
     }
 }
