@@ -28,14 +28,13 @@ public class ProductServlet extends HttpServlet {
     private int maxPrice = 10_000;
 
     private static final int RECORDS_PER_PAGE = 5;
-    private final int productsAmount;
+    private int productsAmount;
     private int pageNumber = 1;
     private int pagesAmount;
 
     public ProductServlet() {
         productDAO = new ProductDAO();
         products = productDAO.getAllProducts(minPrice, maxPrice);
-        productsAmount = products.size();
     }
 
     @Override
@@ -43,8 +42,7 @@ public class ProductServlet extends HttpServlet {
         if (sendProductToCart(request, response))
             return;
 
-        if (request.getParameter("page") != null)
-            pageNumber = Integer.parseInt(request.getParameter("page"));
+        productsAmount = products.size();
 
         getProductsFromPriceRange(request);
 
@@ -57,6 +55,11 @@ public class ProductServlet extends HttpServlet {
             sortingOption = request.getParameter("Sort");
 
         sortProducts(sortingOption);
+
+        if (request.getParameter("page") != null)
+            pageNumber = Integer.parseInt(request.getParameter("page"));
+
+        getProductsOnPage();
 
         request.setAttribute("products", products);
         request.setAttribute("pagesAmount", pagesAmount);
@@ -80,7 +83,9 @@ public class ProductServlet extends HttpServlet {
     }
 
     private void getProductsOnPage() {
-        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, minPrice, maxPrice);
+        productsAmount = products.size();
+
+        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, products);
 
         pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
     }
@@ -93,16 +98,14 @@ public class ProductServlet extends HttpServlet {
         if (request.getParameter("maxPrice") != null && request.getParameter("maxPrice").length() > 0)
             maxPrice = Integer.parseInt(request.getParameter("maxPrice"));
 
-        getProductsOnPage();
+        products = productDAO.getAllProducts(minPrice, maxPrice);
     }
 
     private void getProductsFromCategory() {
 
         if (selectedCategory != null && !products.isEmpty()) {
 
-            if (selectedCategory.equals("All"))
-                getProductsOnPage();
-            else
+            if (!selectedCategory.equals("All"))
                 products.removeIf(product -> !product.getCategory().equals(selectedCategory));
         }
     }

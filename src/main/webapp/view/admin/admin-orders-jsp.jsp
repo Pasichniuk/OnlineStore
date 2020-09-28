@@ -30,7 +30,17 @@
             <tr>
                 <td>${order.orderID}</td>
                 <td>${order.userID}</td>
-                <td>${order.status}</td>
+                <c:choose>
+                    <c:when test="${order.status == 'PAID'}">
+                        <td><fmt:message key="order_paid"/></td>
+                    </c:when>
+                    <c:when test="${order.status == 'REGISTERED'}">
+                        <td><fmt:message key="order_registered"/></td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><fmt:message key="order_cancelled"/></td>
+                    </c:otherwise>
+                </c:choose>
                 <td>
                     <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=PAID"><fmt:message key="order_paid"/></a>
                     |

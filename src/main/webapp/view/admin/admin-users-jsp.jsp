@@ -30,7 +30,14 @@
             <tr>
                 <td>${user.id}</td>
                 <td>${user.login}</td>
-                <td>${user.blockStatus}</td>
+                <c:choose>
+                    <c:when test="${user.blockStatus == 'BLOCKED'}">
+                        <td><fmt:message key="user.blocked"/></td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><fmt:message key="user.unblocked"/></td>
+                     </c:otherwise>
+                </c:choose>
                 <td>
                     <a href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=BLOCKED"><fmt:message key="block"/></a>
                     |

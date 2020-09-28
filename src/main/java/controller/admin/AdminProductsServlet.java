@@ -20,7 +20,7 @@ public class AdminProductsServlet extends HttpServlet {
     private static final int MIN_PRICE = 0;
 
     private static final int RECORDS_PER_PAGE = 5;
-    private final int productsAmount;
+    private int productsAmount;
     private int pageNumber = 1;
     private int pagesAmount;
 
@@ -30,8 +30,6 @@ public class AdminProductsServlet extends HttpServlet {
 
     public AdminProductsServlet() {
         productDAO = new ProductDAO();
-        products = productDAO.getAllProducts(MIN_PRICE, MAX_PRICE);
-        productsAmount = products.size();
     }
 
     @Override
@@ -53,6 +51,9 @@ public class AdminProductsServlet extends HttpServlet {
         if (deleteProduct(request, response))
             return;
 
+        products = productDAO.getAllProducts(MIN_PRICE, MAX_PRICE);
+        productsAmount = products.size();
+
         if (request.getParameter("page") != null)
             pageNumber = Integer.parseInt(request.getParameter("page"));
 
@@ -66,7 +67,7 @@ public class AdminProductsServlet extends HttpServlet {
     }
 
     private void getProductsOnPage() {
-        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, MIN_PRICE, MAX_PRICE);
+        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, products);
 
         pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
     }
