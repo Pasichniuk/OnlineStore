@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel='stylesheet' href='https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css'>
 
 <html>
@@ -9,7 +10,7 @@
 
 <div class="container">
 
-    <h1>Edit product</h1>
+    <h1><fmt:message key="edit_product"/></h1>
     <hr/>
 
     <div class="row">
@@ -20,20 +21,20 @@
 
                     <div class="form-group">
                         <label>
-                            <input type="text" name="productName" placeholder="Enter new product name" class="form-control"/>
+                            <input type="text" name="productName" placeholder="<fmt:message key="enter_new_product_name"/>" class="form-control"/>
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            <input type="text" name="category" placeholder="Enter new category" class="form-control"/>
+                            <input type="text" name="category" placeholder="<fmt:message key="enter_new_product_category"/>" class="form-control"/>
                         </label>
                     </div>
                     <div class="form-group">
                         <label>
-                            <input type="text" name="price" placeholder="Enter new price" class="form-control"/>
+                            <input type="text" name="price" placeholder="<fmt:message key="enter_new_product_price"/>" class="form-control"/>
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Edit product</button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="edit_product"/></button>
 
             </form>
 
