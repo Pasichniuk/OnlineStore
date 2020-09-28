@@ -21,6 +21,8 @@
 <div class="container">
     <h3 align="center"><fmt:message key="profile.user"/>: ${userLogin}
         <a href="${pageContext.request.contextPath}/log-out"><h3><fmt:message key="profile.logout"/></h3></a>
+        <a href="${pageContext.request.contextPath}/profile?lang=en"><h3>EN</h3></a>
+        <a href="${pageContext.request.contextPath}/profile?lang=ru"><h3>RU</h3></a>
     </h3>
     <hr>
 </div>

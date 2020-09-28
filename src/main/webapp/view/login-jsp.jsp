@@ -22,6 +22,8 @@
             <div class="card">
                 <div class="card-header" align="center">
                    <h2><fmt:message key="login"/></h2>
+                    <a href="${pageContext.request.contextPath}/log-in?lang=en"><h3>EN</h3></a>
+                    <a href="${pageContext.request.contextPath}/log-in?lang=ru"><h3>RU</h3></a>
                 </div>
                 <div class="card-body">
                     <div class="form-group">

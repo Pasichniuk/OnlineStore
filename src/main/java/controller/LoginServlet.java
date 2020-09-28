@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/log-in")
@@ -29,6 +30,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setLanguage(request);
+
         if (getProfile(request, response))
             return;
 
@@ -80,6 +83,17 @@ public class LoginServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    private void setLanguage(HttpServletRequest request) {
+        String language = (String) request.getSession().getAttribute("lang");
+
+        if (request.getParameter("lang") != null) {
+            language = request.getParameter("lang");
+            request.getSession().setAttribute("lang", language);
+        }
+
+        Config.set(request.getSession(), "javax.servlet.jsp.jstl.fmt.locale", language);
     }
 
     private String notifyIncorrectLoginInput() {
