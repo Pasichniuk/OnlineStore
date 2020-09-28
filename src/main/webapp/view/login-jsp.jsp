@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<table border="1" class="table table-striped table-bordered">
+<table class="table table-striped table-bordered">
     <tr>
         <th><a href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
         <th><a href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
@@ -22,8 +22,6 @@
             <div class="card">
                 <div class="card-header" align="center">
                    <h2><fmt:message key="login"/></h2>
-                    <a href="${pageContext.request.contextPath}/log-in?lang=en"><h3>EN</h3></a>
-                    <a href="${pageContext.request.contextPath}/log-in?lang=ru"><h3>RU</h3></a>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
@@ -40,6 +38,15 @@
             </div>
         </form>
     </div>
+
+<div class="container">
+    <h5 align="center">
+        <fmt:message key="language"/>:
+        <a href="${pageContext.request.contextPath}/log-in?lang=en">EN</a>
+        |
+        <a href="${pageContext.request.contextPath}/log-in?lang=ru">RU</a>
+    </h5>
+</div>
 
 </body>
 </html>

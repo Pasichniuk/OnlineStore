@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<table border="1" class="table table-striped table-bordered">
+<table class="table table-striped table-bordered">
     <tr>
         <th><a href="${pageContext.request.contextPath}/admin-catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
         <th><a href="${pageContext.request.contextPath}/admin-orders"><h3><fmt:message key="menu.orders"/></h3></a></th>
@@ -25,7 +25,7 @@
 </div>
 
 <div class="container">
-    <table border="1" class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered">
         <tr class="thead-dark">
             <th><fmt:message key="product.name"/></th>
             <th><fmt:message key="product.category"/></th>

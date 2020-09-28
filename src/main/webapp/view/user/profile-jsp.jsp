@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<table border="1" class="table table-striped table-bordered">
+<table class="table table-striped table-bordered">
     <tr>
         <th><a href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
         <th><a href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
@@ -18,17 +18,20 @@
     </tr>
 </table>
 
-<div class="container">
-    <h3 align="center"><fmt:message key="profile.user"/>: ${userLogin}
-        <a href="${pageContext.request.contextPath}/log-out"><h3><fmt:message key="profile.logout"/></h3></a>
-        <a href="${pageContext.request.contextPath}/profile?lang=en"><h3>EN</h3></a>
-        <a href="${pageContext.request.contextPath}/profile?lang=ru"><h3>RU</h3></a>
-    </h3>
-    <hr>
-</div>
+<table class="table table-striped table-bordered">
+    <tr>
+        <th><h5><fmt:message key="profile.user"/>: ${userLogin}</h5></th>
+        <th><h5><a href="${pageContext.request.contextPath}/log-out"><fmt:message key="profile.logout"/></a></h5></th>
+        <th><h5><fmt:message key="language"/>:
+            <a href="${pageContext.request.contextPath}/profile?lang=en">EN</a>
+            |
+            <a href="${pageContext.request.contextPath}/profile?lang=ru">RU</a>
+        </h5></th>
+    </tr>
+</table>
 
 <div class="container">
-    <table border="1" class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered">
         <tr class="thead-dark">
             <th><fmt:message key="order_id"/></th>
             <th><fmt:message key="order_status"/></th>
