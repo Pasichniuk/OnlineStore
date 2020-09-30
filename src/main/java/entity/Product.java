@@ -7,6 +7,7 @@ public class Product {
     private int id;
     private String name;
     private String category;
+    private String categoryRU;
     private Date additionDate;
     private float price;
 
@@ -40,6 +41,14 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getCategoryRU() {
+        return categoryRU;
+    }
+
+    public void setCategoryRU(String categoryRU) {
+        this.categoryRU = categoryRU;
     }
 
     public Date getAdditionDate() {

@@ -8,10 +8,10 @@ import java.sql.*;
 
 public class ProductDAO {
 
-    private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, price, addition_date FROM online_store.product \n" +
+    private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date FROM online_store.product \n" +
             "JOIN online_store.category ON product.category = category.category_id WHERE price BETWEEN ? AND ?";
 
-    private static final String SQL_GET_PRODUCT = "SELECT product_id, product_name, category_name, price, addition_date FROM online_store.product \n" +
+    private static final String SQL_GET_PRODUCT = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date FROM online_store.product \n" +
             "JOIN online_store.category ON product.category = category.category_id WHERE product_id=?";
 
     private static final String SQL_DELETE_PRODUCT = "DELETE FROM online_store.product WHERE product_id=?";
@@ -23,6 +23,8 @@ public class ProductDAO {
     private static final String SQL_GET_PRODUCT_ID = "SELECT product_id FROM online_store.product WHERE product_name=?";
 
     private static final String SQL_GET_CATEGORY_ID = "SELECT category_id FROM online_store.category WHERE category_name=?";
+
+    private static final String SQL_GET_CATEGORY_RU_ID = "SELECT category_id FROM online_store.category WHERE category_name_ru=?";
 
     private final Connection connection;
 
@@ -59,7 +61,8 @@ public class ProductDAO {
             products = new ArrayList<>();
 
             while (resultSet.next()) {
-                product = new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getFloat(4), resultSet.getDate(5));
+                product = new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getFloat(5), resultSet.getDate(6));
+                product.setCategoryRU(resultSet.getString(4));
                 products.add(product);
             }
         } catch (SQLException exception) {
@@ -78,8 +81,10 @@ public class ProductDAO {
 
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next())
-                product = new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getFloat(4), resultSet.getDate(5));
+            if (resultSet.next()) {
+                product = new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getFloat(5), resultSet.getDate(6));
+                product.setCategoryRU(resultSet.getString(4));
+            }
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -158,6 +163,14 @@ public class ProductDAO {
     private int getCategoryID(String category) {
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_ID);
+            preparedStatement.setString(1, category);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next())
+                return resultSet.getInt(1);
+
+            preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_RU_ID);
             preparedStatement.setString(1, category);
 
             resultSet = preparedStatement.executeQuery();

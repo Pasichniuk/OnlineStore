@@ -39,7 +39,16 @@
         <c:forEach items="${products}" var="product">
             <tr>
                 <td>${product.name}</td>
-                <td>${product.category}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${lang eq 'en'}">
+                            ${product.category}
+                        </c:when>
+                        <c:otherwise>
+                            ${product.categoryRU}
+                        </c:otherwise>
+                    </c:choose>
+                </td>
                 <td>${product.additionDate}</td>
                 <td>${product.price}</td>
                 <td>
