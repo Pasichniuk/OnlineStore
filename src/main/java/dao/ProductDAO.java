@@ -127,7 +127,7 @@ public class ProductDAO {
         try {
             int categoryID = getCategoryID(category);
 
-            if (categoryID == 0 || productExists(productName))
+            if (categoryID == 0)
                 return;
 
             preparedStatement = connection.prepareStatement(SQL_UPDATE_PRODUCT);

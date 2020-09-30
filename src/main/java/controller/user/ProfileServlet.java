@@ -35,7 +35,7 @@ public class ProfileServlet extends HttpServlet {
 
         List<Order> orders = orderDAO.getUserOrders(userDAO.getUser(userLogin).getId());
 
-        request.setAttribute("userLogin", userLogin);
+        request.setAttribute("userName", getUserFullName(session, userLogin));
         request.setAttribute("orders", orders);
 
         request.getRequestDispatcher("view/user/profile-jsp.jsp").forward(request, response);
@@ -50,5 +50,16 @@ public class ProfileServlet extends HttpServlet {
         }
 
         Config.set(request.getSession(), "javax.servlet.jsp.jstl.fmt.locale", language);
+    }
+
+    private String getUserFullName(HttpSession session, String userLogin) {
+
+        if (session.getAttribute("lang") != null) {
+
+            if (session.getAttribute("lang").equals("ru"))
+                return userDAO.getUser(userLogin).getUserNameRU();
+        }
+
+        return userDAO.getUser(userLogin).getUserName();
     }
 }

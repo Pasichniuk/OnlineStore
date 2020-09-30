@@ -11,13 +11,13 @@ public class UserDAO {
     private static final String SQL_AUTHORIZE_USER = "SELECT user_login, block_status FROM online_store.store_user " +
             "WHERE user_login=? AND user_password=aes_encrypt(?, 'password')";
 
-    private static final String SQL_INSERT_USER = "INSERT INTO online_store.store_user(user_login, user_role, user_password) " +
-            "VALUES(?, 1, aes_encrypt(?, 'password'))";
+    private static final String SQL_INSERT_USER = "INSERT INTO online_store.store_user(user_login, user_role, user_password, user_name, user_name_ru) " +
+            "VALUES(?, 1, aes_encrypt(?, 'password'), ?, ?)";
 
-    private static final String SQL_FIND_ALL_USERS = "SELECT user_id, user_login, block_status FROM online_store.store_user " +
+    private static final String SQL_FIND_ALL_USERS = "SELECT user_id, user_login, block_status, user_name, user_name_ru FROM online_store.store_user " +
             "WHERE user_role=1";
 
-    private static final String SQL_GET_USER = "SELECT user_id, user_login, block_status, role_name FROM online_store.store_user " +
+    private static final String SQL_GET_USER = "SELECT user_id, user_login, block_status, role_name, user_name, user_name_ru FROM online_store.store_user " +
             "JOIN online_store.role ON store_user.user_role = role.role_id WHERE user_login=?";
 
     private static final String SQL_UPDATE_USER_BLOCK_STATUS = "UPDATE online_store.store_user SET block_status=? WHERE user_id=?";
@@ -49,7 +49,7 @@ public class UserDAO {
         return false;
     }
 
-    public boolean registerUser(String userLogin, String userPassword) {
+    public boolean registerUser(String userLogin, String userPassword, String userName, String userNameRU) {
         try {
             if (getUser(userLogin) != null)
                 return false;
@@ -57,6 +57,8 @@ public class UserDAO {
             preparedStatement = connection.prepareStatement(SQL_INSERT_USER);
             preparedStatement.setString(1, userLogin);
             preparedStatement.setString(2, userPassword);
+            preparedStatement.setString(3, userName);
+            preparedStatement.setString(4, userNameRU);
 
             if (preparedStatement.executeUpdate() == 1)
                 return true;
@@ -93,7 +95,8 @@ public class UserDAO {
             users = new ArrayList<>();
 
             while (resultSet.next()) {
-                user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), "ROLE_USER");
+                user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+                        "ROLE_USER", resultSet.getString(4), resultSet.getString(5));
                 users.add(user);
             }
 
@@ -114,7 +117,8 @@ public class UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next())
-                user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+                user = new User(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+                        resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
 
         } catch (SQLException exception) {
             exception.printStackTrace();

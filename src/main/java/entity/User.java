@@ -6,12 +6,16 @@ public class User {
     private String login;
     private String blockStatus;
     private String role;
+    private String userName;
+    private String userNameRU;
 
-    public User(int id, String login, String blockStatus, String role) {
+    public User(int id, String login, String blockStatus, String role, String userName, String userNameRU) {
         this.id = id;
         this.login = login;
         this.blockStatus = blockStatus;
         this.role = role;
+        this.userName = userName;
+        this.userNameRU = userNameRU;
     }
 
     public int getId() {
@@ -44,5 +48,21 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserNameRU() {
+        return userNameRU;
+    }
+
+    public void setUserNameRU(String userNameRU) {
+        this.userNameRU = userNameRU;
     }
 }

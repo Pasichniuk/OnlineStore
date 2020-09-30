@@ -1,5 +1,7 @@
 package controller.admin;
 
+import dao.UserDAO;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,12 @@ import java.io.IOException;
 @WebServlet(name = "AdminProfileServlet", urlPatterns = "/admin-profile")
 public class AdminProfileServlet extends HttpServlet {
 
+    private final UserDAO userDAO;
+
+    public AdminProfileServlet() {
+        userDAO = new UserDAO();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -20,7 +28,7 @@ public class AdminProfileServlet extends HttpServlet {
 
         String adminLogin = (String)session.getAttribute("userLogin");
 
-        request.setAttribute("adminLogin", adminLogin);
+        request.setAttribute("adminName", getAdminFullName(session, adminLogin));
 
         request.getRequestDispatcher("view/admin/admin-profile-jsp.jsp").forward(request, response);
     }
@@ -34,5 +42,16 @@ public class AdminProfileServlet extends HttpServlet {
         }
 
         Config.set(request.getSession(), "javax.servlet.jsp.jstl.fmt.locale", language);
+    }
+
+    private String getAdminFullName(HttpSession session, String adminLogin) {
+
+        if (session.getAttribute("lang") != null) {
+
+            if (session.getAttribute("lang").equals("ru"))
+                return userDAO.getUser(adminLogin).getUserNameRU();
+        }
+
+        return userDAO.getUser(adminLogin).getUserName();
     }
 }

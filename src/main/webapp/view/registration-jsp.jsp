@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=windows-1251" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel='stylesheet' href='https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css'>
 
@@ -32,6 +32,12 @@
                 </div>
                 <div class="form-group">
                     <input type="password" name="confirm-password" class="form-control" placeholder="<fmt:message key="confirm_password"/>">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="userName" class="form-control" placeholder="<fmt:message key="enter_full_name"/>">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="userNameRU" class="form-control" placeholder="<fmt:message key="enter_full_name_ru"/>">
                 </div>
             </div>
             <div class="card-footer" align="center">

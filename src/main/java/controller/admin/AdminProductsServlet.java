@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "AdminProductsServlet", urlPatterns = "/admin-catalog")
@@ -74,10 +75,10 @@ public class AdminProductsServlet extends HttpServlet {
 
     private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productName = request.getParameter("productName");
-        String category = request.getParameter("category");
+        String category = new String(request.getParameter("category").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
         String price = request.getParameter("price");
 
-        if (productName.matches(CHECK_INPUT_REGEX) && category.matches(CHECK_INPUT_REGEX) && price != null) {
+        if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.insertProduct(productName, category, Float.parseFloat(price));
             response.sendRedirect("/admin-catalog");
         } else
@@ -87,10 +88,10 @@ public class AdminProductsServlet extends HttpServlet {
     private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int productID = Integer.parseInt(request.getParameter("productID"));
         String productName = request.getParameter("productName");
-        String category = request.getParameter("category");
+        String category = new String(request.getParameter("category").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
         String price = request.getParameter("price");
 
-        if (productName.matches(CHECK_INPUT_REGEX) && category.matches(CHECK_INPUT_REGEX) && price != null) {
+        if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.updateProduct(productID, productName, category, Float.parseFloat(price));
             response.sendRedirect("/admin-catalog");
         } else
