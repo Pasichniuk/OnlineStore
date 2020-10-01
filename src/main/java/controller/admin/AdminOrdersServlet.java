@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.OrderDAO;
+import database.dao.OrderDAO;
 import entity.Order;
 
 import javax.servlet.ServletException;

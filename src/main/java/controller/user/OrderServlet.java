@@ -1,7 +1,7 @@
 package controller.user;
 
-import dao.OrderDAO;
-import dao.UserDAO;
+import database.dao.OrderDAO;
+import database.dao.UserDAO;
 import entity.Cart;
 
 import javax.servlet.annotation.WebServlet;

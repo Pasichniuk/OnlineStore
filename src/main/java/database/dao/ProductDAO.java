@@ -1,7 +1,7 @@
-package dao;
+package database.dao;
 
 import entity.Product;
-import util.DBConnectionUtil;
+import database.DBConnectionUtil;
 
 import java.util.*;
 import java.sql.*;

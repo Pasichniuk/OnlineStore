@@ -1,6 +1,6 @@
 package controller.user;
 
-import dao.ProductDAO;
+import database.dao.ProductDAO;
 import entity.Cart;
 import entity.Product;
 

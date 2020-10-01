@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.UserDAO;
+import database.dao.UserDAO;
 import entity.User;
 
 import javax.servlet.ServletException;
