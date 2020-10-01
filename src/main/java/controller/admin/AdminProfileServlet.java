@@ -2,6 +2,7 @@ package controller.admin;
 
 import database.dao.UserDAO;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import java.io.IOException;
 
 @WebServlet(name = "AdminProfileServlet", urlPatterns = "/admin-profile")
 public class AdminProfileServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(AdminProfileServlet.class);
 
     private final UserDAO userDAO;
 
@@ -29,6 +32,8 @@ public class AdminProfileServlet extends HttpServlet {
         String adminLogin = (String)session.getAttribute("userLogin");
 
         request.setAttribute("adminName", getAdminFullName(session, adminLogin));
+
+        logger.info("Admin '" + adminLogin + "' viewed his profile...");
 
         request.getRequestDispatcher("view/admin/admin-profile-jsp.jsp").forward(request, response);
     }

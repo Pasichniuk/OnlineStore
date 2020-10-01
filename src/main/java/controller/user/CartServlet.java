@@ -4,6 +4,7 @@ import database.dao.ProductDAO;
 import entity.Cart;
 import entity.Product;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -15,6 +16,8 @@ import java.util.*;
 
 @WebServlet(name = "CartServlet", urlPatterns = "/cart")
 public class CartServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(CartServlet.class);
 
     private final ProductDAO productDAO;
 
@@ -62,8 +65,10 @@ public class CartServlet extends HttpServlet {
 
                 if (p.getId() == Integer.parseInt(productID)) {
                     Cart.decreaseTotalPrice(p.getPrice());
-
                     products.remove(p);
+
+                    logger.info("Product was removed from cart...");
+
                     response.sendRedirect("/cart");
                     return true;
                 }
@@ -87,6 +92,9 @@ public class CartServlet extends HttpServlet {
                 Cookie cookie = new Cookie("ProductID", "");
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
+
+                logger.info("Product was added to cart...");
+
                 response.sendRedirect("/catalog");
                 return true;
             }

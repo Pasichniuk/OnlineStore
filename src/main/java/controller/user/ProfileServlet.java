@@ -4,6 +4,7 @@ import database.dao.OrderDAO;
 import database.dao.UserDAO;
 import entity.Order;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,8 @@ import java.util.List;
 
 @WebServlet(name = "ProfileServlet", urlPatterns = "/profile")
 public class ProfileServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(ProfileServlet.class);
 
     private final OrderDAO orderDAO;
     private final UserDAO userDAO;
@@ -37,6 +40,8 @@ public class ProfileServlet extends HttpServlet {
 
         request.setAttribute("userName", getUserFullName(session, userLogin));
         request.setAttribute("orders", orders);
+
+        logger.info("User '" + userLogin + "' viewed his profile...");
 
         request.getRequestDispatcher("view/user/profile-jsp.jsp").forward(request, response);
     }

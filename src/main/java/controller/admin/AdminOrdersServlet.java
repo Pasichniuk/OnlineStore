@@ -3,6 +3,7 @@ package controller.admin;
 import database.dao.OrderDAO;
 import entity.Order;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import java.util.List;
 
 @WebServlet(name = "AdminOrdersServlet", urlPatterns = "/admin-orders")
 public class AdminOrdersServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(AdminOrdersServlet.class);
 
     private final OrderDAO orderDAO;
 
@@ -52,6 +55,7 @@ public class AdminOrdersServlet extends HttpServlet {
 
         if (orderID != null && status != null) {
             orderDAO.updateOrderStatus(Integer.parseInt(orderID), status);
+            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' changed status of order with ID=" + orderID + " to " + status + "...");
             response.sendRedirect("/admin-orders");
             return true;
         }

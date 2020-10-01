@@ -4,6 +4,7 @@ import database.dao.OrderDAO;
 import database.dao.UserDAO;
 import entity.Cart;
 
+import org.apache.log4j.Logger;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import java.io.IOException;
 
 @WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(OrderServlet.class);
 
     private final OrderDAO orderDAO;
     private final UserDAO userDAO;
@@ -28,7 +31,11 @@ public class OrderServlet extends HttpServlet {
         if (userLogin != null && Cart.getCartProducts().size() > 0) {
             orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), Cart.getCartProducts());
             Cart.clearCart();
+
+            logger.info("User '" + userLogin + "' created new order...");
+
             response.sendRedirect("/cart");
+
         } else
             response.getWriter().write(notifyUnauthorizedUser());
     }

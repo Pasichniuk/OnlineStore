@@ -3,6 +3,7 @@ package controller.admin;
 import database.dao.UserDAO;
 import entity.User;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import java.util.List;
 
 @WebServlet(name = "AdminUsersServlet", urlPatterns = "/admin-users")
 public class AdminUsersServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(AdminUsersServlet.class);
 
     private final UserDAO userDAO;
 
@@ -52,6 +55,7 @@ public class AdminUsersServlet extends HttpServlet {
 
         if (blockStatus != null && userID != null) {
             userDAO.updateUserBlockStatus(blockStatus, Integer.parseInt(userID));
+            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' " + blockStatus + " user with ID=" + userID);
             response.sendRedirect("/admin-users");
             return true;
         }

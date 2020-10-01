@@ -3,6 +3,7 @@ package controller.admin;
 import database.dao.ProductDAO;
 import entity.Product;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,8 @@ import java.util.List;
 
 @WebServlet(name = "AdminProductsServlet", urlPatterns = "/admin-catalog")
 public class AdminProductsServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(AdminProductsServlet.class);
 
     private static final String CHECK_INPUT_REGEX = "^[a-zA-Z0-9 ._-]{3,}$";
 
@@ -80,6 +83,7 @@ public class AdminProductsServlet extends HttpServlet {
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.insertProduct(productName, category, Float.parseFloat(price));
+            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' added new product...");
             response.sendRedirect("/admin-catalog");
         } else
             response.getWriter().write(notifyIncorrectInput());
@@ -93,6 +97,7 @@ public class AdminProductsServlet extends HttpServlet {
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.updateProduct(productID, productName, category, Float.parseFloat(price));
+            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' edited product with ID=" + productID + "...");
             response.sendRedirect("/admin-catalog");
         } else
             response.getWriter().write(notifyIncorrectInput());
@@ -103,6 +108,7 @@ public class AdminProductsServlet extends HttpServlet {
 
         if (productID != null) {
             productDAO.deleteProduct(Integer.parseInt(productID));
+            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' deleted product with ID=" + productID + "...");
             response.sendRedirect("/admin-catalog");
             return true;
         }
