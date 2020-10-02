@@ -2,6 +2,13 @@ package database;
 
 import java.sql.*;
 
+/**
+ * Provides connection to database.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class DBConnectionUtil {
 
     private static final String URL = "jdbc:mysql://localhost:3306/online_store";

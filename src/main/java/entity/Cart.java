@@ -3,6 +3,13 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Stores products added to the cart
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public final class Cart {
 
     private static List<Product> products = new ArrayList<>();

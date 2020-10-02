@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Product servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "ProductServlet", urlPatterns = "/catalog")
 public class ProductServlet extends HttpServlet {
 
@@ -68,6 +75,16 @@ public class ProductServlet extends HttpServlet {
         request.getRequestDispatcher("view/user/catalog-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Sends product to cart using cookies.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether product is sent.
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean sendProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productID = request.getParameter("ProductID");
 

@@ -14,6 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Cart servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "CartServlet", urlPatterns = "/cart")
 public class CartServlet extends HttpServlet {
 
@@ -38,7 +45,7 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         products = Cart.getCartProducts();
 
-        if (removeProductFromCart(request, response, products) || addProductToCart(request, response, products))
+        if (removeProductFromCart(request, response) || addProductToCart(request, response))
             return;
 
         productsAmount = products.size();
@@ -56,7 +63,17 @@ public class CartServlet extends HttpServlet {
         request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
     }
 
-    private boolean removeProductFromCart(HttpServletRequest request, HttpServletResponse response, List<Product> products) throws IOException {
+    /**
+     * Removes product from cart.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether product is removed.
+     *
+     * @throws IOException If redirect failed.
+     */
+    private boolean removeProductFromCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productID = request.getParameter("ProductID");
 
         if (productID != null) {
@@ -78,7 +95,17 @@ public class CartServlet extends HttpServlet {
         return false;
     }
 
-    private boolean addProductToCart(HttpServletRequest request, HttpServletResponse response, List<Product> products) throws IOException {
+    /**
+     * Adds products to cart.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether product is added.
+     *
+     * @throws IOException If redirect failed.
+     */
+    private boolean addProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie[] cookies = request.getCookies();
 
         for (Cookie c : cookies) {

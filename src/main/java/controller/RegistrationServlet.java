@@ -10,6 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Registration servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationServlet extends HttpServlet {
 
@@ -36,6 +43,16 @@ public class RegistrationServlet extends HttpServlet {
         request.getRequestDispatcher("view/registration-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Validates User input.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return If registration is successful
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean validateUserInput(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userLogin = request.getParameter("login");
         String userPassword = request.getParameter("password");

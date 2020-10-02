@@ -15,6 +15,13 @@ import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * User profile servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "ProfileServlet", urlPatterns = "/profile")
 public class ProfileServlet extends HttpServlet {
 
@@ -46,6 +53,12 @@ public class ProfileServlet extends HttpServlet {
         request.getRequestDispatcher("view/user/profile-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Sets application language.
+     *
+     * @param request Request.
+     * @param session Session.
+     */
     private void setLanguage(HttpServletRequest request, HttpSession session) {
         String language = (String) session.getAttribute("lang");
 
@@ -57,6 +70,14 @@ public class ProfileServlet extends HttpServlet {
         Config.set(request.getSession(), "javax.servlet.jsp.jstl.fmt.locale", language);
     }
 
+    /**
+     * Returns full name of User.
+     *
+     * @param session Session.
+     * @param userLogin Login of User.
+     *
+     * @return User's full name.
+     */
     private String getUserFullName(HttpSession session, String userLogin) {
 
         if (session.getAttribute("lang") != null) {

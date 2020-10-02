@@ -6,6 +6,13 @@ import database.DBConnectionUtil;
 import java.util.*;
 import java.sql.*;
 
+/**
+ * Data accessor object for User entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class UserDAO {
 
     private static final String SQL_AUTHORIZE_USER = "SELECT user_login, block_status FROM online_store.store_user " +
@@ -31,6 +38,14 @@ public class UserDAO {
         connection = DBConnectionUtil.getConnection();
     }
 
+    /**
+     * Authorizes User.
+     *
+     * @param userLogin Login of User.
+     * @param userPassword Password of User.
+     *
+     * @return If User was authorized.
+     */
     public boolean authorizeUser(String userLogin, String userPassword) {
         try {
             preparedStatement = connection.prepareStatement(SQL_AUTHORIZE_USER);
@@ -49,6 +64,16 @@ public class UserDAO {
         return false;
     }
 
+    /**
+     * Registers new User.
+     *
+     * @param userLogin User's login.
+     * @param userPassword User's password.
+     * @param userName Username.
+     * @param userNameRU Username in russian.
+     *
+     * @return If User was registered.
+     */
     public boolean registerUser(String userLogin, String userPassword, String userName, String userNameRU) {
         try {
             if (getUser(userLogin) != null)
@@ -70,6 +95,14 @@ public class UserDAO {
         return false;
     }
 
+    /**
+     * Returns users on page.
+     *
+     * @param offset Offset.
+     * @param recordsPerPage Amount of records on page.
+     *
+     * @return List of user entities.
+     */
     public List<User> getUsersOnPage(int offset, int recordsPerPage) {
         List<User> users = getAllUsers();
         List<User> usersOnPage = new ArrayList<>();
@@ -83,6 +116,11 @@ public class UserDAO {
         return usersOnPage;
     }
 
+    /**
+     * Returns all users.
+     *
+     * @return List of user entities.
+     */
     public List<User> getAllUsers() {
         List<User> users = null;
         User user;
@@ -107,6 +145,13 @@ public class UserDAO {
         return users;
     }
 
+    /**
+     * Returns User by login.
+     *
+     * @param userLogin Login of User.
+     *
+     * @return User entity.
+     */
     public User getUser(String userLogin) {
         User user = null;
 
@@ -127,6 +172,12 @@ public class UserDAO {
         return user;
     }
 
+    /**
+     * Updates block status of specific User.
+     *
+     * @param blockStatus Block status.
+     * @param userID User identifier.
+     */
     public void updateUserBlockStatus(String blockStatus, int userID) {
         try {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_BLOCK_STATUS);

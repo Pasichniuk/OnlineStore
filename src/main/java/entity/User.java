@@ -1,5 +1,12 @@
 package entity;
 
+/**
+ * User entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class User {
 
     private int id;

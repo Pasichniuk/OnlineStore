@@ -2,6 +2,13 @@ package entity;
 
 import java.util.Date;
 
+/**
+ * Product entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class Product {
 
     private int id;

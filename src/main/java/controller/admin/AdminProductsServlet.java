@@ -13,6 +13,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * Admin Products servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "AdminProductsServlet", urlPatterns = "/admin-catalog")
 public class AdminProductsServlet extends HttpServlet {
 
@@ -76,6 +83,14 @@ public class AdminProductsServlet extends HttpServlet {
         pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
     }
 
+    /**
+     * Validates input and adds new product.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @throws IOException If redirect failed.
+     */
     private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productName = request.getParameter("productName");
         String category = new String(request.getParameter("category").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
@@ -89,6 +104,14 @@ public class AdminProductsServlet extends HttpServlet {
             response.getWriter().write(notifyIncorrectInput());
     }
 
+    /**
+     * Validates input and edits product.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @throws IOException If redirect failed.
+     */
     private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int productID = Integer.parseInt(request.getParameter("productID"));
         String productName = request.getParameter("productName");
@@ -103,6 +126,16 @@ public class AdminProductsServlet extends HttpServlet {
             response.getWriter().write(notifyIncorrectInput());
     }
 
+    /**
+     * Deletes product.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether product is deleted.
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productID = request.getParameter("productID");
 

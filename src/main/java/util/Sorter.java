@@ -5,6 +5,13 @@ import entity.Product;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Provides methods for sorting list of products
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class Sorter {
 
     private Sorter() {}

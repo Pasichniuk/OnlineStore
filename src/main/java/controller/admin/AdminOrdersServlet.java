@@ -12,6 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Admin Orders servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "AdminOrdersServlet", urlPatterns = "/admin-orders")
 public class AdminOrdersServlet extends HttpServlet {
 
@@ -49,6 +56,16 @@ public class AdminOrdersServlet extends HttpServlet {
         request.getRequestDispatcher("view/admin/admin-orders-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Changes status of order.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether order status is changed.
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean changeOrderStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String orderID = request.getParameter("orderID");
         String status = request.getParameter("status");

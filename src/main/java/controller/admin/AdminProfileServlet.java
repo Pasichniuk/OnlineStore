@@ -12,6 +12,13 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 
+/**
+ * Admin Profile servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "AdminProfileServlet", urlPatterns = "/admin-profile")
 public class AdminProfileServlet extends HttpServlet {
 
@@ -38,6 +45,12 @@ public class AdminProfileServlet extends HttpServlet {
         request.getRequestDispatcher("view/admin/admin-profile-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Sets application language.
+     *
+     * @param request Request.
+     * @param session Session.
+     */
     private void setLanguage(HttpServletRequest request, HttpSession session) {
         String language = (String) session.getAttribute("lang");
 
@@ -49,6 +62,14 @@ public class AdminProfileServlet extends HttpServlet {
         Config.set(request.getSession(), "javax.servlet.jsp.jstl.fmt.locale", language);
     }
 
+    /**
+     * Returns full name of Admin.
+     *
+     * @param session Session.
+     * @param adminLogin Login of Admin.
+     *
+     * @return Full name of Admin.
+     */
     private String getAdminFullName(HttpSession session, String adminLogin) {
 
         if (session.getAttribute("lang") != null) {

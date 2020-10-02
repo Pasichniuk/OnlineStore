@@ -12,6 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Admin Users servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "AdminUsersServlet", urlPatterns = "/admin-users")
 public class AdminUsersServlet extends HttpServlet {
 
@@ -49,6 +56,16 @@ public class AdminUsersServlet extends HttpServlet {
         request.getRequestDispatcher("view/admin/admin-users-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Sets block status of User.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether status is changed.
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean setUserBlockStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String blockStatus = request.getParameter("blockStatus");
         String userID = request.getParameter("userID");

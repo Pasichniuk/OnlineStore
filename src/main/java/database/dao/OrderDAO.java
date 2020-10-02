@@ -7,6 +7,13 @@ import database.DBConnectionUtil;
 import java.util.*;
 import java.sql.*;
 
+/**
+ * Data accessor object for Order entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class OrderDAO {
 
     private static final String SQL_FIND_ALL_ORDERS = "SELECT * FROM online_store.order";
@@ -28,6 +35,14 @@ public class OrderDAO {
         connection = DBConnectionUtil.getConnection();
     }
 
+    /**
+     * Returns orders on page.
+     *
+     * @param offset Offset.
+     * @param recordsPerPage Amount of records on page.
+     *
+     * @return List of order entities.
+     */
     public List<Order> getOrdersOnPage(int offset, int recordsPerPage) {
         List<Order> orders = getAllOrders();
         List<Order> ordersOnPage = new ArrayList<>();
@@ -41,6 +56,11 @@ public class OrderDAO {
         return ordersOnPage;
     }
 
+    /**
+     * Returns all orders.
+     *
+     * @return List of order entities.
+     */
     public List<Order> getAllOrders() {
         List<Order> orders = null;
         Order order;
@@ -64,6 +84,13 @@ public class OrderDAO {
         return orders;
     }
 
+    /**
+     * Returns orders of specific User.
+     *
+     * @param userID User identifier.
+     *
+     * @return List of order entities.
+     */
     public List<Order> getUserOrders(int userID) {
         List<Order> orders = null;
         Order order;
@@ -88,6 +115,12 @@ public class OrderDAO {
         return orders;
     }
 
+    /**
+     * Inserts order.
+     *
+     * @param userID User identifier.
+     * @param products List of products in Order.
+     */
     public void insertOrder(int userID, List<Product> products) {
         try {
             preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER, Statement.RETURN_GENERATED_KEYS);
@@ -111,6 +144,12 @@ public class OrderDAO {
         }
     }
 
+    /**
+     * Inserts products from order.
+     *
+     * @param orderID Order identifier.
+     * @param productID Product identifier.
+     */
     private void insertOrderProduct(int orderID, int productID) {
         try {
             preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER_PRODUCT);
@@ -123,6 +162,12 @@ public class OrderDAO {
         }
     }
 
+    /**
+     * Updates status of order.
+     *
+     * @param orderID Order identifier.
+     * @param status Status.
+     */
     public void updateOrderStatus(int orderID, String status) {
         try {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_ORDER_STATUS);

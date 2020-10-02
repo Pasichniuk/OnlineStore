@@ -1,5 +1,12 @@
 package entity;
 
+/**
+ * Order entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class Order {
 
     private int orderID;

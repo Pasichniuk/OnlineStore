@@ -6,6 +6,13 @@ import database.DBConnectionUtil;
 import java.util.*;
 import java.sql.*;
 
+/**
+ * Data accessor object for Product entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class ProductDAO {
 
     private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date FROM online_store.product \n" +
@@ -35,6 +42,15 @@ public class ProductDAO {
         connection = DBConnectionUtil.getConnection();
     }
 
+    /**
+     * Returns products on page.
+     *
+     * @param offset Offset.
+     * @param recordsPerPage Amount of records on page.
+     * @param products List of all products.
+     *
+     * @return List of product entities.
+     */
     public List<Product> getProductsOnPage(int offset, int recordsPerPage, List<Product> products) {
         List<Product> productsOnPage = new ArrayList<>();
 
@@ -47,6 +63,14 @@ public class ProductDAO {
         return productsOnPage;
     }
 
+    /**
+     * Returns all products.
+     *
+     * @param minPrice Minimal price.
+     * @param maxPrice Maximal price.
+     *
+     * @return List of protuct entities.
+     */
     public List<Product> getAllProducts(int minPrice, int maxPrice) {
         List<Product> products = null;
         Product product;
@@ -72,6 +96,13 @@ public class ProductDAO {
         return products;
     }
 
+    /**
+     * Returns Product by ID.
+     *
+     * @param productID Product identifier.
+     *
+     * @return Product entity.
+     */
     public Product getProduct(int productID) {
         Product product = null;
 
@@ -93,6 +124,11 @@ public class ProductDAO {
         return product;
     }
 
+    /**
+     * Deletes product by ID.
+     *
+     * @param productID Product identifier.
+     */
     public void deleteProduct(int productID) {
         try {
             preparedStatement = connection.prepareStatement(SQL_DELETE_PRODUCT);
@@ -104,6 +140,13 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Inserts new product.
+     *
+     * @param productName Name of product.
+     * @param category Category of product.
+     * @param price Price of product.
+     */
     public void insertProduct(String productName, String category, float price) {
         try {
             int categoryID = getCategoryID(category);
@@ -123,6 +166,14 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Updates product info.
+     *
+     * @param productID Product identifier.
+     * @param productName Name of product.
+     * @param category Category of product.
+     * @param price Price of product.
+     */
     public void updateProduct(int productID, String productName, String category, float price) {
         try {
             int categoryID = getCategoryID(category);
@@ -143,6 +194,13 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Checks if product already exists.
+     *
+     * @param productName Name of product.
+     *
+     * @return If product already exists.
+     */
     private boolean productExists(String productName) {
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_PRODUCT_ID);
@@ -160,6 +218,13 @@ public class ProductDAO {
         return false;
     }
 
+    /**
+     * Returns category identifier by category name.
+     *
+     * @param category Name of category.
+     *
+     * @return Category identifier.
+     */
     private int getCategoryID(String category) {
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_ID);

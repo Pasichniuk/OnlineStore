@@ -11,6 +11,13 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 
+/**
+ * Login servlet controller.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 @WebServlet(name = "LoginServlet", urlPatterns = "/log-in")
 public class LoginServlet extends HttpServlet {
 
@@ -38,6 +45,16 @@ public class LoginServlet extends HttpServlet {
         request.getRequestDispatcher("view/login-jsp.jsp").forward(request, response);
     }
 
+    /**
+     * Authorizes User.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return If authorization is successful.
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean authorizeUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userLogin = request.getParameter("login");
         String userPassword = request.getParameter("password");
@@ -66,6 +83,16 @@ public class LoginServlet extends HttpServlet {
         return false;
     }
 
+    /**
+     * Provides profile page.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @return Whether the profile was received.
+     *
+     * @throws IOException If redirect failed.
+     */
     private boolean getProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
@@ -85,6 +112,11 @@ public class LoginServlet extends HttpServlet {
         return false;
     }
 
+    /**
+     * Sets application language.
+     *
+     * @param request Request.
+     */
     private void setLanguage(HttpServletRequest request) {
         String language = (String) request.getSession().getAttribute("lang");
 
