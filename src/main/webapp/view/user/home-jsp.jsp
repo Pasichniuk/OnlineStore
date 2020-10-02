@@ -10,23 +10,23 @@
 </head>
 <body>
 
-<table class="table table-striped table-bordered">
-    <tr>
-        <th><a href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
+<table class="table table-bordered table-hover">
+    <tr class="thead-dark">
+        <th><a class="text-light" href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
     </tr>
 </table>
 
-<h1 class="thead-light" align="center">
+<h1 class="thead-light text-center">
     <ex:Welcome>
         <fmt:message key="home_jsp.welcome"/>
     </ex:Welcome>
 </h1>
 
 <div>
-    <h5 class="fixed-bottom" align="center">
+    <h5 class="fixed-bottom text-center">
         <hr>
         <tf:tagfile/>
         <hr>

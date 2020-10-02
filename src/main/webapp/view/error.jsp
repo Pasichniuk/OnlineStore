@@ -9,7 +9,7 @@
 <body>
 
 <hr>
-    <div class="d-flex justify-content-center">
+    <div class="text-center text-danger">
         <h1><fmt:message key="error_message"/></h1>
     </div>
 <hr>

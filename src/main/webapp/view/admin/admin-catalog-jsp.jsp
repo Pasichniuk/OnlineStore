@@ -9,16 +9,16 @@
 </head>
 <body>
 
-<table class="table table-striped table-bordered">
-    <tr>
-        <th><a href="${pageContext.request.contextPath}/admin-catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/admin-orders"><h3><fmt:message key="menu.orders"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/admin-users"><h3><fmt:message key="menu.users"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/admin-profile"><h3><fmt:message key="menu.profile"/></h3></a></th>
+<table class="table table-bordered table-hover">
+    <tr class="thead-dark">
+        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-orders"><h3><fmt:message key="menu.orders"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-users"><h3><fmt:message key="menu.users"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-profile"><h3><fmt:message key="menu.profile"/></h3></a></th>
     </tr>
 </table>
 
-<div class="container">
+<div class="container text-center">
     <form action="${pageContext.request.contextPath}/view/admin/product-add-jsp.jsp">
         <button type="submit" class="btn btn-primary"><fmt:message key="admin.add_product"/></button>
     </form>
@@ -35,8 +35,8 @@
         </tr>
         <c:forEach items="${products}" var="product">
             <tr>
-                <td>${product.name}</td>
-                <td>
+                <td class="text-center">${product.name}</td>
+                <td class="text-center">
                     <c:choose>
                         <c:when test="${lang eq 'en'}">
                             ${product.category}
@@ -46,9 +46,9 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
-                <td>${product.additionDate}</td>
-                <td>${product.price}</td>
-                <td>
+                <td class="text-center">${product.additionDate}</td>
+                <td class="text-center">${product.price}</td>
+                <td class="text-center">
                     <a href="${pageContext.request.contextPath}/view/admin/product-edit-jsp.jsp?productID=${product.id}"><fmt:message key="edit"/></a>
                     |
                     <a href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}"><fmt:message key="delete"/></a>

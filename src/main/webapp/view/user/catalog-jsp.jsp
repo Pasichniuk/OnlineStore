@@ -9,53 +9,57 @@
 </head>
 <body>
 
-<table class="table table-striped table-bordered">
-    <tr>
-        <th><a href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
+<table class="table table-bordered table-hover">
+    <tr class="thead-dark">
+        <th><a class="text-light" href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
     </tr>
 </table>
 
-<div class="container">
-
-    <form action="${pageContext.request.contextPath}/catalog">
-        <label>
-            <select name="Sort">
-                <option value="a-z" selected><fmt:message key="sort.a_z"/></option>
-                <option value="z-a"><fmt:message key="sort.z_a"/></option>
-                <option value="cheap-expensive"><fmt:message key="sort.cheap_expensive"/></option>
-                <option value="expensive-cheap"><fmt:message key="sort.expensive_cheap"/></option>
-                <option value="older-newer"><fmt:message key="sort.older_newer"/></option>
-                <option value="newer-older"><fmt:message key="sort.newer_older"/></option>
-            </select>
-        </label>
-        <input type="submit" value="<fmt:message key="sort"/>" class="btn btn-primary">
-    </form>
-
-    <form action="${pageContext.request.contextPath}/catalog">
-        <label>
-            <select name="Category">
-                <option value="All" selected><fmt:message key="category.all"/></option>
-                <option value="Phones"><fmt:message key="category.phones"/></option>
-                <option value="Laptops"><fmt:message key="category.laptops"/></option>
-                <option value="Headphones"><fmt:message key="category.headphones"/></option>
-                <option value="Home appliances"><fmt:message key="category.home_appliances"/></option>
-            </select>
-        </label>
-        <input type="submit" value="<fmt:message key="apply"/>" class="btn btn-primary">
-    </form>
-
-    <form action="${pageContext.request.contextPath}/catalog">
-        <label>
-            <input type="number" name="minPrice"  min="0" placeholder="<fmt:message key="enter_min_price"/>"/>
-            <input type="number" name="maxPrice" max="10_000" placeholder="<fmt:message key="enter_max_price"/>"/>
-        </label>
-        <input type="submit" value="<fmt:message key="apply"/>" class="btn btn-primary">
-    </form>
-
-</div>
+<form action="${pageContext.request.contextPath}/catalog">
+    <table class="table table-borderless">
+        <tr class="thead-light">
+            <th>
+                <label>
+                    <input type="number" name="minPrice"  min="0" placeholder="<fmt:message key="enter_min_price"/>"/>
+                </label>
+            </th>
+            <th>
+                <label>
+                    <input type="number" name="maxPrice" max="10_000" placeholder="<fmt:message key="enter_max_price"/>"/>
+                </label>
+            </th>
+            <th>
+                <label>
+                    <select name="Sort">
+                        <option value="a-z" selected><fmt:message key="sort.a_z"/></option>
+                        <option value="z-a"><fmt:message key="sort.z_a"/></option>
+                        <option value="cheap-expensive"><fmt:message key="sort.cheap_expensive"/></option>
+                        <option value="expensive-cheap"><fmt:message key="sort.expensive_cheap"/></option>
+                        <option value="older-newer"><fmt:message key="sort.older_newer"/></option>
+                        <option value="newer-older"><fmt:message key="sort.newer_older"/></option>
+                    </select>
+                </label>
+            </th>
+            <th>
+                <label>
+                    <select name="Category">
+                        <option value="All" selected><fmt:message key="category.all"/></option>
+                        <option value="Phones"><fmt:message key="category.phones"/></option>
+                        <option value="Laptops"><fmt:message key="category.laptops"/></option>
+                        <option value="Headphones"><fmt:message key="category.headphones"/></option>
+                        <option value="Home appliances"><fmt:message key="category.home_appliances"/></option>
+                    </select>
+                </label>
+            </th>
+            <th>
+                <input type="submit" value="<fmt:message key="apply"/>" class="btn btn-primary">
+            </th>
+        </tr>
+    </table>
+</form>
 
 <div class="container">
        <table class="table table-striped table-bordered">
@@ -68,8 +72,8 @@
            </tr>
            <c:forEach items="${products}" var="product">
                <tr>
-                   <td>${product.name}</td>
-                   <td>
+                   <td class="text-center">${product.name}</td>
+                   <td class="text-center">
                        <c:choose>
                            <c:when test="${lang eq 'en'}">
                                ${product.category}
@@ -79,9 +83,9 @@
                            </c:otherwise>
                        </c:choose>
                    </td>
-                   <td>${product.additionDate}</td>
-                   <td>${product.price}</td>
-                   <td>
+                   <td class="text-center">${product.additionDate}</td>
+                   <td class="text-center">${product.price}</td>
+                   <td class="text-center">
                        <a href="${pageContext.request.contextPath}/catalog?ProductID=${product.id}"><fmt:message key="product.add_to_cart"/></a>
                    </td>
                </tr>

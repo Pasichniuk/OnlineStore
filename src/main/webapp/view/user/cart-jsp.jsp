@@ -9,21 +9,21 @@
 </head>
 <body>
 
-<table class="table table-striped table-bordered">
-    <tr>
-        <th><a href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
-        <th><a href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
+<table class="table table-bordered table-hover">
+    <tr class="thead-dark">
+        <th><a class="text-light" href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
+        <th><a class="text-light" href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
     </tr>
 </table>
 
 <div class="container">
-    <h5>
-        <fmt:message key="total_price"/> = <c:out value="${totalPrice}"/>
-    </h5>
     <form action="${pageContext.request.contextPath}/order" method="post">
-        <input type="submit" value="<fmt:message key="buy"/>" class="btn btn-primary">
+        <h5>
+            <input type="submit" value="<fmt:message key="buy"/>" class="btn btn-primary">
+            <fmt:message key="total_price"/> = <c:out value="${totalPrice}"/>
+        </h5>
     </form>
 </div>
 
@@ -38,8 +38,8 @@
         </tr>
         <c:forEach items="${products}" var="product">
             <tr>
-                <td>${product.name}</td>
-                <td>
+                <td class="text-center">${product.name}</td>
+                <td class="text-center">
                     <c:choose>
                         <c:when test="${lang eq 'en'}">
                             ${product.category}
@@ -49,9 +49,9 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
-                <td>${product.additionDate}</td>
-                <td>${product.price}</td>
-                <td>
+                <td class="text-center">${product.additionDate}</td>
+                <td class="text-center">${product.price}</td>
+                <td class="text-center">
                     <a href="${pageContext.request.contextPath}/cart?ProductID=${product.id}"><fmt:message key="product.remove"/></a>
                 </td>
             </tr>
