@@ -39,9 +39,8 @@
                      </c:otherwise>
                 </c:choose>
                 <td class="text-center">
-                    <a href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=BLOCKED"><fmt:message key="block"/></a>
-                    |
-                    <a href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=UNBLOCKED"><fmt:message key="unblock"/></a>
+                    <a class="btn btn-success" href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=UNBLOCKED"><fmt:message key="unblock"/></a>
+                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/admin-users?userID=${user.id}&blockStatus=BLOCKED"><fmt:message key="block"/></a>
                 </td>
             </tr>
         </c:forEach>

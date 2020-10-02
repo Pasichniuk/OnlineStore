@@ -20,7 +20,7 @@
 
 <div class="container text-center">
     <form action="${pageContext.request.contextPath}/view/admin/product-add-jsp.jsp">
-        <button type="submit" class="btn btn-primary"><fmt:message key="admin.add_product"/></button>
+        <button type="submit" class="btn btn-success"><fmt:message key="admin.add_product"/></button>
     </form>
 </div>
 
@@ -49,9 +49,8 @@
                 <td class="text-center">${product.additionDate}</td>
                 <td class="text-center">${product.price}</td>
                 <td class="text-center">
-                    <a href="${pageContext.request.contextPath}/view/admin/product-edit-jsp.jsp?productID=${product.id}"><fmt:message key="edit"/></a>
-                    |
-                    <a href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}"><fmt:message key="delete"/></a>
+                    <a class="btn btn-warning" href="${pageContext.request.contextPath}/view/admin/product-edit-jsp.jsp?productID=${product.id}"><fmt:message key="edit"/></a>
+                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}"><fmt:message key="delete"/></a>
                 </td>
             </tr>
         </c:forEach>

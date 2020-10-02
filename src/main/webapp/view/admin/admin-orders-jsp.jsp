@@ -42,9 +42,8 @@
                     </c:otherwise>
                 </c:choose>
                 <td class="text-center">
-                    <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=PAID"><fmt:message key="order_paid"/></a>
-                    |
-                    <a href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=CANCELLED"><fmt:message key="order_cancelled"/></a>
+                    <a class="btn btn-success" href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=PAID"><fmt:message key="order_paid"/></a>
+                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/admin-orders?orderID=${order.orderID}&status=CANCELLED"><fmt:message key="order_cancelled"/></a>
                 </td>
             </tr>
         </c:forEach>

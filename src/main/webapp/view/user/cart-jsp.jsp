@@ -49,7 +49,7 @@
                 <td class="text-center">${product.additionDate}</td>
                 <td class="text-center">${product.price}</td>
                 <td class="text-center">
-                    <a href="${pageContext.request.contextPath}/cart?ProductID=${product.id}"><fmt:message key="product.remove"/></a>
+                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/cart?ProductID=${product.id}"><fmt:message key="product.remove"/></a>
                 </td>
             </tr>
         </c:forEach>

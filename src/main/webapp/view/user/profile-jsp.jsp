@@ -21,7 +21,7 @@
 <table class="table table-bordered">
     <tr>
         <th><h5><fmt:message key="profile.user"/>: ${userName}</h5></th>
-        <th><h5><a href="${pageContext.request.contextPath}/log-out"><fmt:message key="profile.logout"/></a></h5></th>
+        <th><h5><a class="btn btn-danger" href="${pageContext.request.contextPath}/log-out"><fmt:message key="profile.logout"/></a></h5></th>
         <th><h5><fmt:message key="language"/>:
             <a href="${pageContext.request.contextPath}/profile?lang=en">EN</a>
             |
