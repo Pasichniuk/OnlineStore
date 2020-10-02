@@ -4,39 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Stores products added to the cart
+ * Stores products added to the cart.
+ *
+ * Singleton.
  *
  * @author Vlad Pasichniuk
  *
  */
 
-public final class Cart {
+public class Cart {
+
+    private static Cart instance;
 
     private static List<Product> products = new ArrayList<>();
-    private static float totalPrice = 0.0f;
 
-    public static void clearCart() {
+    private Cart() {}
+
+    public static Cart getInstance() {
+        if (instance == null)
+            instance = new Cart();
+
+        return instance;
+    }
+
+    public void clearCart() {
         products = new ArrayList<>();
-        totalPrice = 0.0f;
     }
 
-    public static void increaseTotalPrice(float number) {
-        totalPrice += number;
-    }
-
-    public static void decreaseTotalPrice(float number) {
-        totalPrice -= number;
-    }
-
-    public static float getTotalPrice() {
-        return totalPrice;
-    }
-
-    public static List<Product> getCartProducts() {
+    public List<Product> getCartProducts() {
         return products;
     }
 
-    public static List<Product> getCartProductsOnPage(int offset, int recordsPerPage) {
+    public List<Product> getCartProductsOnPage(int offset, int recordsPerPage) {
         List<Product> products = getCartProducts();
         List<Product> productsOnPage = new ArrayList<>();
 

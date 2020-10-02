@@ -20,14 +20,11 @@
 
 <div class="container">
     <form action="${pageContext.request.contextPath}/order" method="post">
-        <h5>
-            <input type="submit" value="<fmt:message key="buy"/>" class="btn btn-primary">
-            <fmt:message key="total_price"/> = <c:out value="${totalPrice}"/>
+        <h5 class="text-center">
+            <input type="submit" value="<fmt:message key="buy"/>" class="btn btn-success">
         </h5>
     </form>
-</div>
 
-<div class="container">
     <table class="table table-striped table-bordered">
         <tr class="thead-dark">
             <th><fmt:message key="product.name"/></th>

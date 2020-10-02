@@ -17,6 +17,6 @@ public class MySessionAttributeListener implements HttpSessionAttributeListener 
     @Override
     public void attributeAdded(HttpSessionBindingEvent httpSessionBindingEvent) {
         if (httpSessionBindingEvent.getName().equals("userLogin"))
-            Cart.clearCart();
+            Cart.getInstance().clearCart();
     }
 }

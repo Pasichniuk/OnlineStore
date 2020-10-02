@@ -35,9 +35,11 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userLogin = (String) request.getSession().getAttribute("userLogin");
 
-        if (userLogin != null && Cart.getCartProducts().size() > 0) {
-            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), Cart.getCartProducts());
-            Cart.clearCart();
+        Cart cart = Cart.getInstance();
+
+        if (userLogin != null && cart.getCartProducts().size() > 0) {
+            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), cart.getCartProducts());
+            cart.clearCart();
 
             logger.info("User '" + userLogin + "' created new order...");
 
