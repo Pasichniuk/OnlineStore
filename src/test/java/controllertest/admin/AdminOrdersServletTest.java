@@ -1,6 +1,6 @@
-package controllerTest.admin;
+package controllertest.admin;
 
-import controller.admin.AdminUsersServlet;
+import controller.admin.AdminOrdersServlet;
 import org.junit.*;
 
 import javax.servlet.RequestDispatcher;
@@ -12,11 +12,11 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
-public class AdminUsersServletTest {
+public class AdminOrdersServletTest {
 
     @Test
-    public void testAdminUsersServlet() throws ServletException, IOException {
-        final AdminUsersServlet servlet = new AdminUsersServlet();
+    public void testAdminOrdersServlet() throws ServletException, IOException {
+        final AdminOrdersServlet servlet = new AdminOrdersServlet();
 
         final HttpServletRequest request = mock(HttpServletRequest.class);
         final HttpServletResponse response = mock(HttpServletResponse.class);
@@ -24,10 +24,10 @@ public class AdminUsersServletTest {
         final HttpSession session = mock(HttpSession.class);
 
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("blockStatus")).thenReturn(null, "UNBLOCKED", "BLOCKED");
-        when(request.getParameter("userID")).thenReturn(String.valueOf(0));
+        when(request.getParameter("orderID")).thenReturn(String.valueOf(0));
+        when(request.getParameter("status")).thenReturn(null);
         when(request.getParameter("page")).thenReturn(String.valueOf(1));
-        when(request.getRequestDispatcher("view/admin/admin-users-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("view/admin/admin-orders-jsp.jsp")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
     }

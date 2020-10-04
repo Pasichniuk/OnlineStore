@@ -1,4 +1,4 @@
-package entityTest;
+package entitytest;
 
 import entity.Product;
 
@@ -14,12 +14,6 @@ public class ProductTest {
         Product product = new Product(1, "iPhone XR", "Phones", 800.8f, new Date());
 
         assertNotNull(product);
-
-        assertEquals(product.getId(), 1);
-        assertEquals(product.getName(), "iPhone XR");
-        assertEquals(product.getCategory(), "Phones");
-        assertEquals(product.getPrice(), 800.8f, 0.8);
-        assertEquals(product.getAdditionDate(), new Date());
 
         product.setId(2);
         product.setName("iPhone 11");

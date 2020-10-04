@@ -1,4 +1,4 @@
-package controllerTest;
+package controllertest;
 
 import controller.LogoutServlet;
 import org.junit.*;

@@ -1,4 +1,4 @@
-package controllerTest.user;
+package controllertest.user;
 
 import controller.user.HomeServlet;
 import org.junit.*;

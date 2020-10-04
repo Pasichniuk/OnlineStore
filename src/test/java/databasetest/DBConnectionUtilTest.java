@@ -1,4 +1,4 @@
-package databaseTest;
+package databasetest;
 
 import database.DBConnectionUtil;
 import org.junit.*;
@@ -10,7 +10,6 @@ public class DBConnectionUtilTest {
     @Test
     public void getConnectionTest() {
         assertNotNull(DBConnectionUtil.getConnection());
-
         assertNotNull(DBConnectionUtil.getConnection());
     }
 }

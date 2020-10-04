@@ -1,4 +1,4 @@
-package controllerTest.admin;
+package controllertest.admin;
 
 import controller.admin.AdminProfileServlet;
 import database.dao.UserDAO;

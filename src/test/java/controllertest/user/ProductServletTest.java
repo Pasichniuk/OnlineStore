@@ -1,6 +1,6 @@
-package controllerTest.admin;
+package controllertest.user;
 
-import controller.admin.AdminProductsServlet;
+import controller.user.ProductServlet;
 import org.junit.*;
 
 import javax.servlet.RequestDispatcher;
@@ -12,11 +12,11 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
-public class AdminProductsServletTest {
+public class ProductServletTest {
 
     @Test
-    public void testAdminProductsServlet() throws ServletException, IOException {
-        final AdminProductsServlet servlet = new AdminProductsServlet();
+    public void testProductServlet() throws ServletException, IOException {
+        final ProductServlet servlet = new ProductServlet();
 
         final HttpServletRequest request = mock(HttpServletRequest.class);
         final HttpServletResponse response = mock(HttpServletResponse.class);
@@ -24,15 +24,15 @@ public class AdminProductsServletTest {
         final HttpSession session = mock(HttpSession.class);
 
         when(request.getSession()).thenReturn(session);
-        when(request.getParameter("productID")).thenReturn(String.valueOf(0));
+        when(request.getParameter("ProductID")).thenReturn(null, String.valueOf(0));
         when(request.getParameter("productName")).thenReturn("test");
-        when(request.getParameter("category")).thenReturn("test");
-        when(request.getParameter("price")).thenReturn(String.valueOf(0));
-        when(request.getParameter("action")).thenReturn("EDIT", "ADD");
+        when(request.getParameter("Category")).thenReturn("test");
+        when(request.getParameter("minPrice")).thenReturn(String.valueOf(100));
+        when(request.getParameter("maxPrice")).thenReturn(String.valueOf(1200));
+        when(request.getParameter("Sort")).thenReturn("a-z");
         when(request.getParameter("page")).thenReturn(String.valueOf(1));
-        when(request.getRequestDispatcher("view/admin/admin-catalog-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("view/user/catalog-jsp.jsp")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
-        servlet.doPost(request, response);
     }
 }

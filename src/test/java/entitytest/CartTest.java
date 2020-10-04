@@ -1,4 +1,4 @@
-package entityTest;
+package entitytest;
 
 import entity.Cart;
 import entity.Product;
