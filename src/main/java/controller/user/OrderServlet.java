@@ -32,7 +32,7 @@ public class OrderServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userLogin = (String) request.getSession().getAttribute("userLogin");
 
         Cart cart = Cart.getInstance();
