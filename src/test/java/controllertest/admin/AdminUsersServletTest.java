@@ -2,6 +2,7 @@ package controllertest.admin;
 
 import controller.admin.AdminUsersServlet;
 import org.junit.*;
+import org.mockito.Mock;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,19 +15,30 @@ import static org.mockito.Mockito.*;
 
 public class AdminUsersServletTest {
 
+    @Mock
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private RequestDispatcher dispatcher;
+    private HttpSession session;
+
+    @Before
+    public void beforeClass() {
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        dispatcher = mock(RequestDispatcher.class);
+        session = mock(HttpSession.class);
+    }
+
     @Test
     public void testAdminUsersServlet() throws ServletException, IOException {
         final AdminUsersServlet servlet = new AdminUsersServlet();
 
-        final HttpServletRequest request = mock(HttpServletRequest.class);
-        final HttpServletResponse response = mock(HttpServletResponse.class);
-        final RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        final HttpSession session = mock(HttpSession.class);
-
-        when(request.getSession()).thenReturn(session);
         when(request.getParameter("blockStatus")).thenReturn(null, "UNBLOCKED", "BLOCKED");
         when(request.getParameter("userID")).thenReturn(String.valueOf(0));
         when(request.getParameter("page")).thenReturn(String.valueOf(1));
+
+        when(request.getSession()).thenReturn(session);
+
         when(request.getRequestDispatcher("view/admin/admin-users-jsp.jsp")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);

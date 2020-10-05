@@ -2,6 +2,7 @@ package controllertest;
 
 import controller.RegistrationServlet;
 import org.junit.*;
+import org.mockito.Mock;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,23 +16,36 @@ import static org.mockito.Mockito.*;
 
 public class RegistrationServletTest {
 
+    @Mock
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private RequestDispatcher dispatcher;
+    private PrintWriter writer;
+    private HttpSession session;
+
+    @Before
+    public void beforeClass() {
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        dispatcher = mock(RequestDispatcher.class);
+        writer = mock(PrintWriter.class);
+        session = mock(HttpSession.class);
+    }
+
     @Test
     public void testRegistrationServlet() throws IOException, ServletException {
         final RegistrationServlet servlet = new RegistrationServlet();
-
-        final HttpServletRequest request = mock(HttpServletRequest.class);
-        final HttpServletResponse response = mock(HttpServletResponse.class);
-        final RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        final PrintWriter writer = mock(PrintWriter.class);
-        final HttpSession session = mock(HttpSession.class);
 
         when(request.getParameter("login")).thenReturn("test");
         when(request.getParameter("password")).thenReturn("test");
         when(request.getParameter("confirm-password")).thenReturn("test");
         when(request.getParameter("userName")).thenReturn("Test Test");
         when(request.getParameter("userNameRU")).thenReturn("Тест Тест");
+
         when(request.getSession()).thenReturn(session);
+
         when(response.getWriter()).thenReturn(writer);
+
         when(request.getRequestDispatcher("view/registration-jsp.jsp")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);

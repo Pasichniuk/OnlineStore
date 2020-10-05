@@ -2,6 +2,7 @@ package controllertest;
 
 import controller.LogoutServlet;
 import org.junit.*;
+import org.mockito.Mock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,13 +13,21 @@ import static org.mockito.Mockito.*;
 
 public class LogoutServletTest {
 
+    @Mock
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private HttpSession session;
+
+    @Before
+    public void beforeClass() {
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        session = mock(HttpSession.class);
+    }
+
     @Test
     public void testLogoutServlet() throws IOException {
         final LogoutServlet servlet = new LogoutServlet();
-
-        final HttpServletRequest request = mock(HttpServletRequest.class);
-        final HttpServletResponse response = mock(HttpServletResponse.class);
-        final HttpSession session = mock(HttpSession.class);
 
         when(request.getSession()).thenReturn(session);
 
