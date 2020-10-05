@@ -19,11 +19,11 @@
     </tr>
 </table>
 
-<h1 class="thead-light text-center">
+<h2 class="thead-light text-center">
     <ex:Welcome>
         <fmt:message key="home_jsp.welcome"/>
     </ex:Welcome>
-</h1>
+</h2>
 
 <div>
     <h5 class="fixed-bottom text-center">

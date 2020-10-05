@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <input type="text" name="price" placeholder="<fmt:message key="enter_product_price"/>" class="form-control"/>
+                            <input type="number" min="0" name="price" placeholder="<fmt:message key="enter_product_price"/>" class="form-control"/>
                         </label>
                     </div>
 

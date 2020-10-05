@@ -33,7 +33,7 @@
             </th>
             <th>
                 <label>
-                    <select name="Sort">
+                    <select name="Sort" title=<fmt:message key="sort_by"/>>
                         <option value="a-z" selected><fmt:message key="sort.a_z"/></option>
                         <option value="z-a"><fmt:message key="sort.z_a"/></option>
                         <option value="cheap-expensive"><fmt:message key="sort.cheap_expensive"/></option>
@@ -45,7 +45,7 @@
             </th>
             <th>
                 <label>
-                    <select name="Category">
+                    <select name="Category" title=<fmt:message key="choose_category"/>>
                         <option value="All" selected><fmt:message key="category.all"/></option>
                         <option value="Phones"><fmt:message key="category.phones"/></option>
                         <option value="Laptops"><fmt:message key="category.laptops"/></option>
