@@ -16,7 +16,8 @@ import java.sql.*;
 
 public class OrderDAO {
 
-    private static final String SQL_FIND_ALL_ORDERS = "SELECT * FROM online_store.order";
+    private static final String SQL_FIND_ALL_ORDERS = "SELECT order_id, online_store.order.user_id, order_status, user_login FROM online_store.order " +
+            "JOIN online_store.store_user ON online_store.order.user_id = store_user.user_id";
 
     private static final String SQL_GET_USER_ORDERS = "SELECT * FROM online_store.order WHERE user_id=?";
 
@@ -74,6 +75,7 @@ public class OrderDAO {
 
             while (resultSet.next()) {
                 order = new Order(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3));
+                order.setUserLogin(resultSet.getString(4));
                 orders.add(order);
             }
 

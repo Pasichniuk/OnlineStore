@@ -17,9 +17,11 @@ public class OrderTest {
         order.setOrderID(2);
         order.setUserID(2);
         order.setStatus("CANCELLED");
+        order.setUserLogin("test");
 
         assertEquals(order.getOrderID(), 2);
         assertEquals(order.getUserID(), 2);
         assertEquals(order.getStatus(), "CANCELLED");
+        assertEquals(order.getUserLogin(), "test");
     }
 }

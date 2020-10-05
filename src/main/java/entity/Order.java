@@ -12,6 +12,7 @@ public class Order {
     private int orderID;
     private int userID;
     private String status;
+    private String userLogin;
 
     public Order(int orderID, int userID, String status) {
         this.orderID = orderID;
@@ -41,5 +42,13 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 }

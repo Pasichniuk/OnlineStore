@@ -22,14 +22,14 @@
     <table class="table table-striped table-bordered">
         <tr class="thead-dark">
             <th><fmt:message key="order_id"/></th>
-            <th><fmt:message key="user_id"/></th>
+            <th><fmt:message key="user"/></th>
             <th><fmt:message key="order_status"/></th>
             <th><fmt:message key="actions"/></th>
         </tr>
         <c:forEach items="${orders}" var="order">
             <tr>
                 <td class="text-center">${order.orderID}</td>
-                <td class="text-center">${order.userID}</td>
+                <td class="text-center">${order.userLogin}</td>
                 <c:choose>
                     <c:when test="${order.status == 'PAID'}">
                         <td class="text-center"><fmt:message key="order_paid"/></td>
