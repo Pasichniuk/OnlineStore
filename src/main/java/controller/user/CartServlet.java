@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -38,6 +39,8 @@ public class CartServlet extends HttpServlet {
         List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
 
         if (cartProducts == null) {
+            request.setAttribute("currentPage", pageNumber);
+            request.setAttribute("totalPrice", 0);
             request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
             return;
         }
@@ -51,6 +54,7 @@ public class CartServlet extends HttpServlet {
 
         request.setAttribute("pagesAmount", pagesAmount);
         request.setAttribute("currentPage", pageNumber);
+        request.setAttribute("totalPrice", getTotalPrice(cartProducts));
         request.setAttribute("products", cartProductsOnPage);
 
         request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
@@ -72,6 +76,17 @@ public class CartServlet extends HttpServlet {
         if (productID != null && cartProducts != null) {
             cartProducts.removeIf(p -> p.getId() == Integer.parseInt(productID));
         }
+    }
+
+    private String getTotalPrice(List<Product> products) {
+        double totalPrice = 0;
+
+        for (Product product : products)
+            totalPrice += product.getPrice();
+
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        return df.format(totalPrice);
     }
 
     private List<Product> getCartProductsOnPage(List<Product> cartProducts) {

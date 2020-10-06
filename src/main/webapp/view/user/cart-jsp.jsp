@@ -20,6 +20,9 @@
 
 <div class="container">
     <form action="${pageContext.request.contextPath}/order" method="post">
+        <h5 class="text-center text-info">
+            <fmt:message key="totalprice"/>: ${totalPrice}
+        </h5>
         <h5 class="text-center">
             <input type="submit" value="<fmt:message key="buy"/>" class="btn btn-success">
         </h5>
