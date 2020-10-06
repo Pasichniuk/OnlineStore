@@ -1,5 +1,6 @@
 package controller.user;
 
+import constant.Constants;
 import database.dao.OrderDAO;
 import database.dao.UserDAO;
 
@@ -20,7 +21,7 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "OrderServlet", urlPatterns = "/order")
+@WebServlet(name = "OrderServlet", urlPatterns = Constants.PATH_ORDERS)
 public class OrderServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(OrderServlet.class);
@@ -36,21 +37,33 @@ public class OrderServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
+
         String userLogin = (String) session.getAttribute("userLogin");
 
-        if (userLogin != null && session.getAttribute("cartProducts") != null) {
-            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), (List<Product>) session.getAttribute("cartProducts"));
+        if (userLogin == null) {
+            response.getWriter().write(notifyUnauthorizedUser());
+            return;
+        }
+
+        List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
+
+        if (cartProducts != null && !cartProducts.isEmpty()) {
+            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), cartProducts);
             session.setAttribute("cartProducts", null);
 
             logger.info("User '" + userLogin + "' created new order...");
 
-            response.sendRedirect("/cart");
+            response.sendRedirect(Constants.PATH_CART);
 
         } else
-            response.getWriter().write(notifyUnauthorizedUser());
+            response.getWriter().write(notifyCartIsEmpty());
     }
 
     private String notifyUnauthorizedUser() {
-        return "<script>" + "alert('Only authorized users can make orders. Cart cannot be empty.');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
+        return "<script>" + "alert('Only authorized users can make orders!');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
+    }
+
+    private String notifyCartIsEmpty() {
+        return "<script>" + "alert('Cart is empty!');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
     }
 }

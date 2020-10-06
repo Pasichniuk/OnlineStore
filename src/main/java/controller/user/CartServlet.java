@@ -1,5 +1,6 @@
 package controller.user;
 
+import constant.Constants;
 import entity.Product;
 import org.apache.log4j.Logger;
 
@@ -17,21 +18,19 @@ import java.util.*;
  *
  */
 
-@WebServlet(name = "CartServlet", urlPatterns = "/cart")
+@WebServlet(name = "CartServlet", urlPatterns = Constants.PATH_CART)
 public class CartServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(CartServlet.class);
 
-    private static final int RECORDS_PER_PAGE = 5;
     private int pageNumber = 1;
-
     private int productsAmount;
     private int pagesAmount;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         removeProductFromCart(request);
-        response.sendRedirect("/cart");
+        response.sendRedirect(Constants.PATH_CART);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class CartServlet extends HttpServlet {
         if (cartProducts == null) {
             request.setAttribute("currentPage", pageNumber);
             request.setAttribute("totalPrice", 0);
-            request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
+            request.getRequestDispatcher(Constants.PATH_CART_JSP).forward(request, response);
             return;
         }
 
@@ -59,7 +58,7 @@ public class CartServlet extends HttpServlet {
         request.setAttribute("totalPrice", getTotalPrice(cartProducts));
         request.setAttribute("products", cartProductsOnPage);
 
-        request.getRequestDispatcher("view/user/cart-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_CART_JSP).forward(request, response);
     }
 
     /**
@@ -100,15 +99,15 @@ public class CartServlet extends HttpServlet {
     }
 
     private List<Product> getCartProductsOnPage(List<Product> cartProducts) {
-        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
+        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / Constants.RECORDS_PER_PAGE);
 
-        return getCartProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, cartProducts);
+        return getCartProductsOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, cartProducts);
     }
 
     private List<Product> getCartProductsOnPage(int offset, List<Product> products) {
         List<Product> productsOnPage = new ArrayList<>();
 
-        for (int i = offset; i < (offset + RECORDS_PER_PAGE); i++) {
+        for (int i = offset; i < (offset + Constants.RECORDS_PER_PAGE); i++) {
 
             if (i < products.size())
                 productsOnPage.add(products.get(i));

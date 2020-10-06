@@ -1,6 +1,8 @@
 package controllertest;
 
+import constant.Constants;
 import controller.RegistrationServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -46,7 +48,7 @@ public class RegistrationServletTest {
 
         when(response.getWriter()).thenReturn(writer);
 
-        when(request.getRequestDispatcher("view/registration-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_REGISTRATION_JSP)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

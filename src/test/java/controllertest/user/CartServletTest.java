@@ -1,7 +1,9 @@
 package controllertest.user;
 
+import constant.Constants;
 import controller.user.CartServlet;
 import entity.Product;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -48,7 +50,7 @@ public class CartServletTest {
         when(request.getParameter("ProductID")).thenReturn(String.valueOf(1));
         when(request.getParameter("page")).thenReturn(String.valueOf(1));
 
-        when(request.getRequestDispatcher("view/user/cart-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_CART_JSP)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

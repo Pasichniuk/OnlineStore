@@ -1,11 +1,12 @@
 package controller.user;
 
+import constant.Constants;
 import database.dao.CategoryDAO;
 import database.dao.ProductDAO;
 import entity.Product;
 import util.Sorter;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -20,12 +21,10 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "ProductServlet", urlPatterns = "/catalog")
+@WebServlet(name = "ProductServlet", urlPatterns = Constants.PATH_CATALOG)
 public class ProductServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ProductServlet.class);
-
-    private static final int CART_LIMIT = 20;
 
     private final ProductDAO productDAO;
     private final CategoryDAO categoryDAO;
@@ -38,9 +37,9 @@ public class ProductServlet extends HttpServlet {
     private int minPrice = 0;
     private int maxPrice = 10_000;
 
-    private static final int RECORDS_PER_PAGE = 5;
-    private int productsAmount;
     private int pageNumber = 1;
+
+    private int productsAmount;
     private int pagesAmount;
 
     public ProductServlet() {
@@ -52,7 +51,7 @@ public class ProductServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         addProductToCart(request);
-        response.sendRedirect("/catalog");
+        response.sendRedirect(Constants.PATH_CATALOG);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("pagesAmount", pagesAmount);
         request.setAttribute("currentPage", pageNumber);
 
-        request.getRequestDispatcher("view/user/catalog-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_CATALOG_JSP).forward(request, response);
     }
 
     /**
@@ -101,7 +100,7 @@ public class ProductServlet extends HttpServlet {
 
             if (cartProducts != null) {
 
-                if (cartProducts.size() < CART_LIMIT) {
+                if (cartProducts.size() < Constants.CART_LIMIT) {
                     cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
                     logger.info("Product (ID=" + productID + ") has been added to the cart");
                 }
@@ -118,9 +117,9 @@ public class ProductServlet extends HttpServlet {
     private void getProductsOnPage() {
         productsAmount = products.size();
 
-        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, products);
+        products = productDAO.getProductsOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, Constants.RECORDS_PER_PAGE, products);
 
-        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
+        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / Constants.RECORDS_PER_PAGE);
     }
 
     private void getProductsFromPriceRange(HttpServletRequest request) {

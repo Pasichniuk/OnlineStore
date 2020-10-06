@@ -1,5 +1,6 @@
 package controller.admin;
 
+import constant.Constants;
 import database.dao.OrderDAO;
 import entity.Order;
 
@@ -19,7 +20,7 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "AdminOrdersServlet", urlPatterns = "/admin-orders")
+@WebServlet(name = "AdminOrdersServlet", urlPatterns = Constants.PATH_ADMIN_ORDERS)
 public class AdminOrdersServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(AdminOrdersServlet.class);
@@ -28,9 +29,10 @@ public class AdminOrdersServlet extends HttpServlet {
 
     private List<Order> orders;
 
-    private static final int RECORDS_PER_PAGE = 5;
     private final int ordersAmount;
+
     private int pageNumber = 1;
+
     private int pagesAmount;
 
     public AdminOrdersServlet() {
@@ -53,7 +55,7 @@ public class AdminOrdersServlet extends HttpServlet {
         request.setAttribute("pagesAmount", pagesAmount);
         request.setAttribute("currentPage", pageNumber);
 
-        request.getRequestDispatcher("view/admin/admin-orders-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_ADMIN_ORDERS_JSP).forward(request, response);
     }
 
     /**
@@ -73,7 +75,7 @@ public class AdminOrdersServlet extends HttpServlet {
         if (orderID != null && status != null) {
             orderDAO.updateOrderStatus(Integer.parseInt(orderID), status);
             logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' changed status of order with ID=" + orderID + " to " + status + "...");
-            response.sendRedirect("/admin-orders");
+            response.sendRedirect(Constants.PATH_ADMIN_ORDERS);
             return true;
         }
 
@@ -81,8 +83,8 @@ public class AdminOrdersServlet extends HttpServlet {
     }
 
     private void getOrdersOnPage() {
-        orders = orderDAO.getOrdersOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
+        orders = orderDAO.getOrdersOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, Constants.RECORDS_PER_PAGE);
 
-        pagesAmount = (int) Math.ceil(ordersAmount * 1.0 / RECORDS_PER_PAGE);
+        pagesAmount = (int) Math.ceil(ordersAmount * 1.0 / Constants.RECORDS_PER_PAGE);
     }
 }

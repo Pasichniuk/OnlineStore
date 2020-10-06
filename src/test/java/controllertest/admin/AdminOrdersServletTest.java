@@ -1,6 +1,8 @@
 package controllertest.admin;
 
+import constant.Constants;
 import controller.admin.AdminOrdersServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -39,7 +41,7 @@ public class AdminOrdersServletTest {
 
         when(request.getSession()).thenReturn(session);
 
-        when(request.getRequestDispatcher("view/admin/admin-orders-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_ADMIN_ORDERS_JSP)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
     }

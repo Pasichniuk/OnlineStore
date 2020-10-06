@@ -1,6 +1,8 @@
 package controllertest.user;
 
+import constant.Constants;
 import controller.user.ProductServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -46,7 +48,7 @@ public class ProductServletTest {
 
         when(request.getSession()).thenReturn(session);
 
-        when(request.getRequestDispatcher("view/user/catalog-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_CATALOG_JSP)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

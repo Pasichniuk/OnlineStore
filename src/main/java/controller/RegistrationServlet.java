@@ -1,5 +1,6 @@
 package controller;
 
+import constant.Constants;
 import database.dao.UserDAO;
 
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ import java.nio.charset.StandardCharsets;
  *
  */
 
-@WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
+@WebServlet(name = "RegistrationServlet", urlPatterns = Constants.PATH_REGISTRATION)
 public class RegistrationServlet extends HttpServlet {
 
     private static final String CHECK_INPUT_REGEX = "^[a-zA-Z0-9._-]{3,}$";
@@ -40,7 +41,7 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("view/registration-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_REGISTRATION_JSP).forward(request, response);
     }
 
     /**
@@ -66,7 +67,7 @@ public class RegistrationServlet extends HttpServlet {
             if (userPassword.equals(confirmPassword)) {
 
                 if (userDAO.registerUser(userLogin, userPassword, userName, userNameRU)) {
-                    response.sendRedirect("/log-in");
+                    response.sendRedirect(Constants.PATH_LOGIN);
                     return true;
                 }
             }

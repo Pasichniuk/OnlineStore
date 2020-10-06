@@ -1,5 +1,6 @@
 package util.filter;
 
+import constant.Constants;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,25 +28,29 @@ public class UserAuthenticationFilter implements Filter {
 
         if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
 
-            final HttpServletRequest req = (HttpServletRequest) servletRequest;
-            final HttpServletResponse resp = (HttpServletResponse) servletResponse;
+            final HttpServletRequest request = (HttpServletRequest) servletRequest;
+            final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-            final HttpSession session = req.getSession();
+            final HttpSession session = request.getSession();
 
             if (session != null && session.getAttribute("role") != null) {
 
-                if (session.getAttribute("role").equals("ROLE_ADMIN")) {
-                    resp.sendRedirect("/log-in");
+                if (session.getAttribute("role").equals(Constants.ROLE_ADMIN)) {
+                    response.getWriter().write(notifyAccessDenied());
                     return;
                 }
             }
 
-            filterChain.doFilter(servletRequest, resp);
+            filterChain.doFilter(servletRequest, response);
         }
     }
 
     @Override
     public void destroy() {
         filterConfig = null;
+    }
+
+    private String notifyAccessDenied() {
+        return "<script>" + "alert('Access denied!');" + "window.location = 'http://localhost:8080/log-in';" + "</script>";
     }
 }

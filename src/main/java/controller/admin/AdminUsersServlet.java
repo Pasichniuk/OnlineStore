@@ -1,5 +1,6 @@
 package controller.admin;
 
+import constant.Constants;
 import database.dao.UserDAO;
 import entity.User;
 
@@ -19,7 +20,7 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "AdminUsersServlet", urlPatterns = "/admin-users")
+@WebServlet(name = "AdminUsersServlet", urlPatterns = Constants.PATH_ADMIN_USERS)
 public class AdminUsersServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(AdminUsersServlet.class);
@@ -28,9 +29,10 @@ public class AdminUsersServlet extends HttpServlet {
 
     private List<User> users;
 
-    private static final int RECORDS_PER_PAGE = 5;
     private final int usersAmount;
+
     private int pageNumber = 1;
+
     private int pagesAmount;
 
     public AdminUsersServlet() {
@@ -53,7 +55,7 @@ public class AdminUsersServlet extends HttpServlet {
         request.setAttribute("pagesAmount", pagesAmount);
         request.setAttribute("currentPage", pageNumber);
 
-        request.getRequestDispatcher("view/admin/admin-users-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_ADMIN_USERS_JSP).forward(request, response);
     }
 
     /**
@@ -73,7 +75,7 @@ public class AdminUsersServlet extends HttpServlet {
         if (blockStatus != null && userID != null) {
             userDAO.updateUserBlockStatus(blockStatus, Integer.parseInt(userID));
             logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' " + blockStatus + " user with ID=" + userID);
-            response.sendRedirect("/admin-users");
+            response.sendRedirect(Constants.PATH_ADMIN_USERS);
             return true;
         }
 
@@ -81,8 +83,8 @@ public class AdminUsersServlet extends HttpServlet {
     }
 
     private void getUsersOnPage() {
-        users = userDAO.getUsersOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE);
+        users = userDAO.getUsersOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, Constants.RECORDS_PER_PAGE);
 
-        pagesAmount = (int) Math.ceil(usersAmount * 1.0 / RECORDS_PER_PAGE);
+        pagesAmount = (int) Math.ceil(usersAmount * 1.0 / Constants.RECORDS_PER_PAGE);
     }
 }

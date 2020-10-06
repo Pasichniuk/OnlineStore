@@ -1,10 +1,12 @@
 package controllertest.user;
 
+import constant.Constants;
 import controller.user.ProfileServlet;
 import database.dao.OrderDAO;
 import database.dao.UserDAO;
 import entity.Order;
 import entity.User;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -58,7 +60,7 @@ public class ProfileServletTest {
 
         when(orderDAO.getUserOrders(user.getId())).thenReturn(orders);
 
-        when(request.getRequestDispatcher("view/user/profile-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_PROFILE_JSP)).thenReturn(dispatcher);
 
         profileServlet.doGet(request, response);
 

@@ -1,5 +1,6 @@
 package util.filter;
 
+import constant.Constants;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,18 +35,22 @@ public class AdminAuthenticationFilter implements Filter {
 
             if (session != null && session.getAttribute("userLogin") != null && session.getAttribute("role") != null) {
 
-                if (session.getAttribute("role").equals("ROLE_ADMIN")) {
+                if (session.getAttribute("role").equals(Constants.ROLE_ADMIN)) {
                     filterChain.doFilter(servletRequest, response);
                     return;
                 }
             }
 
-            response.sendRedirect("/log-in");
+            response.getWriter().write(notifyAccessDenied());
         }
     }
 
     @Override
     public void destroy() {
         filterConfig = null;
+    }
+
+    private String notifyAccessDenied() {
+        return "<script>" + "alert('Access denied!');" + "window.location = 'http://localhost:8080/log-in';" + "</script>";
     }
 }

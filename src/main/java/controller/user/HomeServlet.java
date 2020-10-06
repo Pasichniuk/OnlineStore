@@ -1,5 +1,6 @@
 package controller.user;
 
+import constant.Constants;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +15,11 @@ import java.io.IOException;
  *
  */
 
-@WebServlet(name = "HomeServlet", urlPatterns = "/home")
+@WebServlet(name = "HomeServlet", urlPatterns = Constants.PATH_HOME)
 public class HomeServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("view/user/home-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_HOME_JSP).forward(request, response);
     }
 }

@@ -1,6 +1,8 @@
 package controllertest;
 
+import constant.Constants;
 import controller.LoginServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -42,15 +44,15 @@ public class LoginServletTest {
 
         when(session.getAttribute("lang")).thenReturn("en");
         when(session.getAttribute("userLogin")).thenReturn("test");
-        when(session.getAttribute("role")).thenReturn("ROLE_USER");
+        when(session.getAttribute("role")).thenReturn(Constants.ROLE_USER);
 
         when(response.getWriter()).thenReturn(writer);
 
-        when(request.getRequestDispatcher("view/login-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_LOGIN_JSP)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 
-        when(session.getAttribute("role")).thenReturn("ROLE_ADMIN");
+        when(session.getAttribute("role")).thenReturn(Constants.ROLE_ADMIN);
         servlet.doGet(request, response);
 
         when(session.getAttribute("role")).thenReturn(null);

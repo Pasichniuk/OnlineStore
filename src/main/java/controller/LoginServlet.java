@@ -1,5 +1,6 @@
 package controller;
 
+import constant.Constants;
 import database.dao.UserDAO;
 
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ import java.io.IOException;
  *
  */
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/log-in")
+@WebServlet(name = "LoginServlet", urlPatterns = Constants.PATH_LOGIN)
 public class LoginServlet extends HttpServlet {
 
     private final UserDAO userDAO;
@@ -42,7 +43,7 @@ public class LoginServlet extends HttpServlet {
         if (getProfile(request, response))
             return;
 
-        request.getRequestDispatcher("view/login-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_LOGIN_JSP).forward(request, response);
     }
 
     /**
@@ -64,18 +65,18 @@ public class LoginServlet extends HttpServlet {
 
             String role = userDAO.getUser(userLogin).getRole();
 
-            if (role.equals("ROLE_ADMIN")) {
+            if (role.equals(Constants.ROLE_ADMIN)) {
                 session.setAttribute("userLogin", userLogin);
                 session.setAttribute("role", role);
 
-                response.sendRedirect("/admin-profile");
+                response.sendRedirect(Constants.PATH_ADMIN_PROFILE);
                 return true;
 
-            } else if (role.equals("ROLE_USER")) {
+            } else if (role.equals(Constants.ROLE_USER)) {
                 session.setAttribute("userLogin", userLogin);
                 session.setAttribute("role", role);
 
-                response.sendRedirect("/profile");
+                response.sendRedirect(Constants.PATH_PROFILE);
                 return true;
             }
         }
@@ -100,11 +101,11 @@ public class LoginServlet extends HttpServlet {
 
             String role = (String) session.getAttribute("role");
 
-            if (role.equals("ROLE_ADMIN")) {
-                response.sendRedirect("/admin-profile");
+            if (role.equals(Constants.ROLE_ADMIN)) {
+                response.sendRedirect(Constants.PATH_ADMIN_PROFILE);
                 return true;
-            } else if (role.equals("ROLE_USER")) {
-                response.sendRedirect("/profile");
+            } else if (role.equals(Constants.ROLE_USER)) {
+                response.sendRedirect(Constants.PATH_PROFILE);
                 return true;
             }
         }

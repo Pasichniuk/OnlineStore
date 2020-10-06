@@ -1,5 +1,6 @@
 package controller.admin;
 
+import constant.Constants;
 import database.dao.CategoryDAO;
 import database.dao.ProductDAO;
 import entity.Product;
@@ -21,25 +22,22 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "AdminProductsServlet", urlPatterns = "/admin-catalog")
+@WebServlet(name = "AdminProductsServlet", urlPatterns = Constants.PATH_ADMIN_CATALOG)
 public class AdminProductsServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(AdminProductsServlet.class);
 
     private static final String CHECK_INPUT_REGEX = "^[a-zA-Z0-9 ._-]{3,}$";
 
-    private static final int MAX_PRICE = 10_000;
-    private static final int MIN_PRICE = 0;
-
-    private static final int RECORDS_PER_PAGE = 5;
-    private int productsAmount;
-    private int pageNumber = 1;
-    private int pagesAmount;
-
     private final ProductDAO productDAO;
     private final CategoryDAO categoryDAO;
 
     private List<Product> products;
+
+    private int pageNumber = 1;
+
+    private int productsAmount;
+    private int pagesAmount;
 
     public AdminProductsServlet() {
         productDAO = new ProductDAO();
@@ -50,14 +48,10 @@ public class AdminProductsServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
 
-        if (action.equals("ADD")) {
+        if (action.equals("ADD"))
             addProduct(request, response);
-
-        } else if (action.equals("EDIT")) {
+        else if (action.equals("EDIT"))
             editProduct(request, response);
-
-        } else
-            response.sendRedirect("/admin-catalog");
     }
 
     @Override
@@ -67,7 +61,8 @@ public class AdminProductsServlet extends HttpServlet {
 
         request.getSession().setAttribute("categories", categoryDAO.getAllCategories());
 
-        products = productDAO.getAllProducts(MIN_PRICE, MAX_PRICE);
+        products = productDAO.getAllProducts(Constants.MIN_PRICE, Constants.MAX_PRICE);
+
         productsAmount = products.size();
 
         if (request.getParameter("page") != null)
@@ -79,13 +74,13 @@ public class AdminProductsServlet extends HttpServlet {
         request.setAttribute("pagesAmount", pagesAmount);
         request.setAttribute("currentPage", pageNumber);
 
-        request.getRequestDispatcher("/view/admin/admin-catalog-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_ADMIN_CATALOG_JSP).forward(request, response);
     }
 
     private void getProductsOnPage() {
-        products = productDAO.getProductsOnPage((pageNumber-1)*RECORDS_PER_PAGE, RECORDS_PER_PAGE, products);
+        products = productDAO.getProductsOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, Constants.RECORDS_PER_PAGE, products);
 
-        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / RECORDS_PER_PAGE);
+        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / Constants.RECORDS_PER_PAGE);
     }
 
     /**
@@ -104,7 +99,7 @@ public class AdminProductsServlet extends HttpServlet {
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.insertProduct(productName, category, Float.parseFloat(price));
             logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' added new product...");
-            response.sendRedirect("/admin-catalog");
+            response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
         } else
             response.getWriter().write(notifyIncorrectInput());
     }
@@ -126,7 +121,7 @@ public class AdminProductsServlet extends HttpServlet {
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
             productDAO.updateProduct(productID, productName, category, Float.parseFloat(price));
             logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' edited product with ID=" + productID + "...");
-            response.sendRedirect("/admin-catalog");
+            response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
         } else
             response.getWriter().write(notifyIncorrectInput());
     }
@@ -147,7 +142,7 @@ public class AdminProductsServlet extends HttpServlet {
         if (productID != null) {
             productDAO.deleteProduct(Integer.parseInt(productID));
             logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' deleted product with ID=" + productID + "...");
-            response.sendRedirect("/admin-catalog");
+            response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
             return true;
         }
 

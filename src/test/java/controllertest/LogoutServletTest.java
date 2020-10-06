@@ -1,6 +1,8 @@
 package controllertest;
 
+import constant.Constants;
 import controller.LogoutServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -34,6 +36,6 @@ public class LogoutServletTest {
         servlet.doGet(request, response);
 
         verify(session).invalidate();
-        verify(response).sendRedirect("/log-in");
+        verify(response).sendRedirect(Constants.PATH_LOGIN);
     }
 }

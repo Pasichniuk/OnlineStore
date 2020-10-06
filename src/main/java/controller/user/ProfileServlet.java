@@ -1,5 +1,6 @@
 package controller.user;
 
+import constant.Constants;
 import database.dao.OrderDAO;
 import database.dao.UserDAO;
 import entity.Order;
@@ -22,7 +23,7 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "ProfileServlet", urlPatterns = "/profile")
+@WebServlet(name = "ProfileServlet", urlPatterns = Constants.PATH_PROFILE)
 public class ProfileServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ProfileServlet.class);
@@ -50,7 +51,7 @@ public class ProfileServlet extends HttpServlet {
 
         logger.info("User '" + userLogin + "' viewed his profile...");
 
-        request.getRequestDispatcher("view/user/profile-jsp.jsp").forward(request, response);
+        request.getRequestDispatcher(Constants.PATH_PROFILE_JSP).forward(request, response);
     }
 
     /**

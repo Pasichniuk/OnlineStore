@@ -1,5 +1,12 @@
 package entity;
 
+/**
+ * Category entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class Category {
 
     private int categoryID;

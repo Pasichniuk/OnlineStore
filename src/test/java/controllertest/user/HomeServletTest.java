@@ -1,6 +1,8 @@
 package controllertest.user;
 
+import constant.Constants;
 import controller.user.HomeServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -28,11 +30,11 @@ public class HomeServletTest {
 
     @Test
     public void testHomeServlet() throws ServletException, IOException {
-        final HomeServlet homeServlet = new HomeServlet();
+        final HomeServlet servlet = new HomeServlet();
 
-        when(request.getRequestDispatcher("view/user/home-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_HOME_JSP)).thenReturn(dispatcher);
 
-        homeServlet.doGet(request, response);
+        servlet.doGet(request, response);
 
         verify(dispatcher).forward(request, response);
     }

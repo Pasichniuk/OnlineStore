@@ -1,6 +1,8 @@
 package controllertest.admin;
 
+import constant.Constants;
 import controller.admin.AdminProductsServlet;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -37,14 +39,18 @@ public class AdminProductsServletTest {
         when(request.getParameter("productName")).thenReturn("test");
         when(request.getParameter("category")).thenReturn("test");
         when(request.getParameter("price")).thenReturn(String.valueOf(0));
-        when(request.getParameter("action")).thenReturn("EDIT", "ADD");
+        when(request.getParameter("action")).thenReturn("EDIT");
         when(request.getParameter("page")).thenReturn(String.valueOf(1));
 
         when(request.getSession()).thenReturn(session);
 
-        when(request.getRequestDispatcher("view/admin/admin-catalog-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_ADMIN_CATALOG_JSP)).thenReturn(dispatcher);
+
+        servlet.doPost(request, response);
+
+        when(request.getParameter("action")).thenReturn("EDIT");
+        servlet.doPost(request, response);
 
         servlet.doGet(request, response);
-        servlet.doPost(request, response);
     }
 }

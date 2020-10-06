@@ -1,8 +1,10 @@
 package controllertest.admin;
 
+import constant.Constants;
 import controller.admin.AdminProfileServlet;
 import database.dao.UserDAO;
 import entity.User;
+
 import org.junit.*;
 import org.mockito.Mock;
 
@@ -52,7 +54,7 @@ public class AdminProfileServletTest {
         when(user.getUserName()).thenReturn("Test Test");
         when(user.getUserNameRU()).thenReturn("Test Test");
 
-        when(request.getRequestDispatcher("view/admin/admin-profile-jsp.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher(Constants.PATH_ADMIN_PROFILE_JSP)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 
