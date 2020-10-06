@@ -1,5 +1,6 @@
 package controller.user;
 
+import database.dao.CategoryDAO;
 import database.dao.ProductDAO;
 import entity.Product;
 import util.Sorter;
@@ -27,6 +28,7 @@ public class ProductServlet extends HttpServlet {
     private static final int CART_LIMIT = 20;
 
     private final ProductDAO productDAO;
+    private final CategoryDAO categoryDAO;
 
     private List<Product> products;
 
@@ -43,6 +45,7 @@ public class ProductServlet extends HttpServlet {
 
     public ProductServlet() {
         productDAO = new ProductDAO();
+        categoryDAO = new CategoryDAO();
         products = productDAO.getAllProducts(minPrice, maxPrice);
     }
 
@@ -54,7 +57,7 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("categories", productDAO.getAllCategories());
+        request.getSession().setAttribute("categories", categoryDAO.getAllCategories());
 
         productsAmount = products.size();
 

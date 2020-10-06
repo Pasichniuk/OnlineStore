@@ -1,5 +1,6 @@
 package controller.admin;
 
+import database.dao.CategoryDAO;
 import database.dao.ProductDAO;
 import entity.Product;
 
@@ -36,11 +37,13 @@ public class AdminProductsServlet extends HttpServlet {
     private int pagesAmount;
 
     private final ProductDAO productDAO;
+    private final CategoryDAO categoryDAO;
 
     private List<Product> products;
 
     public AdminProductsServlet() {
         productDAO = new ProductDAO();
+        categoryDAO = new CategoryDAO();
     }
 
     @Override
@@ -62,7 +65,7 @@ public class AdminProductsServlet extends HttpServlet {
         if (deleteProduct(request, response))
             return;
 
-        request.getSession().setAttribute("categories", productDAO.getAllCategories());
+        request.getSession().setAttribute("categories", categoryDAO.getAllCategories());
 
         products = productDAO.getAllProducts(MIN_PRICE, MAX_PRICE);
         productsAmount = products.size();

@@ -1,6 +1,5 @@
 package database.dao;
 
-import entity.Category;
 import entity.Product;
 import database.DBConnectionUtil;
 
@@ -29,12 +28,6 @@ public class ProductDAO {
     private static final String SQL_UPDATE_PRODUCT = "UPDATE online_store.product SET product_name=?, category=?, price=? WHERE product_id=?";
 
     private static final String SQL_GET_PRODUCT_ID = "SELECT product_id FROM online_store.product WHERE product_name=?";
-
-    private static final String SQL_GET_CATEGORY_ID = "SELECT category_id FROM online_store.category WHERE category_name=?";
-
-    private static final String SQL_GET_CATEGORY_RU_ID = "SELECT category_id FROM online_store.category WHERE category_name_ru=?";
-
-    private static final String SQL_GET_ALL_CATEGORIES = "SELECT * FROM online_store.category";
 
     private final Connection connection;
 
@@ -152,7 +145,7 @@ public class ProductDAO {
      */
     public void insertProduct(String productName, String category, float price) {
         try {
-            int categoryID = getCategoryID(category);
+            int categoryID = new CategoryDAO().getCategoryID(category);
 
             if (categoryID == 0 || productExists(productName))
                 return;
@@ -179,7 +172,7 @@ public class ProductDAO {
      */
     public void updateProduct(int productID, String productName, String category, float price) {
         try {
-            int categoryID = getCategoryID(category);
+            int categoryID = new CategoryDAO().getCategoryID(category);
 
             if (categoryID == 0)
                 return;
@@ -219,64 +212,5 @@ public class ProductDAO {
         }
 
         return false;
-    }
-
-    /**
-     * Returns category identifier by category name.
-     *
-     * @param category Name of category.
-     *
-     * @return Category identifier.
-     */
-    private int getCategoryID(String category) {
-        try {
-            preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_ID);
-            preparedStatement.setString(1, category);
-
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next())
-                return resultSet.getInt(1);
-
-            preparedStatement = connection.prepareStatement(SQL_GET_CATEGORY_RU_ID);
-            preparedStatement.setString(1, category);
-
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next())
-                return resultSet.getInt(1);
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return 0;
-    }
-
-    /**
-     * Returns all categories.
-     *
-     * @return List of category entities.
-     */
-    public List<Category> getAllCategories() {
-        List<Category> categories = null;
-        Category category;
-
-        try {
-            preparedStatement = connection.prepareStatement(SQL_GET_ALL_CATEGORIES);
-            resultSet = preparedStatement.executeQuery();
-
-            categories = new ArrayList<>();
-
-            while (resultSet.next()) {
-                category = new Category(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3));
-                categories.add(category);
-            }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return categories;
     }
 }
