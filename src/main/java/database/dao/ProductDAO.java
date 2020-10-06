@@ -3,6 +3,7 @@ package database.dao;
 import entity.Product;
 import database.DBConnectionUtil;
 
+import org.apache.log4j.Logger;
 import java.util.*;
 import java.sql.*;
 
@@ -14,6 +15,8 @@ import java.sql.*;
  */
 
 public class ProductDAO {
+
+    private static final Logger logger = Logger.getLogger(ProductDAO.class);
 
     private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date FROM online_store.product \n" +
             "JOIN online_store.category ON product.category = category.category_id WHERE price BETWEEN ? AND ?";
@@ -35,7 +38,7 @@ public class ProductDAO {
     private ResultSet resultSet;
 
     public ProductDAO() {
-        connection = DBConnectionUtil.getConnection();
+        connection = DBConnectionUtil.getInstance().getConnection();
     }
 
     /**
@@ -68,7 +71,7 @@ public class ProductDAO {
      * @return List of protuct entities.
      */
     public List<Product> getAllProducts(int minPrice, int maxPrice) {
-        List<Product> products = null;
+        List<Product> products;
         Product product;
 
         try {
@@ -86,7 +89,8 @@ public class ProductDAO {
                 products.add(product);
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return products;
@@ -114,7 +118,8 @@ public class ProductDAO {
             }
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return product;
@@ -132,7 +137,8 @@ public class ProductDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -158,7 +164,8 @@ public class ProductDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -186,7 +193,8 @@ public class ProductDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -208,7 +216,8 @@ public class ProductDAO {
                 return true;
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return false;

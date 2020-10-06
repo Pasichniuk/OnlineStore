@@ -3,10 +3,20 @@ package database.dao;
 import database.DBConnectionUtil;
 import entity.Category;
 
+import org.apache.log4j.Logger;
 import java.util.*;
 import java.sql.*;
 
+/**
+ * Data accessor object for Category entity.
+ *
+ * @author Vlad Pasichniuk
+ *
+ */
+
 public class CategoryDAO {
+
+    private static final Logger logger = Logger.getLogger(CategoryDAO.class);
 
     private static final String SQL_GET_ALL_CATEGORIES = "SELECT * FROM online_store.category";
 
@@ -20,7 +30,7 @@ public class CategoryDAO {
     private ResultSet resultSet;
 
     public CategoryDAO() {
-        connection = DBConnectionUtil.getConnection();
+        connection = DBConnectionUtil.getInstance().getConnection();
     }
 
     /**
@@ -29,7 +39,7 @@ public class CategoryDAO {
      * @return List of category entities.
      */
     public List<Category> getAllCategories() {
-        List<Category> categories = null;
+        List<Category> categories;
         Category category;
 
         try {
@@ -44,7 +54,8 @@ public class CategoryDAO {
             }
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return categories;
@@ -76,7 +87,8 @@ public class CategoryDAO {
                 return resultSet.getInt(1);
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return 0;

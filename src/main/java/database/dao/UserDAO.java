@@ -3,6 +3,7 @@ package database.dao;
 import entity.User;
 import database.DBConnectionUtil;
 
+import org.apache.log4j.Logger;
 import java.util.*;
 import java.sql.*;
 
@@ -14,6 +15,8 @@ import java.sql.*;
  */
 
 public class UserDAO {
+
+    private static final Logger logger = Logger.getLogger(UserDAO.class);
 
     private static final String SQL_AUTHORIZE_USER = "SELECT user_login, block_status FROM online_store.store_user " +
             "WHERE user_login=? AND user_password=aes_encrypt(?, 'password')";
@@ -35,7 +38,7 @@ public class UserDAO {
     private ResultSet resultSet;
 
     public UserDAO() {
-        connection = DBConnectionUtil.getConnection();
+        connection = DBConnectionUtil.getInstance().getConnection();
     }
 
     /**
@@ -58,7 +61,8 @@ public class UserDAO {
                 return true;
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return false;
@@ -89,7 +93,8 @@ public class UserDAO {
                 return true;
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return false;
@@ -122,7 +127,7 @@ public class UserDAO {
      * @return List of user entities.
      */
     public List<User> getAllUsers() {
-        List<User> users = null;
+        List<User> users;
         User user;
 
         try {
@@ -139,7 +144,8 @@ public class UserDAO {
             }
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return users;
@@ -166,7 +172,8 @@ public class UserDAO {
                         resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return user;
@@ -186,7 +193,8 @@ public class UserDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 }

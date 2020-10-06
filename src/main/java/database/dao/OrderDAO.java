@@ -4,6 +4,7 @@ import entity.Order;
 import entity.Product;
 import database.DBConnectionUtil;
 
+import org.apache.log4j.Logger;
 import java.util.*;
 import java.sql.*;
 
@@ -15,6 +16,8 @@ import java.sql.*;
  */
 
 public class OrderDAO {
+
+    private static final Logger logger = Logger.getLogger(OrderDAO.class);
 
     private static final String SQL_FIND_ALL_ORDERS = "SELECT order_id, online_store.order.user_id, order_status, user_login FROM online_store.order " +
             "JOIN online_store.store_user ON online_store.order.user_id = store_user.user_id";
@@ -33,7 +36,7 @@ public class OrderDAO {
     private ResultSet resultSet;
 
     public OrderDAO() {
-        connection = DBConnectionUtil.getConnection();
+        connection = DBConnectionUtil.getInstance().getConnection();
     }
 
     /**
@@ -63,7 +66,7 @@ public class OrderDAO {
      * @return List of order entities.
      */
     public List<Order> getAllOrders() {
-        List<Order> orders = null;
+        List<Order> orders;
         Order order;
 
         try {
@@ -80,7 +83,8 @@ public class OrderDAO {
             }
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return orders;
@@ -94,7 +98,7 @@ public class OrderDAO {
      * @return List of order entities.
      */
     public List<Order> getUserOrders(int userID) {
-        List<Order> orders = null;
+        List<Order> orders;
         Order order;
 
         try {
@@ -111,7 +115,8 @@ public class OrderDAO {
             }
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
 
         return orders;
@@ -142,7 +147,8 @@ public class OrderDAO {
                 insertOrderProduct(orderID, product.getId());
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -160,7 +166,8 @@ public class OrderDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -178,7 +185,8 @@ public class OrderDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
         }
     }
 }

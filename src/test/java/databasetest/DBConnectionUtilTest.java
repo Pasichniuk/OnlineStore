@@ -9,7 +9,7 @@ public class DBConnectionUtilTest {
 
     @Test
     public void getConnectionTest() {
-        assertNotNull(DBConnectionUtil.getConnection());
-        assertNotNull(DBConnectionUtil.getConnection());
+        assertNotNull(DBConnectionUtil.getInstance().getConnection());
+        assertNotNull(DBConnectionUtil.getInstance().getConnection());
     }
 }
