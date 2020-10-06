@@ -74,10 +74,10 @@ public class AdminProfileServlet extends HttpServlet {
 
         if (session.getAttribute("lang") != null) {
 
-            if (session.getAttribute("lang").equals("ru"))
-                return userDAO.getUser(adminLogin).getUserNameRU();
+            if (session.getAttribute("lang").equals("en"))
+                return userDAO.getUser(adminLogin).getUserName();
         }
 
-        return userDAO.getUser(adminLogin).getUserName();
+        return userDAO.getUser(adminLogin).getUserNameRU();
     }
 }

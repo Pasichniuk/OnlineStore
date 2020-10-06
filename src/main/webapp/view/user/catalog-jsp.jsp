@@ -22,43 +22,45 @@
     <table class="table table-borderless">
         <tr class="thead-light">
             <th>
-                <label>
-                    <input type="number" name="minPrice"  min="0" placeholder="<fmt:message key="enter_min_price"/>"/>
-                </label>
+                <fmt:message key="choose_sorting"/>
             </th>
             <th>
-                <label>
-                    <input type="number" name="maxPrice" max="10_000" placeholder="<fmt:message key="enter_max_price"/>"/>
-                </label>
-            </th>
-            <th>
-                <label>
-                    <select name="Sort" title=<fmt:message key="sort_by"/>>
-                        <option value="a-z" selected><fmt:message key="sort.a_z"/></option>
-                        <option value="z-a"><fmt:message key="sort.z_a"/></option>
-                        <option value="cheap-expensive"><fmt:message key="sort.cheap_expensive"/></option>
-                        <option value="expensive-cheap"><fmt:message key="sort.expensive_cheap"/></option>
-                        <option value="older-newer"><fmt:message key="sort.older_newer"/></option>
-                        <option value="newer-older"><fmt:message key="sort.newer_older"/></option>
-                    </select>
-                </label>
-            </th>
-            <th>
-                <label>
-                    <select name="Category" title=<fmt:message key="choose_category"/>>
-                        <option value="All" selected><fmt:message key="category.all"/></option>
-                        <option value="Phones"><fmt:message key="category.phones"/></option>
-                        <option value="Laptops"><fmt:message key="category.laptops"/></option>
-                        <option value="Headphones"><fmt:message key="category.headphones"/></option>
-                        <option value="Home appliances"><fmt:message key="category.home_appliances"/></option>
-                    </select>
-                </label>
-            </th>
-            <th>
-                <input type="submit" value="<fmt:message key="apply"/>" class="btn btn-primary">
+                <fmt:message key="choose_category"/>
             </th>
         </tr>
+        <tr>
+            <td class="text-center">
+                <select class="form-control form-control-sm" name="Sort" title=<fmt:message key="sort"/>>
+                    <option value="a-z" selected><fmt:message key="sort.a_z"/></option>
+                    <option value="z-a"><fmt:message key="sort.z_a"/></option>
+                    <option value="cheap-expensive"><fmt:message key="sort.cheap_expensive"/></option>
+                    <option value="expensive-cheap"><fmt:message key="sort.expensive_cheap"/></option>
+                    <option value="older-newer"><fmt:message key="sort.older_newer"/></option>
+                    <option value="newer-older"><fmt:message key="sort.newer_older"/></option>
+                </select>
+            </td>
+            <td class="text-center">
+                <select class="form-control form-control-sm" name="Category" title=<fmt:message key="category"/>>
+                    <option value="All" selected><fmt:message key="category.all"/></option>
+                    <option value="Phones"><fmt:message key="category.phones"/></option>
+                    <option value="Laptops"><fmt:message key="category.laptops"/></option>
+                    <option value="Headphones"><fmt:message key="category.headphones"/></option>
+                    <option value="Home appliances"><fmt:message key="category.home_appliances"/></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input class="form-control form-control-sm" type="number" name="minPrice"  min="0" max="10000" placeholder="<fmt:message key="enter_min_price"/>"/>
+            </td>
+            <td>
+                <input class="form-control form-control-sm" type="number" name="maxPrice" min="0" max="10000" placeholder="<fmt:message key="enter_max_price"/>"/>
+            </td>
+        </tr>
     </table>
+    <div class="text-center">
+        <input type="submit" value="<fmt:message key="apply"/>" class="btn btn-primary">
+    </div>
 </form>
 
 <div class="container">

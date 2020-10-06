@@ -82,10 +82,10 @@ public class ProfileServlet extends HttpServlet {
 
         if (session.getAttribute("lang") != null) {
 
-            if (session.getAttribute("lang").equals("ru"))
-                return userDAO.getUser(userLogin).getUserNameRU();
+            if (session.getAttribute("lang").equals("en"))
+                return userDAO.getUser(userLogin).getUserName();
         }
 
-        return userDAO.getUser(userLogin).getUserName();
+        return userDAO.getUser(userLogin).getUserNameRU();
     }
 }
