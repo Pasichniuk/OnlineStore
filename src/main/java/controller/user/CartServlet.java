@@ -1,6 +1,7 @@
 package controller.user;
 
 import entity.Product;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,8 @@ import java.util.*;
 @WebServlet(name = "CartServlet", urlPatterns = "/cart")
 public class CartServlet extends HttpServlet {
 
+    private static final Logger logger = Logger.getLogger(CartServlet.class);
+
     private static final int RECORDS_PER_PAGE = 5;
     private int pageNumber = 1;
 
@@ -28,7 +31,6 @@ public class CartServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         removeProductFromCart(request);
-
         response.sendRedirect("/cart");
     }
 
@@ -74,7 +76,15 @@ public class CartServlet extends HttpServlet {
         List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
 
         if (productID != null && cartProducts != null) {
-            cartProducts.removeIf(p -> p.getId() == Integer.parseInt(productID));
+
+            for (Product product : cartProducts) {
+
+                if (product.getId() == Integer.parseInt(productID)) {
+                    cartProducts.remove(product);
+                    logger.info("Product (ID=" + productID + ") has been removed from the cart...");
+                    return;
+                }
+            }
         }
     }
 
