@@ -49,7 +49,9 @@
                 <td class="text-center">${product.additionDate}</td>
                 <td class="text-center">${product.price}</td>
                 <td class="text-center">
-                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/cart?ProductID=${product.id}"><fmt:message key="product.remove"/></a>
+                    <form action="${pageContext.request.contextPath}/cart?ProductID=${product.id}" method="post">
+                        <input type="submit" value="<fmt:message key="product.remove"/>" class="btn btn-danger"/>
+                    </form>
                 </td>
             </tr>
         </c:forEach>

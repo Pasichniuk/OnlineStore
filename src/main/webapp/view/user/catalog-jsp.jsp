@@ -86,7 +86,9 @@
                    <td class="text-center">${product.additionDate}</td>
                    <td class="text-center">${product.price}</td>
                    <td class="text-center">
-                       <a class="btn btn-success" href="${pageContext.request.contextPath}/catalog?ProductID=${product.id}"><fmt:message key="product.add_to_cart"/></a>
+                       <form action="${pageContext.request.contextPath}/catalog?ProductID=${product.id}" method="post">
+                           <input type="submit" value="<fmt:message key="product.add_to_cart"/>" class="btn btn-success"/>
+                       </form>
                    </td>
                </tr>
            </c:forEach>

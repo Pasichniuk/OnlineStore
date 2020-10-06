@@ -33,7 +33,7 @@ public class ProductServletTest {
     public void testProductServlet() throws ServletException, IOException {
         final ProductServlet servlet = new ProductServlet();
 
-        when(request.getParameter("ProductID")).thenReturn(null, String.valueOf(0));
+        when(request.getParameter("ProductID")).thenReturn(String.valueOf(0));
         when(request.getParameter("productName")).thenReturn("test");
         when(request.getParameter("Category")).thenReturn("test");
 
@@ -49,5 +49,11 @@ public class ProductServletTest {
         when(request.getRequestDispatcher("view/user/catalog-jsp.jsp")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
+
+        servlet.doPost(request, response);
+
+        when(request.getParameter("ProductID")).thenReturn(String.valueOf(0));
+
+        servlet.doPost(request, response);
     }
 }

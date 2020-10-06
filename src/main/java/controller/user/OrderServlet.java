@@ -2,14 +2,16 @@ package controller.user;
 
 import database.dao.OrderDAO;
 import database.dao.UserDAO;
-import entity.Cart;
 
+import entity.Product;
 import org.apache.log4j.Logger;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Order servlet controller.
@@ -33,13 +35,12 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userLogin = (String) request.getSession().getAttribute("userLogin");
+        HttpSession session = request.getSession();
+        String userLogin = (String) session.getAttribute("userLogin");
 
-        Cart cart = Cart.getInstance();
-
-        if (userLogin != null && cart.getCartProducts().size() > 0) {
-            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), cart.getCartProducts());
-            cart.clearCart();
+        if (userLogin != null && session.getAttribute("cartProducts") != null) {
+            orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), (List<Product>) session.getAttribute("cartProducts"));
+            session.setAttribute("cartProducts", null);
 
             logger.info("User '" + userLogin + "' created new order...");
 

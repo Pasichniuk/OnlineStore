@@ -58,11 +58,6 @@
         <listener-class>util.listener.MySessionListener</listener-class>
     </listener>
 
-    <listener>
-        <description>Session Attribute Listener</description>
-        <listener-class>util.listener.MySessionAttributeListener</listener-class>
-    </listener>
-
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Admin</web-resource-name>

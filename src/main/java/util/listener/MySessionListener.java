@@ -1,7 +1,5 @@
 package util.listener;
 
-import entity.Cart;
-
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -15,12 +13,7 @@ import javax.servlet.http.HttpSessionListener;
 public class MySessionListener implements HttpSessionListener {
 
     @Override
-    public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        Cart.getInstance().clearCart();
-    }
-
-    @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        Cart.getInstance().clearCart();
+        httpSessionEvent.getSession().setAttribute("cartProducts", null);
     }
 }

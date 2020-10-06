@@ -6,11 +6,9 @@ import util.Sorter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +26,6 @@ public class ProductServlet extends HttpServlet {
     private List<Product> products;
 
     private String selectedCategory;
-
     private String sortingOption;
 
     private int minPrice = 0;
@@ -45,10 +42,13 @@ public class ProductServlet extends HttpServlet {
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (sendProductToCart(request, response))
-            return;
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        addProductToCart(request);
+        response.sendRedirect("/catalog");
+    }
 
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         productsAmount = products.size();
 
         getProductsFromPriceRange(request);
@@ -76,27 +76,25 @@ public class ProductServlet extends HttpServlet {
     }
 
     /**
-     * Sends product to cart using cookies.
+     * Adds product to cart.
      *
      * @param request Request.
-     * @param response Response.
-     *
-     * @return Whether product is sent.
-     *
-     * @throws IOException If redirect failed.
      */
-    private boolean sendProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void addProductToCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         String productID = request.getParameter("ProductID");
 
         if (productID != null) {
-            Cookie cookie = new Cookie("ProductID", productID);
-            cookie.setMaxAge(24*60*60);
-            response.addCookie(cookie);
-            response.sendRedirect("/cart");
-            return true;
-        }
 
-        return false;
+            if (session.getAttribute("cartProducts") != null) {
+                List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
+                cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+            } else {
+                List<Product> cartProducts = new ArrayList<>();
+                cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+                session.setAttribute("cartProducts", cartProducts);
+            }
+        }
     }
 
     private void getProductsOnPage() {
