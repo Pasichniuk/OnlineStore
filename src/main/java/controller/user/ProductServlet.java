@@ -21,6 +21,8 @@ import java.util.List;
 @WebServlet(name = "ProductServlet", urlPatterns = "/catalog")
 public class ProductServlet extends HttpServlet {
 
+    private static final int CART_LIMIT = 20;
+
     private final ProductDAO productDAO;
 
     private List<Product> products;
@@ -81,16 +83,21 @@ public class ProductServlet extends HttpServlet {
      * @param request Request.
      */
     private void addProductToCart(HttpServletRequest request) {
-        HttpSession session = request.getSession();
         String productID = request.getParameter("ProductID");
+
+        HttpSession session = request.getSession();
+
+        List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
 
         if (productID != null) {
 
-            if (session.getAttribute("cartProducts") != null) {
-                List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
-                cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+            if (cartProducts != null) {
+
+                if (cartProducts.size() < CART_LIMIT)
+                    cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+
             } else {
-                List<Product> cartProducts = new ArrayList<>();
+                cartProducts = new ArrayList<>();
                 cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
                 session.setAttribute("cartProducts", cartProducts);
             }
