@@ -3,6 +3,7 @@ package controller.user;
 import database.dao.ProductDAO;
 import entity.Product;
 import util.Sorter;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +21,8 @@ import java.util.List;
 
 @WebServlet(name = "ProductServlet", urlPatterns = "/catalog")
 public class ProductServlet extends HttpServlet {
+
+    private static final Logger logger = Logger.getLogger(ProductServlet.class);
 
     private static final int CART_LIMIT = 20;
 
@@ -51,6 +54,8 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().setAttribute("categories", productDAO.getAllCategories());
+
         productsAmount = products.size();
 
         getProductsFromPriceRange(request);
@@ -93,12 +98,15 @@ public class ProductServlet extends HttpServlet {
 
             if (cartProducts != null) {
 
-                if (cartProducts.size() < CART_LIMIT)
+                if (cartProducts.size() < CART_LIMIT) {
                     cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+                    logger.info("Product (ID=" + productID + ") has been added to the cart");
+                }
 
             } else {
                 cartProducts = new ArrayList<>();
                 cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+                logger.info("Product (ID=" + productID + ") has been added to the cart");
                 session.setAttribute("cartProducts", cartProducts);
             }
         }

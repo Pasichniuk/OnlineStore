@@ -42,10 +42,17 @@
             <td class="text-center">
                 <select class="form-control form-control-sm" name="Category" title=<fmt:message key="category"/>>
                     <option value="All" selected><fmt:message key="category.all"/></option>
-                    <option value="Phones"><fmt:message key="category.phones"/></option>
-                    <option value="Laptops"><fmt:message key="category.laptops"/></option>
-                    <option value="Headphones"><fmt:message key="category.headphones"/></option>
-                    <option value="Home appliances"><fmt:message key="category.home_appliances"/></option>
+
+                    <c:forEach items="${categories}" var="category">
+                        <c:choose>
+                            <c:when test="${lang eq 'en'}">
+                                <option value="${category.name}">${category.name}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${category.name}">${category.nameRU}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
                 </select>
             </td>
         </tr>

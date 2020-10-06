@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=windows-1251" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link rel='stylesheet' href='https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css'>
 
@@ -22,9 +23,22 @@
                     <div class="form-group">
                         <input class="form-control form-control-lg" type="text" minlength="3" name="productName" placeholder="<fmt:message key="enter_product_name"/>"/>
                     </div>
+
                     <div class="form-group">
-                        <input class="form-control form-control-lg" type="text" minlength="3" name="category" placeholder="<fmt:message key="enter_product_category"/>"/>
+                        <select class="form-control form-control-sm" name="category" title=<fmt:message key="category"/>>
+                            <c:forEach items="${categories}" var="category">
+                                <c:choose>
+                                    <c:when test="${lang eq 'en'}">
+                                        <option value="${category.name}">${category.name}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${category.name}">${category.nameRU}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
                     </div>
+
                     <div class="form-group">
                         <input class="form-control form-control-lg" type="number" min="0" max="10000" name="price" placeholder="<fmt:message key="enter_product_price"/>"/>
                     </div>

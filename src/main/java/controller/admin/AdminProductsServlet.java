@@ -62,6 +62,8 @@ public class AdminProductsServlet extends HttpServlet {
         if (deleteProduct(request, response))
             return;
 
+        request.getSession().setAttribute("categories", productDAO.getAllCategories());
+
         products = productDAO.getAllProducts(MIN_PRICE, MAX_PRICE);
         productsAmount = products.size();
 

@@ -1,5 +1,6 @@
 package database.dao;
 
+import entity.Category;
 import entity.Product;
 import database.DBConnectionUtil;
 
@@ -7,7 +8,7 @@ import java.util.*;
 import java.sql.*;
 
 /**
- * Data accessor object for Product entity.
+ * Data accessor object for Product & Category entities.
  *
  * @author Vlad Pasichniuk
  *
@@ -32,6 +33,8 @@ public class ProductDAO {
     private static final String SQL_GET_CATEGORY_ID = "SELECT category_id FROM online_store.category WHERE category_name=?";
 
     private static final String SQL_GET_CATEGORY_RU_ID = "SELECT category_id FROM online_store.category WHERE category_name_ru=?";
+
+    private static final String SQL_GET_ALL_CATEGORIES = "SELECT * FROM online_store.category";
 
     private final Connection connection;
 
@@ -248,5 +251,32 @@ public class ProductDAO {
         }
 
         return 0;
+    }
+
+    /**
+     * Returns all categories.
+     *
+     * @return List of category entities.
+     */
+    public List<Category> getAllCategories() {
+        List<Category> categories = null;
+        Category category;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_ALL_CATEGORIES);
+            resultSet = preparedStatement.executeQuery();
+
+            categories = new ArrayList<>();
+
+            while (resultSet.next()) {
+                category = new Category(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3));
+                categories.add(category);
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return categories;
     }
 }
