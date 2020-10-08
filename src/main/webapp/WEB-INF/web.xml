@@ -34,6 +34,9 @@
         <url-pattern>/admin-orders</url-pattern>
         <url-pattern>/admin-users</url-pattern>
         <url-pattern>/admin-profile</url-pattern>
+        <url-pattern>/view/admin/product-edit-jsp.jsp</url-pattern>
+        <url-pattern>/view/admin/product-add-jsp.jsp</url-pattern>
+        <url-pattern>/view/admin/category-add-jsp.jsp</url-pattern>
     </filter-mapping>
 
     <filter>

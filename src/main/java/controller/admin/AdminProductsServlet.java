@@ -28,6 +28,8 @@ public class AdminProductsServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(AdminProductsServlet.class);
 
     private static final String CHECK_INPUT_REGEX = "^[a-zA-Z0-9 ._-]{3,}$";
+    private static final String CHECK_NAME_REGEX = "^[a-zA-Z\\s-]{3,}$";
+    private static final String CHECK_NAME_RU_REGEX = "^[а-яА-ЯёЁ\\s-]{3,}$";
 
     private final ProductDAO productDAO;
     private final CategoryDAO categoryDAO;
@@ -48,10 +50,20 @@ public class AdminProductsServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
 
-        if (action.equals("ADD"))
-            addProduct(request, response);
-        else if (action.equals("EDIT"))
-            editProduct(request, response);
+        switch (action) {
+
+            case "ADD":
+                addProduct(request, response);
+                break;
+            case "EDIT":
+                editProduct(request, response);
+                break;
+            case "ADD_CATEGORY":
+                addCategory(request, response);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -84,7 +96,7 @@ public class AdminProductsServlet extends HttpServlet {
     }
 
     /**
-     * Validates input and adds new product.
+     * Adds new product.
      *
      * @param request Request.
      * @param response Response.
@@ -93,7 +105,7 @@ public class AdminProductsServlet extends HttpServlet {
      */
     private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productName = request.getParameter("productName");
-        String category = new String(request.getParameter("category").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
+        String category = request.getParameter("category");
         String price = request.getParameter("price");
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
@@ -105,7 +117,7 @@ public class AdminProductsServlet extends HttpServlet {
     }
 
     /**
-     * Validates input and edits product.
+     * Edits product.
      *
      * @param request Request.
      * @param response Response.
@@ -115,7 +127,7 @@ public class AdminProductsServlet extends HttpServlet {
     private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int productID = Integer.parseInt(request.getParameter("productID"));
         String productName = request.getParameter("productName");
-        String category = new String(request.getParameter("category").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
+        String category = request.getParameter("category");
         String price = request.getParameter("price");
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
@@ -147,6 +159,26 @@ public class AdminProductsServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    /**
+     * Adds new category.
+     *
+     * @param request Request.
+     * @param response Response.
+     *
+     * @throws IOException If redirect failed.
+     */
+    private void addCategory(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String categoryName = request.getParameter("categoryName");
+        String categoryNameRU = new String(request.getParameter("categoryNameRU").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
+
+        if (categoryName.matches(CHECK_NAME_REGEX) && categoryNameRU.matches(CHECK_NAME_RU_REGEX)) {
+            categoryDAO.insertCategory(categoryName, categoryNameRU);
+            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' added new category...");
+            response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
+        } else
+            response.getWriter().write(notifyIncorrectInput());
     }
 
     private String notifyIncorrectInput() {

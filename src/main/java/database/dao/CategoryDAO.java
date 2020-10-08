@@ -24,6 +24,8 @@ public class CategoryDAO {
 
     private static final String SQL_GET_CATEGORY_RU_ID = "SELECT category_id FROM online_store.category WHERE category_name_ru=?";
 
+    private static final String SQL_INSERT_CATEGORY = "INSERT INTO online_store.category (category_name, category_name_ru) VALUES (?, ?)";
+
     private final Connection connection;
 
     private PreparedStatement preparedStatement;
@@ -92,5 +94,27 @@ public class CategoryDAO {
         }
 
         return 0;
+    }
+
+    /**
+     * Inserts new category.
+     *
+     * @param name Category name.
+     * @param nameRU Category name in russian.
+     */
+    public void insertCategory(String name, String nameRU) {
+        try {
+            if (getCategoryID(name) != 0 || getCategoryID(nameRU) != 0)
+                return;
+
+            preparedStatement = connection.prepareStatement(SQL_INSERT_CATEGORY);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, nameRU);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
+        }
     }
 }

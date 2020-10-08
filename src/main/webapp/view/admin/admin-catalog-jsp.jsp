@@ -18,10 +18,19 @@
     </tr>
 </table>
 
-<div class="container text-center">
-    <form action="${pageContext.request.contextPath}/view/admin/product-add-jsp.jsp">
-        <button type="submit" class="btn btn-success"><fmt:message key="admin.add_product"/></button>
-    </form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 text-right">
+            <form action="${pageContext.request.contextPath}/view/admin/product-add-jsp.jsp">
+                <button type="submit" class="btn btn-success"><fmt:message key="admin.add_product"/></button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form action="${pageContext.request.contextPath}/view/admin/category-add-jsp.jsp">
+                <button type="submit" class="btn btn-success"><fmt:message key="admin.add_category"/></button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <div class="container">
