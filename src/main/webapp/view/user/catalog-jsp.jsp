@@ -11,20 +11,20 @@
 
 <table class="table table-bordered table-hover">
     <tr class="thead-dark">
-        <th><a class="text-light" href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
-        <th><a class="text-light" href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th><a class="text-light" href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
-        <th><a class="text-light" href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/home"><h3><fmt:message key="menu.home"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/cart"><h3><fmt:message key="menu.cart"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/log-in"><h3><fmt:message key="menu.profile"/></h3></a></th>
     </tr>
 </table>
 
 <form action="${pageContext.request.contextPath}/catalog">
     <table class="table table-borderless">
         <tr class="thead-light">
-            <th>
+            <th class="text-center">
                 <fmt:message key="choose_sorting"/>
             </th>
-            <th>
+            <th class="text-center">
                 <fmt:message key="choose_category"/>
             </th>
         </tr>
@@ -73,11 +73,11 @@
 <div class="container">
        <table class="table table-striped table-bordered">
            <tr class="thead-dark">
-               <th><fmt:message key="product.name"/></th>
-               <th><fmt:message key="product.category"/></th>
-               <th><fmt:message key="product.addition_date"/></th>
-               <th><fmt:message key="product.price"/></th>
-               <th><fmt:message key="actions"/></th>
+               <th class="text-center"><fmt:message key="product.name"/></th>
+               <th class="text-center"><fmt:message key="product.category"/></th>
+               <th class="text-center"><fmt:message key="product.addition_date"/></th>
+               <th class="text-center"><fmt:message key="product.price"/></th>
+               <th class="text-center"><fmt:message key="actions"/></th>
            </tr>
            <c:forEach items="${products}" var="product">
                <tr>

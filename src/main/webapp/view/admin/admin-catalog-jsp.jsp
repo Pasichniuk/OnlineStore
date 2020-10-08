@@ -11,10 +11,10 @@
 
 <table class="table table-bordered table-hover">
     <tr class="thead-dark">
-        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-orders"><h3><fmt:message key="menu.orders"/></h3></a></th>
-        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-users"><h3><fmt:message key="menu.users"/></h3></a></th>
-        <th><a class="text-light" href="${pageContext.request.contextPath}/admin-profile"><h3><fmt:message key="menu.profile"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-orders"><h3><fmt:message key="menu.orders"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-users"><h3><fmt:message key="menu.users"/></h3></a></th>
+        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-profile"><h3><fmt:message key="menu.profile"/></h3></a></th>
     </tr>
 </table>
 
@@ -36,11 +36,11 @@
 <div class="container">
     <table class="table table-striped table-bordered">
         <tr class="thead-dark">
-            <th><fmt:message key="product.name"/></th>
-            <th><fmt:message key="product.category"/></th>
-            <th><fmt:message key="product.addition_date"/></th>
-            <th><fmt:message key="product.price"/></th>
-            <th><fmt:message key="actions"/></th>
+            <th class="text-center"><fmt:message key="product.name"/></th>
+            <th class="text-center"><fmt:message key="product.category"/></th>
+            <th class="text-center"><fmt:message key="product.addition_date"/></th>
+            <th class="text-center"><fmt:message key="product.price"/></th>
+            <th class="text-center"><fmt:message key="actions"/></th>
         </tr>
         <c:forEach items="${products}" var="product">
             <tr>
