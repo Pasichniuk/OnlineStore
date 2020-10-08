@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS order_product;
-DROP TABLE IF EXISTS order;
+DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS store_user;
@@ -59,20 +59,22 @@ CREATE TABLE `product` (
   `category` int NOT NULL,
   `price` float NOT NULL,
   `addition_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `count` int DEFAULT NULL,
+  `reserve` int DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   UNIQUE KEY `product_id_UNIQUE` (`product_id`),
   UNIQUE KEY `product_name_UNIQUE` (`product_name`),
   KEY `category_pk_idx` (`category`),
   CONSTRAINT `category_pk` FOREIGN KEY (`category`) REFERENCES `category` (`category_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO product(product_name, category, price) VALUES('iPhone XR', 1, 700.7);
-INSERT INTO product(product_name, category, price) VALUES('iPhone 11', 1, 800.5);
-INSERT INTO product(product_name, category, price) VALUES('Macbook Air', 2, 1000.9);
-INSERT INTO product(product_name, category, price) VALUES('Macbook Pro', 2, 1200.2);
-INSERT INTO product(product_name, category, price) VALUES('AirPods', 3, 200.5);
-INSERT INTO product(product_name, category, price) VALUES('AirPods Pro', 3, 400.4);
-INSERT INTO product(product_name, category, price) VALUES('HomePod', 4, 900.3);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('iPhone XR', 1, 700.7, 5, 0);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('iPhone 11', 1, 800.5, 5, 0);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('Macbook Air', 2, 1000.9, 50, 0);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('Macbook Pro', 2, 1200.2, 50, 0);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('AirPods', 3, 200.5, 50, 0);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('AirPods Pro', 3, 400.4, 50, 0);
+INSERT INTO product(product_name, category, price, count, reserve) VALUES('HomePod', 4, 900.3, 50, 0);
 
 CREATE TABLE `order` (
   `order_id` int NOT NULL AUTO_INCREMENT,
@@ -84,24 +86,25 @@ CREATE TABLE `order` (
   CONSTRAINT `user_fk` FOREIGN KEY (`user_id`) REFERENCES `store_user` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO order (user_id) VALUES (1);
-INSERT INTO order (user_id) VALUES (2);
-INSERT INTO order (user_id) VALUES (2);
-INSERT INTO order (user_id) VALUES (3);
+INSERT INTO `order` (user_id) VALUES (1);
+INSERT INTO `order` (user_id) VALUES (2);
+INSERT INTO `order` (user_id) VALUES (2);
+INSERT INTO `order` (user_id) VALUES (3);
 
 CREATE TABLE `order_product` (
   `order_id` int NOT NULL,
   `product_id` int NOT NULL,
+  `product_count` int NOT NULL DEFAULT '1',
   KEY `order_fk_idx` (`order_id`),
   KEY `product_fk_idx` (`product_id`),
   CONSTRAINT `order_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE,
   CONSTRAINT `product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO order_product VALUES (1, 1);
-INSERT INTO order_product VALUES (1, 3);
-INSERT INTO order_product VALUES (2, 4);
-INSERT INTO order_product VALUES (3, 2);
-INSERT INTO order_product VALUES (3, 5);
-INSERT INTO order_product VALUES (3, 7);
-INSERT INTO order_product VALUES (4, 6);
+INSERT INTO order_product VALUES (1, 1, 2);
+INSERT INTO order_product VALUES (1, 3, 1);
+INSERT INTO order_product VALUES (2, 4, 3);
+INSERT INTO order_product VALUES (3, 2, 2);
+INSERT INTO order_product VALUES (3, 5, 1);
+INSERT INTO order_product VALUES (3, 7, 2);
+INSERT INTO order_product VALUES (4, 6, 1);
