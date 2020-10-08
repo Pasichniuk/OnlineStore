@@ -77,6 +77,7 @@
                <th class="text-center"><fmt:message key="product.category"/></th>
                <th class="text-center"><fmt:message key="product.addition_date"/></th>
                <th class="text-center"><fmt:message key="product.price"/></th>
+               <th class="text-center"><fmt:message key="product.count"/></th>
                <th class="text-center"><fmt:message key="actions"/></th>
            </tr>
            <c:forEach items="${products}" var="product">
@@ -94,6 +95,7 @@
                    </td>
                    <td class="text-center">${product.additionDate}</td>
                    <td class="text-center">${product.price}</td>
+                   <td class="text-center">${product.count - product.reserve}</td>
                    <td class="text-center">
                        <form action="${pageContext.request.contextPath}/catalog?ProductID=${product.id}" method="post">
                            <input type="submit" value="<fmt:message key="product.add_to_cart"/>" class="btn btn-success"/>

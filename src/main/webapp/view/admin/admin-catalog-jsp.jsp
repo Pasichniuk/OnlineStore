@@ -40,6 +40,8 @@
             <th class="text-center"><fmt:message key="product.category"/></th>
             <th class="text-center"><fmt:message key="product.addition_date"/></th>
             <th class="text-center"><fmt:message key="product.price"/></th>
+            <th class="text-center"><fmt:message key="product.count"/></th>
+            <th class="text-center"><fmt:message key="product.reserve"/></th>
             <th class="text-center"><fmt:message key="actions"/></th>
         </tr>
         <c:forEach items="${products}" var="product">
@@ -57,6 +59,8 @@
                 </td>
                 <td class="text-center">${product.additionDate}</td>
                 <td class="text-center">${product.price}</td>
+                <td class="text-center">${product.count}</td>
+                <td class="text-center">${product.reserve}</td>
                 <td class="text-center">
                     <a class="btn btn-warning" href="${pageContext.request.contextPath}/view/admin/product-edit-jsp.jsp?productID=${product.id}"><fmt:message key="edit"/></a>
                     <a class="btn btn-danger" href="${pageContext.request.contextPath}/admin-catalog?productID=${product.id}"><fmt:message key="delete"/></a>

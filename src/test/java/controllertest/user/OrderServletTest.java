@@ -35,9 +35,15 @@ public class OrderServletTest {
 
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute("userLogin")).thenReturn(null);
+        when(session.getAttribute("cartProducts")).thenReturn(null);
 
         when(response.getWriter()).thenReturn(printWriter);
 
+        servlet.doPost(request, response);
+
+        when(session.getAttribute("userLogin")).thenReturn("test");
+
+        when(session.getAttribute("userLogin")).thenReturn("test");
         servlet.doPost(request, response);
     }
 }

@@ -18,7 +18,7 @@ public class ProductDAO {
 
     private static final Logger logger = Logger.getLogger(ProductDAO.class);
 
-    private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date FROM online_store.product \n" +
+    private static final String SQL_FIND_ALL_PRODUCTS = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date, count, reserve FROM online_store.product \n" +
             "JOIN online_store.category ON product.category = category.category_id WHERE price BETWEEN ? AND ?";
 
     private static final String SQL_GET_PRODUCT = "SELECT product_id, product_name, category_name, category_name_ru, price, addition_date FROM online_store.product \n" +
@@ -26,11 +26,17 @@ public class ProductDAO {
 
     private static final String SQL_DELETE_PRODUCT = "DELETE FROM online_store.product WHERE product_id=?";
 
-    private static final String SQL_INSERT_PRODUCT = "INSERT INTO online_store.product (product_name, category, price) VALUES (?, ?, ?)";
+    private static final String SQL_INSERT_PRODUCT = "INSERT INTO online_store.product (product_name, category, price, count, reserve) VALUES (?, ?, ?, ?, 0)";
 
     private static final String SQL_UPDATE_PRODUCT = "UPDATE online_store.product SET product_name=?, category=?, price=? WHERE product_id=?";
 
     private static final String SQL_GET_PRODUCT_ID = "SELECT product_id FROM online_store.product WHERE product_name=?";
+
+    private static final String SQL_SET_PRODUCT_RESERVE = "UPDATE online_store.product SET reserve=(reserve + ?) WHERE product_id=?";
+
+    private static final String SQL_PRODUCT_BOUGHT = "UPDATE online_store.product SET count=(count - reserve), reserve =(reserve - ?) WHERE product_id=?";
+
+    private static final String SQL_PRODUCT_CANCEL_RESERVE = "UPDATE online_store.product SET reserve =(reserve - ?) WHERE product_id=?";
 
     private final Connection connection;
 
@@ -86,6 +92,8 @@ public class ProductDAO {
             while (resultSet.next()) {
                 product = new Product(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getFloat(5), resultSet.getDate(6));
                 product.setCategoryRU(resultSet.getString(4));
+                product.setCount(resultSet.getInt(7));
+                product.setReserve(resultSet.getInt(8));
                 products.add(product);
             }
         } catch (SQLException exception) {
@@ -149,7 +157,7 @@ public class ProductDAO {
      * @param category Category of product.
      * @param price Price of product.
      */
-    public void insertProduct(String productName, String category, float price) {
+    public void insertProduct(String productName, String category, float price, int count) {
         try {
             int categoryID = new CategoryDAO().getCategoryID(category);
 
@@ -160,6 +168,7 @@ public class ProductDAO {
             preparedStatement.setString(1, productName);
             preparedStatement.setInt(2, categoryID);
             preparedStatement.setFloat(3, price);
+            preparedStatement.setInt(4, count);
 
             preparedStatement.executeUpdate();
 
@@ -199,6 +208,25 @@ public class ProductDAO {
     }
 
     /**
+     * Updates reserve of product.
+     *
+     * @param productID Product identifier.
+     * @param reserve Reserve amount.
+     */
+    public void setProductReserve(int productID, int reserve) {
+        try {
+            preparedStatement = connection.prepareStatement(SQL_SET_PRODUCT_RESERVE);
+            preparedStatement.setInt(1, reserve);
+            preparedStatement.setInt(2, productID);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception) {
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
+        }
+    }
+
+    /**
      * Checks if product already exists.
      *
      * @param productName Name of product.
@@ -221,5 +249,35 @@ public class ProductDAO {
         }
 
         return false;
+    }
+
+    /**
+     * Changes products reserve/count.
+     *
+     * @param orderID Order identifier.
+     * @param status Order status.
+     */
+    public void operateProductsAmount(int orderID, String status) {
+        try {
+            List<Product> orderProducts = new OrderDAO().getOrderProducts(orderID);
+
+            String query = null;
+
+            if (status.equals("PAID"))
+                query = SQL_PRODUCT_BOUGHT;
+            else if (status.equals("CANCELLED"))
+                query = SQL_PRODUCT_CANCEL_RESERVE;
+
+            for (Product product : orderProducts) {
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setInt(1, product.getCount());
+                preparedStatement.setInt(2, product.getId());
+                preparedStatement.executeUpdate();
+            }
+
+        } catch (SQLException exception) {
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
+        }
     }
 }

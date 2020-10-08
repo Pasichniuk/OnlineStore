@@ -98,10 +98,17 @@ public class ProductServlet extends HttpServlet {
 
         if (productID != null) {
 
+            int id = Integer.parseInt(productID);
+
             if (cartProducts != null) {
 
                 if (cartProducts.size() < Constants.CART_LIMIT) {
-                    cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+
+                    if (!productIsAlreadyInCart(id, cartProducts))
+                        cartProducts.add(productDAO.getProduct(id));
+                    else
+                        increaseProductCountInCart(id, cartProducts);
+
                     logger.info("Product (ID=" + productID + ") has been added to the cart");
                 }
 
@@ -111,6 +118,26 @@ public class ProductServlet extends HttpServlet {
                 logger.info("Product (ID=" + productID + ") has been added to the cart");
                 session.setAttribute("cartProducts", cartProducts);
             }
+        }
+    }
+
+    private boolean productIsAlreadyInCart(int productID, List<Product> products) {
+
+        for (Product product : products) {
+
+            if (product.getId() == productID)
+                return true;
+        }
+
+        return false;
+    }
+
+    private void increaseProductCountInCart(int productID, List<Product> products) {
+
+        for (Product product : products) {
+
+            if (product.getId() == productID)
+                product.setCount(product.getCount() + 1);
         }
     }
 

@@ -21,6 +21,8 @@ public class ProductTest {
         product.setCategoryRU("Телефоны");
         product.setPrice(900.9f);
         product.setAdditionDate(new Date());
+        product.setCount(5);
+        product.setReserve(2);
 
         assertEquals(product.getId(), 2);
         assertEquals(product.getName(), "iPhone 11");
@@ -28,5 +30,10 @@ public class ProductTest {
         assertEquals(product.getCategoryRU(), "Телефоны");
         assertEquals(product.getPrice(), 900.9f, 0.9);
         assertEquals(product.getAdditionDate(), new Date());
+        assertEquals(product.getCount(), 5);
+        assertEquals(product.getReserve(), 2);
+
+        product = new Product();
+        assertNotNull(product);
     }
 }

@@ -43,6 +43,10 @@
                         <input class="form-control form-control-lg" type="number" min="0" max="10000" name="price" placeholder="<fmt:message key="enter_product_price"/>"/>
                     </div>
 
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" type="number" min="0" max="100" name="count" placeholder="<fmt:message key="enter_product_count"/>"/>
+                    </div>
+
                     <button type="submit" class="btn btn-primary"><fmt:message key="admin.add_product"/></button>
             </form>
 

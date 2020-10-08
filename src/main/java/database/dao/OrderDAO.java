@@ -26,9 +26,11 @@ public class OrderDAO {
 
     private static final String SQL_INSERT_ORDER = "INSERT INTO online_store.order (user_id) VALUES (?)";
 
-    private static final String SQL_INSERT_ORDER_PRODUCT = "INSERT INTO online_store.order_product VALUES (?, ?)";
+    private static final String SQL_INSERT_ORDER_PRODUCT = "INSERT INTO online_store.order_product VALUES (?, ?, ?)";
 
     private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE online_store.order SET order_status=? WHERE order_id=? AND order_status='REGISTERED'";
+
+    private static final String SQL_GET_ORDER_PRODUCTS = "SELECT * FROM online_store.order_product WHERE order_id=?";
 
     private final Connection connection;
 
@@ -144,7 +146,7 @@ public class OrderDAO {
                 orderID = resultSet.getInt(1);
 
             for (Product product : products)
-                insertOrderProduct(orderID, product.getId());
+                insertOrderProduct(orderID, product.getId(), product.getCount());
 
         } catch (SQLException exception) {
             logger.error(exception.getMessage());
@@ -157,12 +159,14 @@ public class OrderDAO {
      *
      * @param orderID Order identifier.
      * @param productID Product identifier.
+     * @param productCount Product count.
      */
-    private void insertOrderProduct(int orderID, int productID) {
+    private void insertOrderProduct(int orderID, int productID, int productCount) {
         try {
             preparedStatement = connection.prepareStatement(SQL_INSERT_ORDER_PRODUCT);
             preparedStatement.setInt(1, orderID);
             preparedStatement.setInt(2, productID);
+            preparedStatement.setInt(3, productCount);
             preparedStatement.executeUpdate();
 
         } catch (SQLException exception) {
@@ -182,11 +186,47 @@ public class OrderDAO {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_ORDER_STATUS);
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderID);
-            preparedStatement.executeUpdate();
+
+            if (preparedStatement.executeUpdate() == 1)
+                new ProductDAO().operateProductsAmount(orderID, status);
 
         } catch (SQLException exception) {
             logger.error(exception.getMessage());
             throw new RuntimeException();
         }
+    }
+
+    /**
+     * Returns list of products from specific Order.
+     *
+     * @param orderID Order identifier.
+     *
+     * @return List of product entities.
+     */
+    public List<Product> getOrderProducts(int orderID) {
+        List<Product> orderProducts;
+        Product product;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_ORDER_PRODUCTS);
+            preparedStatement.setInt(1, orderID);
+
+            resultSet = preparedStatement.executeQuery();
+
+            orderProducts = new ArrayList<>();
+
+            while (resultSet.next()) {
+                product = new Product();
+                product.setId(resultSet.getInt(2));
+                product.setCount(resultSet.getInt(3));
+                orderProducts.add(product);
+            }
+
+        } catch (SQLException exception) {
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
+        }
+
+        return orderProducts;
     }
 }

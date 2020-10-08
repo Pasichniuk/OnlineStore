@@ -107,9 +107,10 @@ public class AdminProductsServlet extends HttpServlet {
         String productName = request.getParameter("productName");
         String category = request.getParameter("category");
         String price = request.getParameter("price");
+        String count = request.getParameter("count");
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
-            productDAO.insertProduct(productName, category, Float.parseFloat(price));
+            productDAO.insertProduct(productName, category, Float.parseFloat(price), Integer.parseInt(count));
             logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' added new product...");
             response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
         } else

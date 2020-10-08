@@ -17,6 +17,8 @@ public class Product {
     private String categoryRU;
     private Date additionDate;
     private float price;
+    private int count;
+    private int reserve;
 
     public Product(int id, String name, String category, float price, Date additionDate) {
         this.id = id;
@@ -24,7 +26,11 @@ public class Product {
         this.category = category;
         this.additionDate = additionDate;
         this.price = price;
+        this.count = 1;
+        this.reserve = 0;
     }
+
+    public Product() { }
 
     public int getId() {
         return id;
@@ -72,5 +78,21 @@ public class Product {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getReserve() {
+        return reserve;
+    }
+
+    public void setReserve(int reserve) {
+        this.reserve = reserve;
     }
 }
