@@ -1,5 +1,12 @@
 package constant;
 
+/**
+ * Stores all main application constants.
+ *
+ * @author Vlad Pasichniuk.
+ *
+ */
+
 public final class Constants {
 
     public static final int CART_LIMIT = 20;

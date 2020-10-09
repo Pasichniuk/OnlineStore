@@ -25,10 +25,10 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <input type="text" minlength="3" name="login" class="form-control" placeholder="<fmt:message key="enter_login"/>">
+                        <input type="text" minlength="3" name="login" required class="form-control" placeholder="<fmt:message key="enter_login"/>">
                     </div>
                     <div class="form-group">
-                        <input type="password" minlength="3" name="password" class="form-control" placeholder="<fmt:message key="enter_password"/>">
+                        <input type="password" minlength="3" name="password" required class="form-control" placeholder="<fmt:message key="enter_password"/>">
                     </div>
                 </div>
                 <div class="card-footer text-center">

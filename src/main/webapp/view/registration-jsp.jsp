@@ -25,19 +25,19 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <input type="text" minlength="3" name="login" class="form-control" placeholder="<fmt:message key="enter_login"/>">
+                    <input type="text" minlength="3" name="login" required class="form-control" placeholder="<fmt:message key="enter_login"/>">
                 </div>
                 <div class="form-group">
-                    <input type="password" minlength="3" name="password" class="form-control" placeholder="<fmt:message key="enter_password"/>">
+                    <input type="password" minlength="3" name="password" required class="form-control" placeholder="<fmt:message key="enter_password"/>">
                 </div>
                 <div class="form-group">
-                    <input type="password" minlength="3" name="confirm-password" class="form-control" placeholder="<fmt:message key="confirm_password"/>">
+                    <input type="password" minlength="3" name="confirm-password" required class="form-control" placeholder="<fmt:message key="confirm_password"/>">
                 </div>
                 <div class="form-group">
-                    <input type="text" minlength="3" name="userName" class="form-control" placeholder="<fmt:message key="enter_full_name"/>">
+                    <input type="text" minlength="3" name="userName" required class="form-control" placeholder="<fmt:message key="enter_full_name"/>">
                 </div>
                 <div class="form-group">
-                    <input type="text" minlength="3" name="userNameRU" class="form-control" placeholder="<fmt:message key="enter_full_name_ru"/>">
+                    <input type="text" minlength="3" name="userNameRU" required class="form-control" placeholder="<fmt:message key="enter_full_name_ru"/>">
                 </div>
             </div>
             <div class="card-footer text-center">

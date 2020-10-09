@@ -21,7 +21,7 @@
             <form action="${pageContext.request.contextPath}/admin-catalog?action=ADD" method="post">
 
                     <div class="form-group">
-                        <input class="form-control form-control-lg" type="text" minlength="3" name="productName" placeholder="<fmt:message key="enter_product_name"/>"/>
+                        <input class="form-control form-control-lg" type="text" minlength="3" name="productName" required placeholder="<fmt:message key="enter_product_name"/>"/>
                     </div>
 
                     <div class="form-group">
@@ -40,11 +40,11 @@
                     </div>
 
                     <div class="form-group">
-                        <input class="form-control form-control-lg" type="number" min="0" max="10000" name="price" placeholder="<fmt:message key="enter_product_price"/>"/>
+                        <input class="form-control form-control-lg" type="number" min="0" max="10000" name="price" required placeholder="<fmt:message key="enter_product_price"/>"/>
                     </div>
 
                     <div class="form-group">
-                        <input class="form-control form-control-lg" type="number" min="0" max="100" name="count" placeholder="<fmt:message key="enter_product_count"/>"/>
+                        <input class="form-control form-control-lg" type="number" min="0" max="100" name="count" required placeholder="<fmt:message key="enter_product_count"/>"/>
                     </div>
 
                     <button type="submit" class="btn btn-primary"><fmt:message key="admin.add_product"/></button>

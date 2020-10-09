@@ -21,11 +21,11 @@
             <form action="${pageContext.request.contextPath}/admin-catalog?action=ADD_CATEGORY" method="post">
 
                 <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" minlength="3" name="categoryName" placeholder="<fmt:message key="enter_category_name"/>"/>
+                    <input class="form-control form-control-lg" type="text" minlength="3" name="categoryName" required placeholder="<fmt:message key="enter_category_name"/>"/>
                 </div>
 
                 <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" minlength="3" name="categoryNameRU" placeholder="<fmt:message key="enter_category_name_ru"/>"/>
+                    <input class="form-control form-control-lg" type="text" minlength="3" name="categoryNameRU" required placeholder="<fmt:message key="enter_category_name_ru"/>"/>
                 </div>
 
                 <button type="submit" class="btn btn-primary"><fmt:message key="admin.add_category"/></button>

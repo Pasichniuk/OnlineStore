@@ -227,31 +227,6 @@ public class ProductDAO {
     }
 
     /**
-     * Checks if product already exists.
-     *
-     * @param productName Name of product.
-     *
-     * @return If product already exists.
-     */
-    private boolean productExists(String productName) {
-        try {
-            preparedStatement = connection.prepareStatement(SQL_GET_PRODUCT_ID);
-            preparedStatement.setString(1, productName);
-
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next())
-                return true;
-
-        } catch (SQLException exception) {
-            logger.error(exception.getMessage());
-            throw new RuntimeException();
-        }
-
-        return false;
-    }
-
-    /**
      * Changes products reserve/count.
      *
      * @param orderID Order identifier.
@@ -279,5 +254,30 @@ public class ProductDAO {
             logger.error(exception.getMessage());
             throw new RuntimeException();
         }
+    }
+
+    /**
+     * Checks if product already exists.
+     *
+     * @param productName Name of product.
+     *
+     * @return If product already exists.
+     */
+    private boolean productExists(String productName) {
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_PRODUCT_ID);
+            preparedStatement.setString(1, productName);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next())
+                return true;
+
+        } catch (SQLException exception) {
+            logger.error(exception.getMessage());
+            throw new RuntimeException();
+        }
+
+        return false;
     }
 }
