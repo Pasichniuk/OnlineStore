@@ -87,11 +87,19 @@ public class CartServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Gets total price of products.
+     *
+     * @param products List of products.
+     *
+     * @return Total price of products in list.
+     */
     private String getTotalPrice(List<Product> products) {
         double totalPrice = 0;
 
-        for (Product product : products)
-            totalPrice += product.getPrice();
+        for (Product product : products) {
+            totalPrice += product.getPrice() * product.getCount();
+        }
 
         DecimalFormat df = new DecimalFormat("#.##");
 

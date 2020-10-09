@@ -50,8 +50,7 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        addProductToCart(request);
-        response.sendRedirect(Constants.PATH_CATALOG);
+        addProductToCart(request, response);
     }
 
     @Override
@@ -88,8 +87,11 @@ public class ProductServlet extends HttpServlet {
      * Adds product to cart.
      *
      * @param request Request.
+     * @param response Response.
+     *
+     * @throws IOException If getWriter() or redirect failed.
      */
-    private void addProductToCart(HttpServletRequest request) {
+    private void addProductToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String productID = request.getParameter("ProductID");
 
         HttpSession session = request.getSession();
@@ -102,7 +104,7 @@ public class ProductServlet extends HttpServlet {
 
             if (cartProducts != null) {
 
-                if (cartProducts.size() < Constants.CART_LIMIT) {
+                if (getCartSize(cartProducts) < Constants.CART_LIMIT) {
 
                     if (!productIsAlreadyInCart(id, cartProducts))
                         cartProducts.add(productDAO.getProduct(id));
@@ -110,20 +112,48 @@ public class ProductServlet extends HttpServlet {
                         increaseProductCountInCart(id, cartProducts);
 
                     logger.info("Product (ID=" + productID + ") has been added to the cart");
-                }
+                    response.sendRedirect(Constants.PATH_CATALOG);
+                } else
+                    response.getWriter().write(notifyCartIsFull());
 
             } else {
                 cartProducts = new ArrayList<>();
                 cartProducts.add(productDAO.getProduct(Integer.parseInt(productID)));
+
                 logger.info("Product (ID=" + productID + ") has been added to the cart");
                 session.setAttribute("cartProducts", cartProducts);
+                response.sendRedirect(Constants.PATH_CATALOG);
             }
         }
     }
 
-    private boolean productIsAlreadyInCart(int productID, List<Product> products) {
+    /**
+     * Returns amount of products in Cart.
+     *
+     * @param cartProducts List of products in Cart.
+     *
+     * @return Size of cart.
+     */
+    private int getCartSize(List<Product> cartProducts) {
+        int size = 0;
 
-        for (Product product : products) {
+        for (Product product : cartProducts)
+            size += product.getCount();
+
+        return size;
+    }
+
+    /**
+     * Checks whether same product is already in Cart.
+     *
+     * @param productID Product identifier.
+     * @param cartProducts List of products in Cart.
+     *
+     * @return Whether product exists in Cart.
+     */
+    private boolean productIsAlreadyInCart(int productID, List<Product> cartProducts) {
+
+        for (Product product : cartProducts) {
 
             if (product.getId() == productID)
                 return true;
@@ -132,6 +162,12 @@ public class ProductServlet extends HttpServlet {
         return false;
     }
 
+    /**
+     * Increases count of product.
+     *
+     * @param productID Product identifier.
+     * @param products List of products.
+     */
     private void increaseProductCountInCart(int productID, List<Product> products) {
 
         for (Product product : products) {
@@ -203,5 +239,9 @@ public class ProductServlet extends HttpServlet {
                     break;
             }
         }
+    }
+
+    private String notifyCartIsFull() {
+        return "<script>" + "alert('Cart is full!');" + "window.location = 'http://localhost:8080/catalog';" + "</script>";
     }
 }
