@@ -9,14 +9,7 @@
 </head>
 <body>
 
-<table class="table table-bordered table-hover">
-    <tr class="thead-dark">
-        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-catalog"><h3><fmt:message key="menu.catalog"/></h3></a></th>
-        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-orders"><h3><fmt:message key="menu.orders"/></h3></a></th>
-        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-users"><h3><fmt:message key="menu.users"/></h3></a></th>
-        <th class="text-center"><a class="text-light" href="${pageContext.request.contextPath}/admin-profile"><h3><fmt:message key="menu.profile"/></h3></a></th>
-    </tr>
-</table>
+<%@ include file="admin-menu.jspf" %>
 
 <div class="container">
     <table class="table table-striped table-bordered">

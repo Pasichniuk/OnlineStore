@@ -9,47 +9,42 @@
 </head>
 <body>
 
+<%@ include file="admin-menu.jspf" %>
+
 <div class="container">
+    <form action="${pageContext.request.contextPath}/admin-catalog?action=EDIT&productID=<%= request.getParameter("productID") %>" method="post">        <div class="card">
+            <div class="card-header text-center">
+                <h2><fmt:message key="edit_product"/></h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <input class="form-control" type="text" minlength="3" name="productName" required placeholder="<fmt:message key="enter_new_product_name"/>"/>
+                </div>
 
-    <h1><fmt:message key="edit_product"/></h1>
-    <hr/>
+                <div class="form-group">
+                    <select class="form-control" name="category" title=<fmt:message key="category"/>>
+                        <c:forEach items="${categories}" var="category">
+                            <c:choose>
+                                <c:when test="${lang eq 'en'}">
+                                    <option value="${category.name}">${category.name}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${category.name}">${category.nameRU}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
 
-    <div class="row">
-
-        <div class="col-md-4">
-
-            <form action="${pageContext.request.contextPath}/admin-catalog?action=EDIT&productID=<%= request.getParameter("productID") %>" method="post">
-
-                    <div class="form-group">
-                        <input class="form-control form-control-lg" type="text" minlength="3" name="productName" required placeholder="<fmt:message key="enter_new_product_name"/>"/>
-                    </div>
-
-                    <div class="form-group">
-                        <select class="form-control form-control-sm" name="category" title=<fmt:message key="category"/>>
-                            <c:forEach items="${categories}" var="category">
-                                <c:choose>
-                                    <c:when test="${lang eq 'en'}">
-                                        <option value="${category.name}">${category.name}</option>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <option value="${category.name}">${category.nameRU}</option>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-control form-control-lg" type="number" min="0" max="10000" name="price" required placeholder="<fmt:message key="enter_new_product_price"/>"/>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary"><fmt:message key="edit_product"/></button>
-            </form>
-
+                <div class="form-group">
+                    <input class="form-control" type="number" min="0" max="10000" name="price" required placeholder="<fmt:message key="enter_new_product_price"/>"/>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary"><fmt:message key="edit_product"/></button>
+            </div>
         </div>
-
-    </div>
-
+    </form>
 </div>
 
 </body>
