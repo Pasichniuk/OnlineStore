@@ -79,8 +79,13 @@ public class CartServlet extends HttpServlet {
             for (Product product : cartProducts) {
 
                 if (product.getId() == Integer.parseInt(productID)) {
-                    cartProducts.remove(product);
-                    logger.info("Product (ID=" + productID + ") has been removed from the cart...");
+
+                    if (product.getCount() == 1) {
+                        cartProducts.remove(product);
+                        logger.info("Product (ID=" + productID + ") has been removed from the cart...");
+                    } else
+                        product.setCount(product.getCount() - 1);
+
                     return;
                 }
             }
