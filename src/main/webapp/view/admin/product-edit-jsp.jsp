@@ -12,7 +12,8 @@
 <%@ include file="admin-menu.jspf" %>
 
 <div class="container">
-    <form action="${pageContext.request.contextPath}/admin-catalog?action=EDIT&productID=<%= request.getParameter("productID") %>" method="post">        <div class="card">
+    <form action="${pageContext.request.contextPath}/admin-catalog?action=EDIT&productID=<%= request.getParameter("productID") %>" method="post">
+        <div class="card">
             <div class="card-header text-center">
                 <h2><fmt:message key="edit_product"/></h2>
             </div>
