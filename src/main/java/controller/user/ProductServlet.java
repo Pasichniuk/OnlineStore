@@ -66,6 +66,8 @@ public class ProductServlet extends HttpServlet {
 
         getProductsFromCategory();
 
+        Sorter.sortProductsAZ(products);
+
         if (request.getParameter("Sort") != null)
             sortingOption = request.getParameter("Sort");
 

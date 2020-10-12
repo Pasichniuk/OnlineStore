@@ -84,6 +84,8 @@ public class OrderDAO {
                 orders.add(order);
             }
 
+            orders.sort(Comparator.comparing(Order::getStatus).reversed());
+
         } catch (SQLException exception) {
             logger.error(exception.getMessage());
             throw new RuntimeException();
