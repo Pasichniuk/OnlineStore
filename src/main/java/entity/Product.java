@@ -11,16 +11,18 @@ import java.util.Date;
 
 public class Product {
 
+    // TODO: consider converting to a record
+
     private int id;
     private String name;
     private String category;
     private String categoryRU;
     private Date additionDate;
-    private float price;
+    private double price;
     private int count;
     private int reserve;
 
-    public Product(int id, String name, String category, float price, Date additionDate) {
+    public Product(int id, String name, String category, double price, Date additionDate) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -30,7 +32,7 @@ public class Product {
         this.reserve = 0;
     }
 
-    public Product() { }
+    public Product() {}
 
     public int getId() {
         return id;
@@ -72,11 +74,11 @@ public class Product {
         this.additionDate = additionDate;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

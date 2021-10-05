@@ -1,23 +1,21 @@
 package controller.user;
 
-import constant.Constants;
+import java.io.IOException;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import javax.servlet.jsp.jstl.core.Config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import database.dao.OrderDAO;
 import database.dao.UserDAO;
-import entity.Order;
-
-import org.apache.log4j.Logger;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.jstl.core.Config;
-import java.io.IOException;
-import java.util.List;
+import constant.Constants;
 
 /**
- * User profile servlet controller.
+ * User profile controller.
  *
  * @author Vlad Pasichniuk.
  *
@@ -26,42 +24,43 @@ import java.util.List;
 @WebServlet(name = "ProfileServlet", urlPatterns = Constants.PATH_PROFILE)
 public class ProfileServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(ProfileServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileServlet.class);
 
     private final OrderDAO orderDAO;
     private final UserDAO userDAO;
 
     public ProfileServlet() {
-        orderDAO = new OrderDAO();
-        userDAO = new UserDAO();
+        this.orderDAO = new OrderDAO();
+        this.userDAO = new UserDAO();
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+
+        var session = request.getSession();
+        var userLogin = (String)session.getAttribute("userLogin");
 
         setLanguage(request, session);
 
-        String userLogin = (String)session.getAttribute("userLogin");
-
-        List<Order> orders = orderDAO.getUserOrders(userDAO.getUser(userLogin).getId());
+        var orders = orderDAO.getUserOrders(userDAO.getUser(userLogin).getId());
 
         request.setAttribute("userName", getUserFullName(session, userLogin));
         request.setAttribute("orders", orders);
 
-        logger.info("User '" + userLogin + "' viewed his profile...");
+        LOGGER.info("User '{}' viewed his profile", userLogin);
 
         request.getRequestDispatcher(Constants.PATH_PROFILE_JSP).forward(request, response);
     }
 
     /**
-     * Sets application language.
+     * Sets the application language.
      *
      * @param request Request.
      * @param session Session.
      */
     private void setLanguage(HttpServletRequest request, HttpSession session) {
-        String language = (String) session.getAttribute("lang");
+
+        var language = (String) session.getAttribute("lang");
 
         if (request.getParameter("lang") != null) {
             language = request.getParameter("lang");
@@ -72,7 +71,7 @@ public class ProfileServlet extends HttpServlet {
     }
 
     /**
-     * Returns full name of User.
+     * Returns the full name of user.
      *
      * @param session Session.
      * @param userLogin Login of User.
@@ -83,8 +82,9 @@ public class ProfileServlet extends HttpServlet {
 
         if (session.getAttribute("lang") != null) {
 
-            if (session.getAttribute("lang").equals("en"))
+            if ("en".equals(session.getAttribute("lang"))) {
                 return userDAO.getUser(userLogin).getUserName();
+            }
         }
 
         return userDAO.getUser(userLogin).getUserNameRU();

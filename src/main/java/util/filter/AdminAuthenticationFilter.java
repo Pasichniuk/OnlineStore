@@ -1,11 +1,11 @@
 package util.filter;
 
-import constant.Constants;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+import constant.Constants;
 
 /**
  * Security filter for Admin.
@@ -28,10 +28,9 @@ public class AdminAuthenticationFilter implements Filter {
 
         if (filterConfig.getInitParameter("active").equalsIgnoreCase("true")) {
 
-            final HttpServletRequest request = (HttpServletRequest) servletRequest;
-            final HttpServletResponse response = (HttpServletResponse) servletResponse;
-
-            final HttpSession session = request.getSession();
+            var request = (HttpServletRequest) servletRequest;
+            var response = (HttpServletResponse) servletResponse;
+            var session = request.getSession();
 
             if (session != null && session.getAttribute("userLogin") != null && session.getAttribute("role") != null) {
 
@@ -51,6 +50,6 @@ public class AdminAuthenticationFilter implements Filter {
     }
 
     private String notifyAccessDenied() {
-        return "<script>" + "alert('Access denied!');" + "window.location = 'http://localhost:8080/log-in';" + "</script>";
+        return "<script>alert('Access denied!');window.location = 'http://localhost:8080/log-in';</script>";
     }
 }

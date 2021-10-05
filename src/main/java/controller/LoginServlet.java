@@ -1,19 +1,17 @@
 package controller;
 
-import constant.Constants;
-import database.dao.UserDAO;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import javax.servlet.jsp.jstl.core.Config;
+
+import database.dao.UserDAO;
+import constant.Constants;
+
 /**
- * Login servlet controller.
+ * Login controller.
  *
  * @author Vlad Pasichniuk.
  *
@@ -25,29 +23,33 @@ public class LoginServlet extends HttpServlet {
     private final UserDAO userDAO;
 
     public LoginServlet() {
-        userDAO = new UserDAO();
+        this.userDAO = new UserDAO();
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (authorizeUser(request, response))
+
+        if (authorizeUser(request, response)) {
             return;
+        }
 
         response.getWriter().write(notifyIncorrectLoginInput());
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         setLanguage(request);
 
-        if (getProfile(request, response))
+        if (getProfile(request, response)) {
             return;
+        }
 
         request.getRequestDispatcher(Constants.PATH_LOGIN_JSP).forward(request, response);
     }
 
     /**
-     * Authorizes User.
+     * Authorizes the user.
      *
      * @param request Request.
      * @param response Response.
@@ -57,26 +59,31 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private boolean authorizeUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userLogin = request.getParameter("login");
-        String userPassword = request.getParameter("password");
+
+        var userLogin = request.getParameter("login");
+        var userPassword = request.getParameter("password");
 
         if (userDAO.authorizeUser(userLogin, userPassword)) {
-            HttpSession session = request.getSession();
 
-            String role = userDAO.getUser(userLogin).getRole();
+            var session = request.getSession();
+            var role = userDAO.getUser(userLogin).getRole();
 
             if (role.equals(Constants.ROLE_ADMIN)) {
+
                 session.setAttribute("userLogin", userLogin);
                 session.setAttribute("role", role);
 
                 response.sendRedirect(Constants.PATH_ADMIN_PROFILE);
+
                 return true;
 
             } else if (role.equals(Constants.ROLE_USER)) {
+
                 session.setAttribute("userLogin", userLogin);
                 session.setAttribute("role", role);
 
                 response.sendRedirect(Constants.PATH_PROFILE);
+
                 return true;
             }
         }
@@ -85,7 +92,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     /**
-     * Provides profile page.
+     * Provides the profile page.
      *
      * @param request Request.
      * @param response Response.
@@ -95,11 +102,12 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private boolean getProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+
+        var session = request.getSession();
 
         if (session.getAttribute("userLogin") != null && session.getAttribute("role") != null) {
 
-            String role = (String) session.getAttribute("role");
+            var role = (String) session.getAttribute("role");
 
             if (role.equals(Constants.ROLE_ADMIN)) {
                 response.sendRedirect(Constants.PATH_ADMIN_PROFILE);
@@ -119,7 +127,8 @@ public class LoginServlet extends HttpServlet {
      * @param request Request.
      */
     private void setLanguage(HttpServletRequest request) {
-        String language = (String) request.getSession().getAttribute("lang");
+
+        var language = (String) request.getSession().getAttribute("lang");
 
         if (request.getParameter("lang") != null) {
             language = request.getParameter("lang");
@@ -130,6 +139,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     private String notifyIncorrectLoginInput() {
-        return "<script>" + "alert('Incorrect login or password! Please, check your input.');" + "window.location = 'http://localhost:8080/log-in';" + "</script>";
+        return "<script>alert('Incorrect login or password! Please, check your input.');window.location = 'http://localhost:8080/log-in';</script>";
     }
 }

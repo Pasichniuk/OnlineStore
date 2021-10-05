@@ -1,45 +1,50 @@
 package controller.user;
 
-import constant.Constants;
-import database.dao.*;
+import java.util.List;
+import java.io.IOException;
 
-import entity.Product;
-import org.apache.log4j.Logger;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import database.dao.*;
+import entity.Product;
+import constant.Constants;
 
 /**
- * Order servlet controller.
+ * Order controller.
  *
  * @author Vlad Pasichniuk.
  *
  */
 
 @WebServlet(name = "OrderServlet", urlPatterns = Constants.PATH_ORDERS)
+@SuppressWarnings("unchecked")
 public class OrderServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(OrderServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderServlet.class);
 
     private final ProductDAO productDAO;
     private final OrderDAO orderDAO;
     private final UserDAO userDAO;
 
     public OrderServlet() {
-        productDAO = new ProductDAO();
-        orderDAO = new OrderDAO();
-        userDAO = new UserDAO();
+        this.productDAO = new ProductDAO();
+        this.orderDAO = new OrderDAO();
+        this.userDAO = new UserDAO();
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
 
-        String userLogin = (String) session.getAttribute("userLogin");
+        var session = request.getSession();
+
+        var userLogin = (String) session.getAttribute("userLogin");
 
         if (userLogin == null) {
             response.getWriter().write(notifyUnauthorizedUser());
@@ -50,7 +55,7 @@ public class OrderServlet extends HttpServlet {
     }
 
     /**
-     * Creates new order.
+     * Creates a new order.
      *
      * @param session Session.
      * @param response Response.
@@ -59,25 +64,24 @@ public class OrderServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private void createOrder(HttpSession session, HttpServletResponse response, String userLogin) throws IOException {
-        List<Product> cartProducts = (List<Product>) session.getAttribute("cartProducts");
+
+        var cartProducts = (List<Product>) session.getAttribute("cartProducts");
 
         if (cartProducts != null && !cartProducts.isEmpty()) {
 
             if (productsIsEnough(cartProducts)) {
                 reserveProducts(cartProducts);
-
                 orderDAO.insertOrder(userDAO.getUser(userLogin).getId(), cartProducts);
-
                 session.setAttribute("cartProducts", null);
-
-                logger.info("User '" + userLogin + "' created new order...");
-
+                LOGGER.info("User '{}' created a new order", userLogin);
                 response.sendRedirect(Constants.PATH_CART);
-            } else
+            } else {
                 response.getWriter().write(notifyWeDontHaveAsMuchProducts());
+            }
 
-        } else
+        } else {
             response.getWriter().write(notifyCartIsEmpty());
+        }
     }
 
     /**
@@ -88,13 +92,16 @@ public class OrderServlet extends HttpServlet {
      * @return Whether there is enough products in store.
      */
     private boolean productsIsEnough(List<Product> cartProducts) {
-        List<Product> products = productDAO.getAllProducts(Constants.MIN_PRICE, Constants.MAX_PRICE);
 
-        for (Product p : cartProducts) {
-            Product product = products.get(p.getId() - 1);
+        var products = productDAO.getAllProducts(Constants.MIN_PRICE, Constants.MAX_PRICE);
 
-            if (product.getCount() - product.getReserve() < p.getCount())
+        for (var p : cartProducts) {
+
+            var product = products.get(p.getId() - 1);
+
+            if (product.getCount() - product.getReserve() < p.getCount()) {
                 return false;
+            }
         }
 
         return true;
@@ -106,23 +113,23 @@ public class OrderServlet extends HttpServlet {
      * @param cartProducts List of products in Cart.
      */
     private void reserveProducts(List<Product> cartProducts) {
-        List<Product> products = productDAO.getAllProducts(Constants.MIN_PRICE, Constants.MAX_PRICE);
 
-        for (Product p : cartProducts) {
-            Product product = products.get(p.getId());
-            productDAO.setProductReserve(p.getId(), product.getReserve() + p.getCount());
+        var products = productDAO.getAllProducts(Constants.MIN_PRICE, Constants.MAX_PRICE);
+
+        for (var p : cartProducts) {
+            productDAO.setProductReserve(p.getId(), products.get(p.getId()).getReserve() + p.getCount());
         }
     }
 
     private String notifyUnauthorizedUser() {
-        return "<script>" + "alert('Only authorized users can make orders!');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
+        return "<script>alert('Only authorized users can make orders!');window.location = 'http://localhost:8080/cart';</script>";
     }
 
     private String notifyCartIsEmpty() {
-        return "<script>" + "alert('Cart is empty!');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
+        return "<script>alert('Cart is empty!');window.location = 'http://localhost:8080/cart';</script>";
     }
 
     private String notifyWeDontHaveAsMuchProducts() {
-        return "<script>" + "alert('We dont have as much products as you want!');" + "window.location = 'http://localhost:8080/cart';" + "</script>";
+        return "<script>alert('We dont have as much products as you want!');window.location = 'http://localhost:8080/cart';</script>";
     }
 }

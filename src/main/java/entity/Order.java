@@ -9,6 +9,8 @@ package entity;
 
 public class Order {
 
+    // TODO: consider converting to a record
+
     private int orderID;
     private int userID;
     private String status;

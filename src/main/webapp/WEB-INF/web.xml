@@ -58,7 +58,7 @@
 
     <listener>
         <description>Session Listener</description>
-        <listener-class>util.listener.MySessionListener</listener-class>
+        <listener-class>util.listener.ApplicationSessionListener</listener-class>
     </listener>
 
     <security-constraint>

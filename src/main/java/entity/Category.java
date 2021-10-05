@@ -9,6 +9,8 @@ package entity;
 
 public class Category {
 
+    // TODO: consider converting to a record
+
     private int categoryID;
     private String name;
     private String nameRU;

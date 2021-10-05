@@ -1,22 +1,23 @@
 package controller.admin;
 
-import constant.Constants;
-import database.dao.CategoryDAO;
-import database.dao.ProductDAO;
-import entity.Product;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
-import org.apache.log4j.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
+
+import database.dao.CategoryDAO;
+import database.dao.ProductDAO;
+import constant.Constants;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Admin Products servlet controller.
+ * Admin product controller.
  *
  * @author Vlad Pasichniuk.
  *
@@ -25,8 +26,7 @@ import java.util.List;
 @WebServlet(name = "AdminProductsServlet", urlPatterns = Constants.PATH_ADMIN_CATALOG)
 public class AdminProductsServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(AdminProductsServlet.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminProductsServlet.class);
     private static final String CHECK_INPUT_REGEX = "^[a-zA-Z0-9 ._-]{3,}$";
     private static final String CHECK_NAME_REGEX = "^[a-zA-Z\\s-]{3,}$";
     private static final String CHECK_NAME_RU_REGEX = "^[а-яА-ЯёЁ\\s-]{3,}$";
@@ -34,21 +34,15 @@ public class AdminProductsServlet extends HttpServlet {
     private final ProductDAO productDAO;
     private final CategoryDAO categoryDAO;
 
-    private List<Product> products;
-
-    private int pageNumber = 1;
-
-    private int productsAmount;
-    private int pagesAmount;
-
     public AdminProductsServlet() {
-        productDAO = new ProductDAO();
-        categoryDAO = new CategoryDAO();
+        this.productDAO = new ProductDAO();
+        this.categoryDAO = new CategoryDAO();
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String action = request.getParameter("action");
+
+        var action = request.getParameter("action");
 
         switch (action) {
 
@@ -68,31 +62,33 @@ public class AdminProductsServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (deleteProduct(request, response))
+
+        if (deleteProduct(request, response)) {
             return;
+        }
 
         request.getSession().setAttribute("categories", categoryDAO.getAllCategories());
 
-        products = productDAO.getAllProducts(Constants.MIN_PRICE, Constants.MAX_PRICE);
+        var pageNumber = 1;
 
-        productsAmount = products.size();
-
-        if (request.getParameter("page") != null)
+        if (request.getParameter("page") != null) {
             pageNumber = Integer.parseInt(request.getParameter("page"));
+        }
 
-        getProductsOnPage();
+        var products = productDAO.getProductsOnPage(
+            (pageNumber - 1) * Constants.RECORDS_PER_PAGE,
+            Constants.RECORDS_PER_PAGE,
+            Constants.MIN_PRICE,
+            Constants.MAX_PRICE
+        );
+
+        var pageAmount = (int) Math.ceil(products.size() * 1.0 / Constants.RECORDS_PER_PAGE);
 
         request.setAttribute("products", products);
-        request.setAttribute("pagesAmount", pagesAmount);
+        request.setAttribute("pagesAmount", pageAmount);
         request.setAttribute("currentPage", pageNumber);
 
         request.getRequestDispatcher(Constants.PATH_ADMIN_CATALOG_JSP).forward(request, response);
-    }
-
-    private void getProductsOnPage() {
-        products = productDAO.getProductsOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, Constants.RECORDS_PER_PAGE, products);
-
-        pagesAmount = (int) Math.ceil(productsAmount * 1.0 / Constants.RECORDS_PER_PAGE);
     }
 
     /**
@@ -104,21 +100,23 @@ public class AdminProductsServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String productName = request.getParameter("productName");
-        String category = request.getParameter("category");
-        String price = request.getParameter("price");
-        String count = request.getParameter("count");
+
+        var productName = request.getParameter("productName");
+        var category = request.getParameter("category");
+        var price = request.getParameter("price");
+        var count = request.getParameter("count");
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
-            productDAO.insertProduct(productName, category, Float.parseFloat(price), Integer.parseInt(count));
-            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' added new product...");
+            productDAO.insertProduct(productName, category, Double.parseDouble(price), Integer.parseInt(count));
+            LOGGER.info("Admin '{}' added new product", request.getSession().getAttribute("userLogin"));
             response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
-        } else
+        } else {
             response.getWriter().write(notifyIncorrectInput());
+        }
     }
 
     /**
-     * Edits product.
+     * Edits a product.
      *
      * @param request Request.
      * @param response Response.
@@ -126,21 +124,23 @@ public class AdminProductsServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int productID = Integer.parseInt(request.getParameter("productID"));
-        String productName = request.getParameter("productName");
-        String category = request.getParameter("category");
-        String price = request.getParameter("price");
+
+        var productID = Integer.parseInt(request.getParameter("productID"));
+        var productName = request.getParameter("productName");
+        var category = request.getParameter("category");
+        var price = request.getParameter("price");
 
         if (productName.matches(CHECK_INPUT_REGEX) && price != null) {
-            productDAO.updateProduct(productID, productName, category, Float.parseFloat(price));
-            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' edited product with ID=" + productID + "...");
+            productDAO.updateProduct(productID, productName, category, Double.parseDouble(price));
+            LOGGER.info("Admin '{}' edited product with ID={}", request.getSession().getAttribute("userLogin"), productID);
             response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
-        } else
+        } else {
             response.getWriter().write(notifyIncorrectInput());
+        }
     }
 
     /**
-     * Deletes product.
+     * Deletes a product.
      *
      * @param request Request.
      * @param response Response.
@@ -150,11 +150,12 @@ public class AdminProductsServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private boolean deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String productID = request.getParameter("productID");
+
+        var productID = request.getParameter("productID");
 
         if (productID != null) {
             productDAO.deleteProduct(Integer.parseInt(productID));
-            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' deleted product with ID=" + productID + "...");
+            LOGGER.info("Admin '{}' deleted product with ID={}", request.getSession().getAttribute("userLogin"), productID);
             response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
             return true;
         }
@@ -163,7 +164,7 @@ public class AdminProductsServlet extends HttpServlet {
     }
 
     /**
-     * Adds new category.
+     * Adds a new category.
      *
      * @param request Request.
      * @param response Response.
@@ -171,18 +172,20 @@ public class AdminProductsServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private void addCategory(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String categoryName = request.getParameter("categoryName");
-        String categoryNameRU = new String(request.getParameter("categoryNameRU").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
+
+        var categoryName = request.getParameter("categoryName");
+        var categoryNameRU = new String(request.getParameter("categoryNameRU").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
 
         if (categoryName.matches(CHECK_NAME_REGEX) && categoryNameRU.matches(CHECK_NAME_RU_REGEX)) {
             categoryDAO.insertCategory(categoryName, categoryNameRU);
-            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' added new category...");
+            LOGGER.info("Admin '{}' added new category", request.getSession().getAttribute("userLogin"));
             response.sendRedirect(Constants.PATH_ADMIN_CATALOG);
-        } else
+        } else {
             response.getWriter().write(notifyIncorrectInput());
+        }
     }
 
     private String notifyIncorrectInput() {
-        return "<script>" + "alert('Incorrect input! Please, try again.');" + "window.location = 'http://localhost:8080/admin-catalog';" + "</script>";
+        return "<script>alert('Incorrect input! Please, try again.');window.location = 'http://localhost:8080/admin-catalog';</script>";
     }
 }

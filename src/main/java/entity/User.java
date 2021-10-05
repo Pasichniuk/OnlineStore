@@ -9,6 +9,8 @@ package entity;
 
 public class User {
 
+    // TODO: consider converting to a record
+
     private int id;
     private String login;
     private String blockStatus;

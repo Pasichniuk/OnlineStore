@@ -1,20 +1,23 @@
 package controller.admin;
 
-import constant.Constants;
-import database.dao.UserDAO;
+import java.io.IOException;
 
-import org.apache.log4j.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
-import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import database.dao.UserDAO;
+import constant.Constants;
 
 /**
- * Admin Profile servlet controller.
+ * Admin profile controller.
  *
  * @author Vlad Pasichniuk.
  *
@@ -23,37 +26,38 @@ import java.io.IOException;
 @WebServlet(name = "AdminProfileServlet", urlPatterns = Constants.PATH_ADMIN_PROFILE)
 public class AdminProfileServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(AdminProfileServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminProfileServlet.class);
 
     private final UserDAO userDAO;
 
     public AdminProfileServlet() {
-        userDAO = new UserDAO();
+        this.userDAO = new UserDAO();
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+
+        var session = request.getSession();
+        var adminLogin = (String) session.getAttribute("userLogin");
 
         setLanguage(request, session);
 
-        String adminLogin = (String)session.getAttribute("userLogin");
-
         request.setAttribute("adminName", getAdminFullName(session, adminLogin));
 
-        logger.info("Admin '" + adminLogin + "' viewed his profile...");
+        LOGGER.info("Admin '{}' viewed his profile", adminLogin);
 
         request.getRequestDispatcher(Constants.PATH_ADMIN_PROFILE_JSP).forward(request, response);
     }
 
     /**
-     * Sets application language.
+     * Sets the application language.
      *
      * @param request Request.
      * @param session Session.
      */
     private void setLanguage(HttpServletRequest request, HttpSession session) {
-        String language = (String) session.getAttribute("lang");
+
+        var language = (String) session.getAttribute("lang");
 
         if (request.getParameter("lang") != null) {
             language = request.getParameter("lang");
@@ -64,7 +68,7 @@ public class AdminProfileServlet extends HttpServlet {
     }
 
     /**
-     * Returns full name of Admin.
+     * Returns the full name of an admin.
      *
      * @param session Session.
      * @param adminLogin Login of Admin.
@@ -75,8 +79,9 @@ public class AdminProfileServlet extends HttpServlet {
 
         if (session.getAttribute("lang") != null) {
 
-            if (session.getAttribute("lang").equals("en"))
+            if ("en".equals(session.getAttribute("lang"))) {
                 return userDAO.getUser(adminLogin).getUserName();
+            }
         }
 
         return userDAO.getUser(adminLogin).getUserNameRU();

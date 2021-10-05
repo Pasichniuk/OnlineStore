@@ -1,15 +1,14 @@
 package controller;
 
-import constant.Constants;
-import database.dao.UserDAO;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+
+import database.dao.UserDAO;
+import constant.Constants;
 
 /**
  * Registration servlet controller.
@@ -28,13 +27,15 @@ public class RegistrationServlet extends HttpServlet {
     private final UserDAO userDAO;
 
     public RegistrationServlet() {
-        userDAO = new UserDAO();
+        this.userDAO = new UserDAO();
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (validateUserInput(request, response))
+
+        if (validateUserInput(request, response)) {
             return;
+        }
 
         response.getWriter().write(notifyIncorrectInput());
     }
@@ -45,7 +46,7 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     /**
-     * Validates User input.
+     * Validates the user input.
      *
      * @param request Request.
      * @param response Response.
@@ -55,14 +56,14 @@ public class RegistrationServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private boolean validateUserInput(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userLogin = request.getParameter("login");
-        String userPassword = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirm-password");
-        String userName = request.getParameter("userName");
-        String userNameRU = new String(request.getParameter("userNameRU").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
 
-        if (userLogin.matches(CHECK_INPUT_REGEX) && userPassword.matches(CHECK_INPUT_REGEX) && confirmPassword.matches(CHECK_INPUT_REGEX) &&
-                userName.matches(CHECK_FULL_NAME_REGEX) && userNameRU.matches(CHECK_FULL_NAME_RU_REGEX)) {
+        var userLogin = request.getParameter("login");
+        var userPassword = request.getParameter("password");
+        var confirmPassword = request.getParameter("confirm-password");
+        var userName = request.getParameter("userName");
+        var userNameRU = new String(request.getParameter("userNameRU").getBytes(StandardCharsets.ISO_8859_1), "cp1251");
+
+        if (userLogin.matches(CHECK_INPUT_REGEX) && userPassword.matches(CHECK_INPUT_REGEX) && confirmPassword.matches(CHECK_INPUT_REGEX) && userName.matches(CHECK_FULL_NAME_REGEX) && userNameRU.matches(CHECK_FULL_NAME_RU_REGEX)) {
 
             if (userPassword.equals(confirmPassword)) {
 
@@ -77,6 +78,6 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     private String notifyIncorrectInput() {
-        return "<script>" + "alert('Incorrect input! Please, try again.');" + "window.location = 'http://localhost:8080/registration';" + "</script>";
+        return "<script>alert('Incorrect input! Please, try again.');" + "window.location = 'http://localhost:8080/registration';</script>";
     }
 }

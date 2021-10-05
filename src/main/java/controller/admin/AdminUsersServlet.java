@@ -1,20 +1,21 @@
 package controller.admin;
 
-import constant.Constants;
-import database.dao.UserDAO;
-import entity.User;
+import java.io.IOException;
 
-import org.apache.log4j.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import database.dao.UserDAO;
+import constant.Constants;
 
 /**
- * Admin Users servlet controller.
+ * Admin user controller.
  *
  * @author Vlad Pasichniuk.
  *
@@ -23,33 +24,33 @@ import java.util.List;
 @WebServlet(name = "AdminUsersServlet", urlPatterns = Constants.PATH_ADMIN_USERS)
 public class AdminUsersServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(AdminUsersServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminUsersServlet.class);
 
     private final UserDAO userDAO;
 
-    private List<User> users;
-
-    private final int usersAmount;
-
-    private int pageNumber = 1;
-
-    private int pagesAmount;
-
     public AdminUsersServlet() {
-        userDAO = new UserDAO();
-        users = userDAO.getAllUsers();
-        usersAmount = users.size();
+        this.userDAO = new UserDAO();
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (setUserBlockStatus(request, response))
+
+        if (setUserBlockStatus(request, response)) {
             return;
+        }
 
-        if (request.getParameter("page") != null)
+        var pageNumber = 1;
+
+        if (request.getParameter("page") != null) {
             pageNumber = Integer.parseInt(request.getParameter("page"));
+        }
 
-        getUsersOnPage();
+        var users = userDAO.getUsersOnPage(
+            (pageNumber - 1) * Constants.RECORDS_PER_PAGE,
+            Constants.RECORDS_PER_PAGE
+        );
+
+        var pagesAmount = (int) Math.ceil(users.size() * 1.0 / Constants.RECORDS_PER_PAGE);
 
         request.setAttribute("users", users);
         request.setAttribute("pagesAmount", pagesAmount);
@@ -59,7 +60,7 @@ public class AdminUsersServlet extends HttpServlet {
     }
 
     /**
-     * Sets block status of User.
+     * Sets user's block status.
      *
      * @param request Request.
      * @param response Response.
@@ -69,22 +70,17 @@ public class AdminUsersServlet extends HttpServlet {
      * @throws IOException If redirect failed.
      */
     private boolean setUserBlockStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String blockStatus = request.getParameter("blockStatus");
-        String userID = request.getParameter("userID");
+
+        var blockStatus = request.getParameter("blockStatus");
+        var userID = request.getParameter("userID");
 
         if (blockStatus != null && userID != null) {
             userDAO.updateUserBlockStatus(blockStatus, Integer.parseInt(userID));
-            logger.info("Admin '" + request.getSession().getAttribute("userLogin") + "' " + blockStatus + " user with ID=" + userID);
+            LOGGER.info("Admin '{}' '{}' user with ID={}", request.getSession().getAttribute("userLogin"), blockStatus, userID);
             response.sendRedirect(Constants.PATH_ADMIN_USERS);
             return true;
         }
 
         return false;
-    }
-
-    private void getUsersOnPage() {
-        users = userDAO.getUsersOnPage((pageNumber-1) * Constants.RECORDS_PER_PAGE, Constants.RECORDS_PER_PAGE);
-
-        pagesAmount = (int) Math.ceil(usersAmount * 1.0 / Constants.RECORDS_PER_PAGE);
     }
 }
